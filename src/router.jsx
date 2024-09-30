@@ -4,7 +4,7 @@ import Homepage from "./components/User/Homepage/Homepage";
 import MasterLayout from "./components/User/MasterLayout/index";
 import TestPage from "./components/User/TestPage/Testpage";
 import Login from "./components/User/Login/Login";
-
+import Register from "./components/User/Register/Register";
 const renderUserRouter = () => {
     const userRouters = [
         {
@@ -18,6 +18,10 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.LOGIN,
             component: <Login />
+        },
+        {
+            path: ROUTERS.USER.REGISTER,
+            component: <Register />
         },
     ];
 

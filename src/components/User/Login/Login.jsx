@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { postLogin } from "../../../services/authService";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import './Login.scss';
+
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [isUsernameFocused, setIsUsernameFocused] = useState(false); // State để kiểm tra trạng thái focus của input username
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false); // State để kiểm tra trạng thái focus của input password
 
     // Toggle password visibility
     const togglePasswordVisibility = () => {
@@ -12,18 +18,23 @@ const Login = () => {
 
     const handleLogin = async () => {
         if (!username) {
-            alert("Email may not be blank");
+            alert("Email không được để trống!");
             return;
         }
         if (!password) {
-            alert("Password may not be blank");
+            alert("Password không được để trống!");
             return;
         }
-        let response = await postLogin(username, password);
-        if (response && response.EC === 0) {
-            alert("Login success");
-        } else if (response && response.EC !== 0) {
-            alert(response.EM);
+        try {
+            let response = await postLogin(username, password);
+            if (response && response.EC === 0) {
+                alert("Login success");
+            } else if (response && response.EC !== 0) {
+                alert(response.EM);
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+            alert("Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại sau.");
         }
     };
 
@@ -38,32 +49,39 @@ const Login = () => {
         <>
             <div className="login-container mt-3 mb-5 d-grid gap-2">
                 <div className="title fs-1 fw-bold col-4 mx-auto text-center">
-                    Simple Login
-                </div>
-                <div className="welcome col-4 mx-auto text-center">
-                    Hello, who’s this?
+                    Đăng Nhập
                 </div>
                 <div className="content-form col-3 mx-auto d-grid gap-3">
                     <div className="form-group d-grid gap-2">
-                        <label>Email</label>
-                        <input
+                    <input
                             type="text"
                             className="form-control"
-                            placeholder="example@domain.com"
+                            placeholder={isUsernameFocused || username ? "" : "Email"}
                             onChange={(event) => setUsername(event.target.value)}
                             onKeyDown={(event) => handleKeyDown(event)}
+                            onFocus={() => setIsUsernameFocused(true)} // Khi focus, thiết lập trạng thái focus
+                            onBlur={() => {
+                                if (!username) {
+                                    setIsUsernameFocused(false); // Nếu không có giá trị, reset trạng thái focus
+                                }
+                            }}
                             value={username}
                         />
                     </div>
                     <div className="form-group d-grid gap-2">
-                        <label>Password</label>
                         <div className="input-group">
-                            <input
+                        <input
                                 type={showPassword ? "text" : "password"}
                                 className="form-control"
-                                placeholder="At least 8 characters"
+                                placeholder={isPasswordFocused || password ? "" : "Mật khẩu"}
                                 onChange={(event) => setPassword(event.target.value)}
                                 onKeyDown={(event) => handleKeyDown(event)}
+                                onFocus={() => setIsPasswordFocused(true)} // Khi focus, thiết lập trạng thái focus
+                                onBlur={() => {
+                                    if (!password) {
+                                        setIsPasswordFocused(false); // Nếu không có giá trị, reset trạng thái focus
+                                    }
+                                }}
                                 value={password}
                             />
                             <button
@@ -72,11 +90,14 @@ const Login = () => {
                                 onClick={togglePasswordVisibility}
                                 style={{ borderLeft: 'none' }}
                             >
-                                {showPassword ? "Hide" : "Show"}
+                                {showPassword ? <FaEye size={15} /> : <FaEyeSlash size={15} />}
                             </button>
                         </div>
                     </div>
-                    <button className="btn btn-dark w-100" onClick={handleLogin}>Log in</button>
+                    <button className="btn btn-dark w-100" onClick={handleLogin}>Đăng nhập</button>
+                    <div className="text-center mt-3">
+                        Bạn không có tài khoản? <Link to="/Register">Đăng kí</Link>
+                    </div>
                 </div>
             </div>
         </>
