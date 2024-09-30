@@ -4,6 +4,7 @@ import Homepage from "./components/User/Homepage/Homepage";
 import MasterLayout from "./components/User/MasterLayout/index";
 import TestPage from "./components/User/TestPage/Testpage";
 import Login from "./components/User/Login/Login";
+import OnlineCourse from "./components/User/OnlineCourse/OnlineCourse";
 
 const renderUserRouter = () => {
     const userRouters = [
@@ -19,6 +20,10 @@ const renderUserRouter = () => {
             path: ROUTERS.USER.LOGIN,
             component: <Login />
         },
+        {
+            path: ROUTERS.USER.ONLINECOURSE,
+            component: <OnlineCourse />
+        }
     ];
 
     return (

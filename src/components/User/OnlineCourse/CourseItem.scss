@@ -1,0 +1,103 @@
+@media (min-width: 605px) {
+  .col-sm-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .col-md-4 {
+    flex: 0 0 33.33333% !important;
+    max-width: 33.33333% !important;
+  }
+}
+
+.col-md-12{
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+}
+
+.ml-1{
+  margin-left: .5rem;
+}
+
+.col-sm-6, .col-md-4, .col-md-12{
+  position: relative;
+  width: 100%;
+  padding: .75rem;
+
+  .courses-grid-item{
+    cursor: pointer;
+    min-height: 200px;
+    background-color: white;
+    border-radius: .65rem;
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    box-shadow: 0 4px 0 0 rgba(143, 156, 173, .2);
+
+    .courses-grid-item-image{
+      height: 145px;
+
+      img{
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    }
+    .courses-grid-item-title {
+      font-weight: 500;
+      font-size: 1rem;
+      overflow: hidden;
+      background-position: 50%;
+      background-size: cover;
+      padding: .5rem 1rem .25rem;
+    }
+
+    .courses-grid-item-content {
+      padding: 0 1rem;
+      position: relative;
+      .rating-star.checked {
+        color: #ffad3b;
+      }
+      .courses-grid-item-starts{
+        font-weight: normal;
+        font-size: .9rem;
+      }
+      .course-tags {
+        margin-top: .5rem;
+        
+        .tag:not(.plain) {
+          padding: 3px 10px;
+          font-size: 12px;
+          border-radius: 15px;
+          text-align: left;
+          background-color: #d5e8fb;
+          color: #284cb0;
+        }
+      }
+    }
+
+    .courses-grid-item-pricing {
+      padding: .5rem 1rem;
+
+      .course-price{
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #3cb46e;
+      }
+      .course-listing-price {
+        font-size: 1rem;
+        font-weight: normal;
+        text-decoration: line-through;
+      }
+      .badge-danger {
+        color: #fff;
+        font-size: 75%;
+        padding: .25em .4em;
+        background-color: #e43a45;
+        border-radius: .35rem;
+      }
+    }
+  }
+}
