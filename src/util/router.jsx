@@ -1,7 +1,8 @@
 export const ROUTERS = {
-    USER: {
-        HOMEPAGE: "/",
-        TESTPAGE: "/test",
-        LOGIN: "/login"
-    }
+  USER: {
+    HOMEPAGE: "/",
+    LIBRARY_TEST: "/library-test",
+    TEST_PAGE: "/test-page",
+    LOGIN: "/login",
+  },
 };

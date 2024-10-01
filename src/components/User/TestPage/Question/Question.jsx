@@ -1,11 +1,11 @@
 // import React from 'react';
-import './MainText.scss';
+import "./TestPage.scss";
 const TestPage = () => {
-    return (
-        <>
-            
-        </>
-    );
+  return( 
+  <>
+
+  </>
+  );
 };
 
 export default TestPage;

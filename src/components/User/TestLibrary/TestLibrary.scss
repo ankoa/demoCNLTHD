@@ -1,0 +1,144 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+.site-content-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  font-family: "Roboto", sans-serif; // Sử dụng font Roboto cho toàn bộ giao diện
+
+  .content-header {
+    height: fit-content;
+
+    .container {
+      width: 100%;
+      max-width: 1170px;
+
+      .custom-row {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 20px;
+        height: 100%;
+        display: flex;
+
+        .custom-col {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: stretch;
+
+          .user-target-user {
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            padding: 1.5rem 1rem;
+            border: 1px solid #efefef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 0.65rem;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+
+            .account-profile-img {
+              border-radius: 50%;
+              display: inline-flex;
+              margin-right: 10px;
+
+              &.md {
+                width: 3.5rem;
+                height: 3.5rem;
+              }
+
+              img {
+                display: block;
+                max-width: 100%;
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+                pointer-events: none;
+                border-radius: 50%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .test-books {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    .test-book {
+      /* font-weight: 0 !important; */
+      background-color: #e8f2ff;
+      color: #1e2022;
+      border: 1px solid transparent;
+      border-radius: 0.35rem;
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem 1rem 0;
+      transition: background-color 0.3s, border-color 0.3s;
+
+      &.active {
+        background-color: #007bff;
+        color: #fff;
+      }
+
+      &:hover {
+        background-color: #d0e0ff;
+      }
+    }
+  }
+
+  .form-find-test {
+    .input-addon {
+      position: relative;
+    }
+
+    .inner-addon {
+      display: flex;
+      align-items: center;
+    }
+
+    .fas.fa-search {
+      position: absolute;
+      right: 15px;
+      color: #999;
+      pointer-events: none;
+    }
+    .form-control {
+      padding-right: 40px;
+      border-radius: 0.35rem;
+      border: 1px solid #ccc;
+      transition: border-color 0.3s;
+
+      &:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      }
+    }
+  }
+  .content-wrapper {
+  }
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+    border-radius: 0.35rem;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .gray-bg {
+    background-color: #f8f8f8;
+  }
+}
