@@ -33,8 +33,8 @@ const ConfirmCode = () => {
     <>
       <div className="container p-5">
         <div className="row">
-          <div className="col-md-2"></div>
-          <div className="col-md-8 mt-5">
+          <div className="col-md-2 col-lg-3"></div>
+          <div className="col-md-8 col-lg-6 mt-5">
             <div className="bg-white p-5 rounded-3 shadow-sm border">
               <div>
                 <p
@@ -49,7 +49,7 @@ const ConfirmCode = () => {
                 </p>
 
                 {/* Sử dụng VerificationInput cho trường nhập OTP */}
-                <div className="pt-4 pb-2 d-flex justify-content-around  ">
+                <div className="pt-4 pb-2 d-flex px-5">
                   <VerificationInput
                     length={6}
                     value={otp}

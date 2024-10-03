@@ -12,3 +12,16 @@
 .btn {
     height: 50px;
 }
+
+.vi__container {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+
+    .vi__character {
+        height: 50px;
+        max-width: 50px;
+        aspect-ratio: 1 / 1;
+        font-size: 30px;
+    }
+}
