@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'; // Importing icons from react-icons
-import { postRegister } from "../../../service/authService";
+import { postRegister } from "../../../services/authService";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Register = () => {
     const [email, setEmail] = useState("");
@@ -10,12 +11,15 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [username, setUsername] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
-
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
     const validateConfirmPassword = () => {
         if (password === confirmPassword)
             return true;
@@ -32,11 +36,12 @@ const Register = () => {
 
     const handleRegister = async () => {
         if (!validateEmail(email)) {
-            toast.error("Invalid email");
+            toast.error("Mail không hợp lệ");
             return
         }
         if (!validateConfirmPassword()) {
-            toast.error("Password confirmation does not match");
+            console.log("Xác nhận mật khẩu không chính xác");
+            toast.error("Xác nhận mật khẩu không chính xác");
             return
         }
 
@@ -55,37 +60,34 @@ const Register = () => {
         <>
             <div className="login-container mt-3 d-grid gap-2">
                 <div className="title fs-1 fw-bold col-4 mx-auto text-center">
-                    Typeform
+                    Đăng Ký
                 </div>
-                <div className="welcome col-4 mx-auto text-center">
+                {/* <div className="welcome col-4 mx-auto text-center">
                     Hello, let's start a new adventure!
-                </div>
+                </div> */}
                 <div className="content-form col-3 mx-auto d-grid gap-3">
                     <div className="form-group d-grid gap-2">
-                        <label>Email</label>
                         <input
                             type="email"
                             className="form-control"
-                            placeholder="bruce@wayne.com"
+                            placeholder="Email"
                             onChange={(event) => { setEmail(event.target.value) }}
                         />
                     </div>
                     <div className="form-group d-grid gap-2">
-                        <label>Username</label>
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="brucewayne"
+                            placeholder="Họ và tên"
                             onChange={(event) => { setUsername(event.target.value) }}
                         />
                     </div>
                     <div className="form-group d-grid gap-2">
-                        <label>Password</label>
                         <div className="input-group">
                             <input
                                 type={showPassword ? "text" : "password"}
                                 className="form-control"
-                                placeholder="At least 8 characters"
+                                placeholder="Mật khẩu"
                                 onChange={(event) => { setPassword(event.target.value) }}
                             />
                             <button
@@ -94,46 +96,41 @@ const Register = () => {
                                 onClick={togglePasswordVisibility}
                                 style={{ borderLeft: 'none' }}
                             >
-                                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                                 {showPassword ? <FaEye size={15} /> : <FaEyeSlash size={15} />}
                             </button>
                         </div>
                     </div>
 
                     <div className="form-group d-grid gap-2">
-                        <label>Confirm password</label>
                         <div className="input-group">
                             <input
-                                type={showPassword ? "text" : "password"}
+                                type={showConfirmPassword ? "text" : "password"}
                                 className="form-control"
-                                placeholder=""
+                                placeholder="Xác nhận mật khẩu"
                                 onChange={(event) => { setConfirmPassword(event.target.value) }}
                             />
                             <button
                                 type="button"
                                 className="btn btn-outline-secondary"
-                                onClick={togglePasswordVisibility}
+                                onClick={toggleConfirmPasswordVisibility}
                                 style={{ borderLeft: 'none' }}
                             >
-                                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                                 {showConfirmPassword ? <FaEye size={15} /> : <FaEyeSlash size={15} />}
                             </button>
                         </div>
                     </div>
-                    <button className="btn btn-dark w-100" onClick={() => { handleRegister() }}> Sign up</button>
+                    <button className="btn btn-dark w-100" onClick={() => { handleRegister() }}> Đăng ký</button>
                     <div className="d-flex align-items-center">
                         <hr className="w-100" />
-                        <span className="px-2">OR</span>
+                        <span className="px-2">HOẶC</span>
                         <hr className="w-100" />
                     </div>
                     <button className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center">
                         <img src="google-logo-url" alt="Google" className="me-2" />
-                        Sign in with Google
+                        Đăng nhập với Google
                     </button>
-                    <button className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center">
-                        <img src="microsoft-logo-url" alt="Microsoft" className="me-2" />
-                        Sign in with Microsoft
-                    </button>
-                    <a href="" onClick={() => navigate("/login")} className="text-center link-secondary mt-2">Return to login page</a>
-                    <a href="" onClick={() => navigate("/")} className="text-center link-secondary mt-2">Go to homepage</a>
+                    <a href="" onClick={() => navigate("/login")} className="text-center link-secondary mt-2">Về trang đăng nhập</a>
+                    <a href="" onClick={() => navigate("/")} className="text-center link-secondary mt-2">Về trang chủ</a>
                 </div>
             </div>
 

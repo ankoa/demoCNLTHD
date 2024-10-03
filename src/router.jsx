@@ -6,6 +6,7 @@ import TestLibrary from "./components/User/TestLibrary/TestLibrary";
 import MainText from "./components/User/TestPage/MainTest";
 import Login from "./components/User/Login/Login";
 import OnlineCourse from "./components/User/OnlineCourse/OnlineCourse";
+import Register from "./components/User/Register/Register";
 
 const renderUserRouter = () => {
   const userRouters = [
@@ -28,6 +29,14 @@ const renderUserRouter = () => {
     {
       path: ROUTERS.USER.ONLINECOURSE,
       component: <OnlineCourse />,
+    },
+    {
+      path: ROUTERS.USER.LOGIN,
+      component: <Login />,
+    },
+    {
+      path: ROUTERS.USER.REGISTER,
+      component: <Register />,
     },
   ];
 

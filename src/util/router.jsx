@@ -3,7 +3,8 @@ export const ROUTERS = {
     HOMEPAGE: "/",
     LIBRARY_TEST: "/library-test",
     TEST_PAGE: "/test-page",
-    LOGIN: "/login",
     ONLINECOURSE: "/onlinecouse",
+    LOGIN: "/login",
+    REGISTER: "/register",
   },
 };
