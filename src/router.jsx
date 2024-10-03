@@ -7,6 +7,7 @@ import MainText from "./components/User/TestPage/MainTest";
 import Login from "./components/User/Login/Login";
 import OnlineCourse from "./components/User/OnlineCourse/OnlineCourse";
 import Register from "./components/User/Register/Register";
+import ConfirmCode from "./components/User/ConfirmCode/ConfirmCode";
 
 const renderUserRouter = () => {
   const userRouters = [
@@ -37,6 +38,10 @@ const renderUserRouter = () => {
     {
       path: ROUTERS.USER.REGISTER,
       component: <Register />,
+    },
+    {
+      path: ROUTERS.USER.ConfirmCode,
+      component: <ConfirmCode />,
     },
   ];
 

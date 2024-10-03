@@ -18,14 +18,22 @@ const postLogOut = (email, refresh_token) => {
 };
 
 // Hàm postRegister để gọi API đăng ký
-const postRegister = (email, username, password) => {
-  const form = new FormData();
-  form.append("username", username);
-  form.append("email", email);
-  form.append("password", password);
+const postRegister = (email, username, password, firstname, lastname) => {
+  const data = {
+    Username: username,
+    Email: email,
+    PasswordHash: password,
+    FirstName: firstname,
+    LastName: lastname
+  };
 
-  return axios.post("api/v1/register", form);
+  return axios.post("api/Account/SignUp", data, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
 };
+
 
 // Export các hàm để sử dụng trong các thành phần khác
 export { postLogin, postRegister, postLogOut };

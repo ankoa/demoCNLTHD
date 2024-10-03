@@ -6,5 +6,6 @@ export const ROUTERS = {
     ONLINECOURSE: "/onlinecouse",
     LOGIN: "/login",
     REGISTER: "/register",
+    ConfirmCode: "/confirmCode",
   },
 };

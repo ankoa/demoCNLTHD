@@ -12,25 +12,7 @@ const Header = () => {
   const [showUpperHeader, setShowUpperHeader] = useState(true);
   const [addDropShadow, setAddDropShadow] = useState(false);
 
-  const handleScroll = () => {
-    const currentScrollPos = window.pageYOffset;
-    setScrollPosition(currentScrollPos);
 
-    if (currentScrollPos > 300) {
-      setShowUpperHeader(false);  // Ẩn upper-header
-      setAddDropShadow(true);     // Thêm hiệu ứng đổ bóng
-    } else {
-      setShowUpperHeader(true);   // Hiển thị lại upper-header
-      setAddDropShadow(false);    // Bỏ hiệu ứng đổ bóng
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
     <div className='header-container'>

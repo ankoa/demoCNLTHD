@@ -8,8 +8,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isUsernameFocused, setIsUsernameFocused] = useState(false);
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   // Toggle password visibility
   const togglePasswordVisibility = () => {
@@ -17,11 +15,6 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    /* let datavalue = {
-      username: username,
-      password: password,
-    };
-      console.log(datavalue); */
     if (!username) {
       alert("Email không được để trống!");
       return;
@@ -58,38 +51,35 @@ const Login = () => {
           Đăng Nhập
         </div>
         <div className="content-form col-3 mx-auto d-grid gap-3">
-          <div className="form-group d-grid gap-2">
+          {/* Email Input with form-floating */}
+          <div className="form-floating mb-3">
             <input
-              type="text"
+              type="email"
               className="form-control"
-              placeholder={isUsernameFocused || username ? "" : "Email"}
+              id="floatingInput"
+              placeholder="name@example.com"
               onChange={(event) => setUsername(event.target.value)}
               onKeyDown={(event) => handleKeyDown(event)}
-              onFocus={() => setIsUsernameFocused(true)} // Khi focus, thiết lập trạng thái focus
-              onBlur={() => {
-                if (!username) {
-                  setIsUsernameFocused(false); // Nếu không có giá trị, reset trạng thái focus
-                }
-              }}
               value={username}
             />
+            <label htmlFor="floatingInput">Email</label>
           </div>
-          <div className="form-group d-grid gap-2">
-            <div className="input-group">
+
+          {/* Password Input with form-floating */}
+          <div className="d-flex">
+            <div className="form-floating mb-3 d-flex" style={{ flex: '9' }}>
               <input
                 type={showPassword ? "text" : "password"}
                 className="form-control"
-                placeholder={isPasswordFocused || password ? "" : "Mật khẩu"}
+                id="floatingPassword"
+                placeholder="Mật khẩu"
                 onChange={(event) => setPassword(event.target.value)}
                 onKeyDown={(event) => handleKeyDown(event)}
-                onFocus={() => setIsPasswordFocused(true)} // Khi focus, thiết lập trạng thái focus
-                onBlur={() => {
-                  if (!password) {
-                    setIsPasswordFocused(false); // Nếu không có giá trị, reset trạng thái focus
-                  }
-                }}
                 value={password}
               />
+              <label htmlFor="floatingPassword">Mật khẩu</label>
+            </div>
+            <div className="input-group" style={{ flex: '1', height: '58px' }}>
               <button
                 type="button"
                 className="btn btn-outline-secondary"
@@ -100,6 +90,7 @@ const Login = () => {
               </button>
             </div>
           </div>
+
           <button className="btn btn-dark w-100" onClick={handleLogin}>
             Đăng nhập
           </button>

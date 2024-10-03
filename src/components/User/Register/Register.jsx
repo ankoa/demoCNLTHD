@@ -12,6 +12,8 @@ const Register = () => {
     const [username, setUsername] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
     const navigate = useNavigate();
 
     const togglePasswordVisibility = () => {
@@ -45,14 +47,15 @@ const Register = () => {
             return
         }
 
-        let response = await postRegister(email, username, password);
+        let response = await postRegister(email, username, password,firstname,lastname);
         if (response && response.EC === 0) {
-            toast.success("Signup success");
-            setTimeout(() => {
-                navigate("/login", { state: { newEmail: email, newPassword: password } });
-            }, 3000);
+            console.log(response)
+            // toast.success("Signup success");
+            // setTimeout(() => {
+            //     navigate("/login", { state: { newEmail: email, newPassword: password } });
+            // }, 3000);
         } else if (response && response.EC !== 0) {
-            toast.error(response.EM);
+            // toast.error(response.EM);
         }
     };
 
@@ -78,8 +81,24 @@ const Register = () => {
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Họ và tên"
+                            placeholder="Tên người dung"
                             onChange={(event) => { setUsername(event.target.value) }}
+                        />
+                    </div>
+                    <div className="form-group d-grid gap-2">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="First name"
+                            onChange={(event) => { setFirstname(event.target.value) }}
+                        />
+                    </div>
+                    <div className="form-group d-grid gap-2">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Last name"
+                            onChange={(event) => { setLastname(event.target.value) }}
                         />
                     </div>
                     <div className="form-group d-grid gap-2">
