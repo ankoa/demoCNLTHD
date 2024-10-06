@@ -1,16 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postLogin } from "../../../services/authService";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Login.scss";
 import { useDispatch } from "react-redux";
 import { doLogIn } from "../../../redux/action/userAction";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const dataFromRegister = location.state;
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  useEffect(() => {
+    if (dataFromRegister) {
+      setUsername(dataFromRegister.newEmail || "");
+      setPassword(dataFromRegister.newPassword || "");
+    }
+  }, [dataFromRegister]);
+
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -18,25 +38,25 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!username) {
-      alert("Email không được để trống!");
+      toast.error("Email không được để trống!");
       return;
     }
     if (!password) {
-      alert("Password không được để trống!");
+      toast.error("Password không được để trống!");
       return;
     }
     try {
       let response = await postLogin(username, password);
       if (response && response.EC === 0) {
         dispatch(doLogIn(response));
-        console.log(response);
-        alert("Login success");
+        navigate('/');
       } else if (response && response.EC !== 0) {
-        alert(response.EM);
+        toast.error(response.EM);
+        console.log(response);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      alert("Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại sau.");
+      toast.error("Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại sau.");
     }
   };
 
@@ -96,6 +116,10 @@ const Login = () => {
             <button className="btn btn-dark w-100" onClick={handleLogin}>
               Đăng nhập
             </button>
+
+            <div className="text-center mt-3">
+              <Link to="/FindAccount">Quên mật khẩu</Link>
+            </div>
             <div className="text-center mt-3">
               Bạn không có tài khoản? <Link to="/Register">Đăng kí</Link>
             </div>

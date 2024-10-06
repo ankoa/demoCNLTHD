@@ -11,21 +11,11 @@ const MasterLayout = ({ children, ...props }) => {
     return (
         <div className={`app-container ${loading ? "loading" : ""}`} {...props}>
             <Header />
-            {children}
+            <div className="app-container-content">
+                {children}
+            </div>
             <Footer></Footer>
-            <ToastContainer
-                position="top-center"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                transition:Bounce
-            />
+
             {true && (
                 <div className="loader-container">
                     <BarLoader

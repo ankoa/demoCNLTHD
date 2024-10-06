@@ -43,6 +43,16 @@ td {
 }
 
 .app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+
+    &-content {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
     &.loading {
         opacity: 0.5;
         pointer-events: none;

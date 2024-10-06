@@ -8,6 +8,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './redux/store';  // Add this line to import store and persistor
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = createRoot(document.getElementById('root'));
 root.render(
@@ -15,6 +17,19 @@ root.render(
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <RouterCustom />
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition:Bounce
+        />
       </BrowserRouter>
     </PersistGate>
   </Provider>

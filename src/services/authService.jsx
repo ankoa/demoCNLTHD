@@ -17,7 +17,23 @@ const postLogOut = (email, refresh_token) => {
   });
 };
 
+// Hàm postSendCode để gọi API gửi mail tạo tk
+const postSendConfirmEmailCode = (Email, Username) => {
+  return axios.post("api/Account/SendConfirmEmailCode", { Email, Username });
+};
+
+// Hàm postCheckAccount để gọi API gửi mail tạo tk
+const postCheckAccountExist = (Email, Username) => {
+  return axios.post("api/Account/CheckAccountExist", { Email, Username });
+};
+
+// Hàm postCheckAccount để gọi API gửi mail tạo tk
+const postCheckConfirmEmailCode = (Email, ConfirmationCode) => {
+  return axios.post("api/Account/CheckConfirmEmailCode", { Email, ConfirmationCode });
+};
+
 // Hàm postRegister để gọi API đăng ký
+
 const postRegister = (email, username, password, firstname, lastname) => {
   const data = {
     Username: username,
@@ -28,12 +44,14 @@ const postRegister = (email, username, password, firstname, lastname) => {
   };
 
   return axios.post("api/Account/SignUp", data, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    header: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;application/json' }
+
   });
 };
 
 
 // Export các hàm để sử dụng trong các thành phần khác
-export { postLogin, postRegister, postLogOut };
+export {
+  postLogin, postRegister, postLogOut, postSendConfirmEmailCode,
+  postCheckConfirmEmailCode
+};

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'; // Importing icons from react-icons
-import { postRegister } from "../../../services/authService";
+import { postRegister, postSendConfirmEmailCode } from "../../../services/authService";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
@@ -38,26 +38,34 @@ const Register = () => {
 
     const handleRegister = async () => {
         if (!validateEmail(email)) {
-            toast.error("Mail không hợp lệ");
+            toast.error("Email không hợp lệ");
             return;
         }
         if (!validateConfirmPassword()) {
-            console.log("Xác nhận mật khẩu không chính xác");
             toast.error("Xác nhận mật khẩu không chính xác");
             return;
         }
 
-        let response = await postRegister(email, username, password, firstname, lastname);
-        if (response && response.EC === 0) {
-            console.log(response);
-            // toast.success("Signup success");
-            // setTimeout(() => {
-            //     navigate("/login", { state: { newEmail: email, newPassword: password } });
-            // }, 3000);
-        } else if (response && response.EC !== 0) {
-            // toast.error(response.EM);
+
+        try {
+            let response = await postSendConfirmEmailCode(email, username);
+            if (response && response.EC === 0) {
+                navigate('/confirmCode', { state: { Email: email, Username: username, PasswordHash: password, FirstName: firstname, LastName: lastname } })
+                //navigate("/login", { state: { newEmail: email, newPassword: password } });
+            } else if (response && response.EC !== 0) {
+                toast.error(response.EM);
+            }
+        } catch (error) {
+            // Ghi lại lỗi từ server
+            if (error.response) {
+                console.error(response);
+                toast.error(error.response.data.EM || "Đã xảy ra lỗi trong quá trình đăng ký.");
+            } else {
+                console.error("Lỗi không xác định:", error);
+            }
         }
     };
+
 
     return (
         <>
@@ -120,7 +128,7 @@ const Register = () => {
                         </div>
 
                         {/* Mật khẩu và xác nhận mật khẩu không thay đổi */}
-                        <div className="form-group d-grid gap-2">
+                        <div className="form-group d-grid gap-2 mb-3">
                             <div className="d-flex align-items-center pass-container">
                                 <div className="form-floating d-flex" style={{ flex: '9' }}>
                                     <input
@@ -144,7 +152,7 @@ const Register = () => {
                             </div>
                         </div>
 
-                        <div className="form-group d-grid gap-2">
+                        <div className="form-group d-grid gap-2 mb-3">
                             <div className="d-flex align-items-center pass-container">
                                 <div className="form-floating d-flex" style={{ flex: '9' }}>
                                     <input
