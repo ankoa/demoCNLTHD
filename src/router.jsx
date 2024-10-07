@@ -8,13 +8,9 @@ import Login from "./components/User/Login/Login";
 import OnlineCourse from "./components/User/OnlineCourse/OnlineCourse";
 import Register from "./components/User/Register/Register";
 import ConfirmCode from "./components/User/ConfirmCode/ConfirmCode";
-<<<<<<< HEAD
 import FindAccount from "./components/User/FindAccount/FindAccount";
 import ResetPassword from "./components/User/ResetPassword/ResetPassword";
-=======
 import UserCourse from "./components/User/UserCourse/UserCourse";
-import FindAccount from "./components/FindAccount/FindAccount";
->>>>>>> 7f5999197fbea2224c144a264d265c57d82d5b57
 
 
 const renderUserRouter = () => {

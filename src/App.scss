@@ -49,8 +49,7 @@ td {
     justify-content: space-between;
 
     &-content {
-        padding-top: 50px;
-        padding-bottom: 50px;
+        background-color: rgba(206, 206, 206, 0.503);
     }
 
     &.loading {
