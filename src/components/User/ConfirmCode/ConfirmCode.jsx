@@ -1,28 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import VerificationInput from "react-verification-input";
 import "./ConfirmCode.scss";
-import { postCheckConfirmEmailCode, postRegister } from "../../../services/authService";
+import { postCheckConfirmEmailCode, postCheckResetPasswordCode, postRegister } from "../../../services/authService";
 import { toast } from "react-toastify";
 
 const ConfirmCode = () => {
-
+  const navigate = useNavigate();
   const location = useLocation();
-  const dataFromRegister = location.state;
+  const dataFromRegister = location.state; // Nhận dữ liệu từ navigate và xác định mục đích
 
   const [otp, setOtp] = useState(""); // State cho mã OTP
+  const [resendEnabled, setResendEnabled] = useState(false); // Trạng thái nút resend
+  const [timer, setTimer] = useState(60); // State cho bộ đếm thời gian
+
+  // Bắt đầu đếm ngược khi component render
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer === 1) {
+          clearInterval(countdown);
+          setResendEnabled(true); // Kích hoạt lại nút resend sau 60 giây
+          return 0;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000);
+    return () => clearInterval(countdown); // Dọn dẹp bộ đếm khi component bị huỷ
+  }, []);
+
+  useEffect(() => {
+    if (!dataFromRegister) {
+      // Nếu không có dữ liệu từ đăng ký, điều hướng về trang đăng ký hoặc trang chủ
+      navigate('/', { replace: true });
+    }
+  }, [dataFromRegister, navigate]);
 
   const handleOtpChange = (value) => {
     setOtp(value); // Cập nhật mã OTP khi người dùng nhập
   };
 
   const handleResendCode = () => {
-    alert("Đã gửi lại mã xác nhận.");
+    if (resendEnabled) {
+      alert("Đã gửi lại mã xác nhận.");
+      setResendEnabled(false); // Vô hiệu hóa nút resend
+      setTimer(60); // Đặt lại bộ đếm thời gian
+    }
   };
 
   const handleCancel = () => {
-    // Xử lý hủy
     alert("Đã hủy xác nhận.");
   };
 
@@ -34,36 +61,52 @@ const ConfirmCode = () => {
     }
 
     try {
-      // Xác minh mã OTP
-      const response = await postCheckConfirmEmailCode(dataFromRegister.Email, otp);
-      if (response && response.EC === 0) {
-        // Đăng ký tài khoản
-        const responseSignup = await postRegister(
-          dataFromRegister.Email,
-          dataFromRegister.Username,
-          dataFromRegister.PasswordHash,
-          dataFromRegister.FirstName,
-          dataFromRegister.LastName
-        );
+      if (dataFromRegister.purpose === 'register') {
+        // Xác minh mã OTP cho đăng ký tài khoản
+        const response = await postCheckConfirmEmailCode(dataFromRegister.Email, otp);
+        if (response && response.EC === 0) {
+          // Đăng ký tài khoản
+          const responseSignup = await postRegister(
+            dataFromRegister.Email,
+            dataFromRegister.Username,
+            dataFromRegister.PasswordHash,
+            dataFromRegister.FirstName,
+            dataFromRegister.LastName
+          );
 
-        if (responseSignup && responseSignup.EC === 0) {
-          // Điều hướng đến trang xác nhận mã
-          navigate('/login', { state: { newEmail: dataFromRegister.Email, newPassword: dataFromRegister.PasswordHash } });
+          if (responseSignup && responseSignup.EC === 0) {
+            navigate('/login',
+              {
+                state: { newEmail: dataFromRegister.Email, newPassword: dataFromRegister.PasswordHash },
+                replace: true
+              },
+
+            );
+          } else {
+            toast.error(responseSignup.EM);
+          }
         } else {
-          // Hiển thị thông báo lỗi từ server khi đăng ký thất bại
-          toast.error(responseSignup.EM);
+          toast.error(response.EM);
         }
-      } else {
-        // Hiển thị thông báo lỗi từ server khi xác minh OTP thất bại
-        toast.error(response.EM);
+      } else if (purpose === 'reset-password') {
+        // Xác minh mã OTP cho reset mật khẩu
+        const response = await postCheckResetPasswordCode(dataFromRegister.Email, otp);
+        if (response && response.EC === 0) {
+          // Chuyển hướng sang trang đặt lại mật khẩu
+          // navigate('/reset-password', {
+          //   state: { email: dataFromRegister.Email },
+          //   replace: true
+          // });
+          toast.success(response.EM);
+        } else {
+          toast.error(response.EM);
+        }
       }
     } catch (error) {
-      // Xử lý lỗi từ server
       handleError(error, "Đã xảy ra lỗi trong quá trình xác minh hoặc đăng ký.");
     }
   };
 
-  // Hàm xử lý lỗi để tránh lặp mã
   const handleError = (error, defaultMessage) => {
     if (error.response) {
       console.error(error.response.data);
@@ -74,20 +117,19 @@ const ConfirmCode = () => {
     }
   };
 
-
   return (
     <>
-      <div className="container p-5">
+      <div className="container p-2">
         <div className="row">
           <div className="col-md-2 col-lg-3"></div>
-          <div className="col-md-8 col-lg-6 mt-5">
+          <div className="col-md-8 col-lg-6">
             <div className="bg-white p-5 rounded-3 shadow-sm border">
               <div>
                 <p
                   className="text-center text-success"
                   style={{ fontSize: "5.5rem" }}
                 >
-                  <i className="fa-solid fa-envelope-circle-check"></i>
+                  <i className="fa-solid fa-envelope-circle-check" style={{ color: '#0d6efd' }}></i>
                 </p>
                 <p className="text-center h5">Please check your email</p>
                 <p className="text-muted text-center">
@@ -107,18 +149,18 @@ const ConfirmCode = () => {
                   />
                 </div>
 
-                <p className="text-muted text-center">
+                <p className="text-muted text-center mt-3">
                   Didn't get the code?{" "}
                   <a
-                    href="#"
-                    className="text-success"
+                    style={{ cursor: 'pointer' }}
+                    className={`text-primary ${!resendEnabled ? "disabled-link" : ""}`}
                     onClick={handleResendCode}
                   >
-                    Click to resend.
+                    {resendEnabled ? "Click to resend." : `Resend in ${timer}s`}
                   </a>
                 </p>
 
-                <div className="row pt-5">
+                <div className="row pt-3">
                   <div className="col-6">
                     <button
                       className="btn btn-outline-secondary w-100"
@@ -129,7 +171,7 @@ const ConfirmCode = () => {
                   </div>
                   <div className="col-6">
                     <button
-                      className="btn btn-success w-100"
+                      className="btn btn-primary w-100"
                       onClick={handleVerify}
                     >
                       Verify

@@ -8,7 +8,8 @@ import Login from "./components/User/Login/Login";
 import OnlineCourse from "./components/User/OnlineCourse/OnlineCourse";
 import Register from "./components/User/Register/Register";
 import ConfirmCode from "./components/User/ConfirmCode/ConfirmCode";
-import FindAccount from "./components/FindAccount/FindAccount";
+import FindAccount from "./components/User/FindAccount/FindAccount";
+import ResetPassword from "./components/User/ResetPassword/ResetPassword";
 
 
 const renderUserRouter = () => {
@@ -48,6 +49,10 @@ const renderUserRouter = () => {
     {
       path: ROUTERS.USER.CONFIRMCODE,
       component: <ConfirmCode />,
+    },
+    {
+      path: ROUTERS.USER.RESETPASSWORD,
+      component: <ResetPassword />,
     },
   ];
 

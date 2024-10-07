@@ -50,8 +50,16 @@ const Register = () => {
         try {
             let response = await postSendConfirmEmailCode(email, username);
             if (response && response.EC === 0) {
-                navigate('/confirmCode', { state: { Email: email, Username: username, PasswordHash: password, FirstName: firstname, LastName: lastname } })
-                //navigate("/login", { state: { newEmail: email, newPassword: password } });
+                navigate('/confirmCode', {
+                    state: {
+                        Email: email,
+                        Username: username,
+                        PasswordHash: password,
+                        FirstName: firstname,
+                        LastName: lastname,
+                        purpose: 'register'
+                    }
+                })
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
             }
@@ -69,7 +77,7 @@ const Register = () => {
 
     return (
         <>
-            <div className="login-container mt-5 mb-5 d-grid gap-2">
+            <div className="login-container mt-2 mb-2 d-grid gap-2">
                 <div className="login-container-content px-4 pb-4 pt-4">
                     <div className="title fs-2 fw-bold col-4 mx-auto text-center">
                         Đăng Ký
@@ -177,6 +185,9 @@ const Register = () => {
                         </div>
 
                         <button className="btn btn-dark w-100 mt-2" onClick={() => handleRegister()}>Đăng ký</button>
+                        <div className="text-center mt-3">
+                            <Link to="/FindAccount">Quên mật khẩu</Link>
+                        </div>
                     </div>
                 </div>
 

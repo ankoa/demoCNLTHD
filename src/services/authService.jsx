@@ -22,18 +22,37 @@ const postSendConfirmEmailCode = (Email, Username) => {
   return axios.post("api/Account/SendConfirmEmailCode", { Email, Username });
 };
 
-// Hàm postCheckAccount để gọi API gửi mail tạo tk
-const postCheckAccountExist = (Email, Username) => {
-  return axios.post("api/Account/CheckAccountExist", { Email, Username });
-};
-
-// Hàm postCheckAccount để gọi API gửi mail tạo tk
+// Hàm postCheckConfirmEmailCode để gọi API gửi kiểm tra code tạo tk
 const postCheckConfirmEmailCode = (Email, ConfirmationCode) => {
   return axios.post("api/Account/CheckConfirmEmailCode", { Email, ConfirmationCode });
 };
 
-// Hàm postRegister để gọi API đăng ký
+// Hàm postSendCode để gọi API gửi mail reset password
+const postSendResetCode = (Email) => {
+  return axios.post("api/Account/SendResetCode",
+    { Email: Email }, // Truyền đối tượng chứa email
+    {
+      headers: { 'Content-Type': 'application/json' } // Đúng cú pháp headers
+    });
+};
 
+// Hàm postCheckResetPasswordCode để gọi API gửi kiểm tra code reset password
+const postCheckResetPasswordCode = (Email, Token) => {
+  return axios.post("api/Account/VerifyResetCode", { Email, Token });
+};
+
+// Hàm để gọi api check account có tồn tại hay không
+const postCheckAccountExist = (Email) => {
+  return axios.post("api/Account/CheckAccountExist",
+    { email: Email }, // Truyền đối tượng chứa email
+    {
+      headers: { 'Content-Type': 'application/json' } // Đúng cú pháp headers
+    });
+};
+
+
+
+// Hàm postRegister để gọi API đăng ký
 const postRegister = (email, username, password, firstname, lastname) => {
   const data = {
     Username: username,
@@ -52,6 +71,12 @@ const postRegister = (email, username, password, firstname, lastname) => {
 
 // Export các hàm để sử dụng trong các thành phần khác
 export {
-  postLogin, postRegister, postLogOut, postSendConfirmEmailCode,
-  postCheckConfirmEmailCode
+  postLogin,
+  postRegister,
+  postLogOut,
+  postSendConfirmEmailCode,
+  postCheckConfirmEmailCode,
+  postCheckAccountExist,
+  postSendResetCode,
+  postCheckResetPasswordCode
 };

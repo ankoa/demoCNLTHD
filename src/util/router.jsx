@@ -8,5 +8,6 @@ export const ROUTERS = {
     REGISTER: "/register",
     CONFIRMCODE: "/confirmCode",
     FINDACCOUNT: "/findAccount",
+    RESETPASSWORD: "/resetPassword",
   },
 };
