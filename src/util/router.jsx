@@ -7,5 +7,6 @@ export const ROUTERS = {
     LOGIN: "/login",
     REGISTER: "/register",
     ConfirmCode: "/confirmCode",
+    USERCOURSE: "/usercourse",
   },
 };

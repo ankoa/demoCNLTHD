@@ -8,7 +8,7 @@ import Login from "./components/User/Login/Login";
 import OnlineCourse from "./components/User/OnlineCourse/OnlineCourse";
 import Register from "./components/User/Register/Register";
 import ConfirmCode from "./components/User/ConfirmCode/ConfirmCode";
-
+import UserCourse from "./components/User/UserCourse/UserCourse";
 const renderUserRouter = () => {
   const userRouters = [
     {
@@ -42,6 +42,10 @@ const renderUserRouter = () => {
     {
       path: ROUTERS.USER.ConfirmCode,
       component: <ConfirmCode />,
+    },
+    {
+      path: ROUTERS.USER.USERCOURSE,
+      component: <UserCourse />,
     },
   ];
 
