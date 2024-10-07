@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'; // Importing icons from react-icons
-import { postRegister } from "../../../services/authService";
+import { postRegister, postSendConfirmEmailCode } from "../../../services/authService";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
@@ -38,121 +38,150 @@ const Register = () => {
 
     const handleRegister = async () => {
         if (!validateEmail(email)) {
-            toast.error("Mail không hợp lệ");
-            return
+            toast.error("Email không hợp lệ");
+            return;
         }
         if (!validateConfirmPassword()) {
-            console.log("Xác nhận mật khẩu không chính xác");
             toast.error("Xác nhận mật khẩu không chính xác");
-            return
+            return;
         }
 
-        let response = await postRegister(email, username, password,firstname,lastname);
-        if (response && response.EC === 0) {
-            console.log(response)
-            // toast.success("Signup success");
-            // setTimeout(() => {
-            //     navigate("/login", { state: { newEmail: email, newPassword: password } });
-            // }, 3000);
-        } else if (response && response.EC !== 0) {
-            // toast.error(response.EM);
+
+        try {
+            let response = await postSendConfirmEmailCode(email, username);
+            if (response && response.EC === 0) {
+                navigate('/confirmCode', { state: { Email: email, Username: username, PasswordHash: password, FirstName: firstname, LastName: lastname } })
+                //navigate("/login", { state: { newEmail: email, newPassword: password } });
+            } else if (response && response.EC !== 0) {
+                toast.error(response.EM);
+            }
+        } catch (error) {
+            // Ghi lại lỗi từ server
+            if (error.response) {
+                console.error(response);
+                toast.error(error.response.data.EM || "Đã xảy ra lỗi trong quá trình đăng ký.");
+            } else {
+                console.error("Lỗi không xác định:", error);
+            }
         }
     };
 
+
     return (
         <>
-            <div className="login-container mt-3 d-grid gap-2">
-                <div className="title fs-1 fw-bold col-4 mx-auto text-center">
-                    Đăng Ký
-                </div>
-                {/* <div className="welcome col-4 mx-auto text-center">
-                    Hello, let's start a new adventure!
-                </div> */}
-                <div className="content-form col-3 mx-auto d-grid gap-3">
-                    <div className="form-group d-grid gap-2">
-                        <input
-                            type="email"
-                            className="form-control"
-                            placeholder="Email"
-                            onChange={(event) => { setEmail(event.target.value) }}
-                        />
+            <div className="login-container mt-5 mb-5 d-grid gap-2">
+                <div className="login-container-content px-4 pb-4 pt-4">
+                    <div className="title fs-2 fw-bold col-4 mx-auto text-center">
+                        Đăng Ký
                     </div>
-                    <div className="form-group d-grid gap-2">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Tên người dung"
-                            onChange={(event) => { setUsername(event.target.value) }}
-                        />
-                    </div>
-                    <div className="form-group d-grid gap-2">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="First name"
-                            onChange={(event) => { setFirstname(event.target.value) }}
-                        />
-                    </div>
-                    <div className="form-group d-grid gap-2">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Last name"
-                            onChange={(event) => { setLastname(event.target.value) }}
-                        />
-                    </div>
-                    <div className="form-group d-grid gap-2">
-                        <div className="input-group">
+                    <div className="content-form col-3 mx-auto d-grid gap-3">
+                        {/* Email input with form-floating */}
+                        <div className="form-floating mb-3">
                             <input
-                                type={showPassword ? "text" : "password"}
+                                type="email"
                                 className="form-control"
-                                placeholder="Mật khẩu"
-                                onChange={(event) => { setPassword(event.target.value) }}
+                                id="floatingEmail"
+                                placeholder="name@example.com"
+                                onChange={(event) => setEmail(event.target.value)}
+                                value={email}
                             />
-                            <button
-                                type="button"
-                                className="btn btn-outline-secondary"
-                                onClick={togglePasswordVisibility}
-                                style={{ borderLeft: 'none' }}
-                            >
-                                 {showPassword ? <FaEye size={15} /> : <FaEyeSlash size={15} />}
-                            </button>
+                            <label htmlFor="floatingEmail">Email</label>
                         </div>
-                    </div>
 
-                    <div className="form-group d-grid gap-2">
-                        <div className="input-group">
+                        {/* Username input with form-floating */}
+                        <div className="form-floating mb-3">
                             <input
-                                type={showConfirmPassword ? "text" : "password"}
+                                type="text"
                                 className="form-control"
-                                placeholder="Xác nhận mật khẩu"
-                                onChange={(event) => { setConfirmPassword(event.target.value) }}
+                                id="floatingUsername"
+                                placeholder="Tên người dùng"
+                                onChange={(event) => setUsername(event.target.value)}
+                                value={username}
                             />
-                            <button
-                                type="button"
-                                className="btn btn-outline-secondary"
-                                onClick={toggleConfirmPasswordVisibility}
-                                style={{ borderLeft: 'none' }}
-                            >
-                                 {showConfirmPassword ? <FaEye size={15} /> : <FaEyeSlash size={15} />}
-                            </button>
+                            <label htmlFor="floatingUsername">Username</label>
                         </div>
+
+                        {/* Firstname input with form-floating */}
+                        <div className="form-floating mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="floatingFirstname"
+                                placeholder="First name"
+                                onChange={(event) => setFirstname(event.target.value)}
+                                value={firstname}
+                            />
+                            <label htmlFor="floatingFirstname">Tên</label>
+                        </div>
+
+                        {/* Lastname input with form-floating */}
+                        <div className="form-floating mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="floatingLastname"
+                                placeholder="Last name"
+                                onChange={(event) => setLastname(event.target.value)}
+                                value={lastname}
+                            />
+                            <label htmlFor="floatingLastname">Họ và tên đệm</label>
+                        </div>
+
+                        {/* Mật khẩu và xác nhận mật khẩu không thay đổi */}
+                        <div className="form-group d-grid gap-2 mb-3">
+                            <div className="d-flex align-items-center pass-container">
+                                <div className="form-floating d-flex" style={{ flex: '9' }}>
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        className="form-control"
+                                        id="floatingPassword"
+                                        placeholder="Mật khẩu"
+                                        onChange={(event) => setPassword(event.target.value)}
+                                        value={password}
+                                    />
+                                    <label htmlFor="floatingPassword">Mật khẩu</label>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="btn-toggle-pass"
+                                    onClick={togglePasswordVisibility}
+                                    style={{ borderLeft: "none" }}
+                                >
+                                    {showPassword ? <FaEye size={15} /> : <FaEyeSlash size={15} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="form-group d-grid gap-2 mb-3">
+                            <div className="d-flex align-items-center pass-container">
+                                <div className="form-floating d-flex" style={{ flex: '9' }}>
+                                    <input
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        className="form-control"
+                                        id="floatingConfirmPassword"
+                                        placeholder="Xác nhận mật khẩu"
+                                        onChange={(event) => setConfirmPassword(event.target.value)}
+                                        value={confirmPassword}
+                                    />
+                                    <label htmlFor="floatingConfirmPassword">Xác nhận mật khẩu</label>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="btn-toggle-pass"
+                                    onClick={toggleConfirmPasswordVisibility}
+                                    style={{ borderLeft: "none" }}
+                                >
+                                    {showConfirmPassword ? <FaEye size={15} /> : <FaEyeSlash size={15} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <button className="btn btn-dark w-100 mt-2" onClick={() => handleRegister()}>Đăng ký</button>
                     </div>
-                    <button className="btn btn-dark w-100" onClick={() => { handleRegister() }}> Đăng ký</button>
-                    <div className="d-flex align-items-center">
-                        <hr className="w-100" />
-                        <span className="px-2">HOẶC</span>
-                        <hr className="w-100" />
-                    </div>
-                    <button className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center">
-                        <img src="google-logo-url" alt="Google" className="me-2" />
-                        Đăng nhập với Google
-                    </button>
-                    <a href="" onClick={() => navigate("/login")} className="text-center link-secondary mt-2">Về trang đăng nhập</a>
-                    <a href="" onClick={() => navigate("/")} className="text-center link-secondary mt-2">Về trang chủ</a>
                 </div>
+
+
             </div>
-
         </>
     );
 }

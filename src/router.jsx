@@ -9,6 +9,9 @@ import OnlineCourse from "./components/User/OnlineCourse/OnlineCourse";
 import Register from "./components/User/Register/Register";
 import ConfirmCode from "./components/User/ConfirmCode/ConfirmCode";
 import UserCourse from "./components/User/UserCourse/UserCourse";
+import FindAccount from "./components/FindAccount/FindAccount";
+
+
 const renderUserRouter = () => {
   const userRouters = [
     {
@@ -40,7 +43,11 @@ const renderUserRouter = () => {
       component: <Register />,
     },
     {
-      path: ROUTERS.USER.ConfirmCode,
+      path: ROUTERS.USER.FINDACCOUNT,
+      component: <FindAccount />,
+    },
+    {
+      path: ROUTERS.USER.CONFIRMCODE,
       component: <ConfirmCode />,
     },
     {
