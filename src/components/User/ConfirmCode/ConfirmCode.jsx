@@ -3,7 +3,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import VerificationInput from "react-verification-input";
 import "./ConfirmCode.scss";
-import { postCheckConfirmEmailCode, postCheckResetPasswordCode, postRegister } from "../../../services/authService";
+import { postCheckConfirmEmailCode, postCheckResetPasswordCode, postRegister, postSendConfirmEmailCode } from "../../../services/authService";
 import { toast } from "react-toastify";
 
 const ConfirmCode = () => {
@@ -14,6 +14,7 @@ const ConfirmCode = () => {
   const [otp, setOtp] = useState(""); // State cho mã OTP
   const [resendEnabled, setResendEnabled] = useState(false); // Trạng thái nút resend
   const [timer, setTimer] = useState(60); // State cho bộ đếm thời gian
+
 
   // Bắt đầu đếm ngược khi component render
   useEffect(() => {
@@ -41,11 +42,26 @@ const ConfirmCode = () => {
     setOtp(value); // Cập nhật mã OTP khi người dùng nhập
   };
 
-  const handleResendCode = () => {
+  const handleResendCode = async () => {
     if (resendEnabled) {
-      alert("Đã gửi lại mã xác nhận.");
-      setResendEnabled(false); // Vô hiệu hóa nút resend
-      setTimer(60); // Đặt lại bộ đếm thời gian
+      try {
+        let response = await postSendConfirmEmailCode(dataFromRegister.Email, dataFromRegister.Username);
+        if (response && response.EC === 0) {
+          toast.success("Đã gửi lại mã xác nhận.");
+          setResendEnabled(false); // Vô hiệu hóa nút resend
+          setTimer(60); // Đặt lại bộ đếm thời gian
+        } else if (response && response.EC !== 0) {
+          toast.error(response.EM);
+        }
+      } catch (error) {
+        // Ghi lại lỗi từ server
+        if (error.response) {
+          console.error(response);
+          toast.error(error.response.data.EM || "Đã xảy ra lỗi trong quá trình đăng ký.");
+        } else {
+          console.error("Lỗi không xác định:", error);
+        }
+      }
     }
   };
 
@@ -119,7 +135,7 @@ const ConfirmCode = () => {
 
   return (
     <>
-      <div className="container p-2">
+      <div className="container px-2 pb-5 pt-5">
         <div className="row">
           <div className="col-md-2 col-lg-3"></div>
           <div className="col-md-8 col-lg-6">

@@ -11,5 +11,6 @@ export const ROUTERS = {
     CONFIRMCODE: "/confirmCode",
     FINDACCOUNT: "/findAccount",
     RESETPASSWORD: "/resetPassword",
+    CHANGEPASSWORD: "/changePassword",
   },
 };

@@ -11,6 +11,7 @@ import ConfirmCode from "./components/User/ConfirmCode/ConfirmCode";
 import FindAccount from "./components/User/FindAccount/FindAccount";
 import ResetPassword from "./components/User/ResetPassword/ResetPassword";
 import UserCourse from "./components/User/UserCourse/UserCourse";
+import ChangePassword from "./components/ChangePassword/ChangePassword";
 
 
 const renderUserRouter = () => {
@@ -54,8 +55,14 @@ const renderUserRouter = () => {
     {
       path: ROUTERS.USER.RESETPASSWORD,
       component: <ResetPassword />,
+    },
+    {
       path: ROUTERS.USER.USERCOURSE,
       component: <UserCourse />,
+    },
+    {
+      path: ROUTERS.USER.CHANGEPASSWORD,
+      component: <ChangePassword />,
     },
   ];
 
