@@ -5,6 +5,7 @@ const postLogin = (Username, Password) => {
   return axios.post("api/Account/Login", {
     Username,
     Password,
+    delay: 2000
   });
 };
 
@@ -50,7 +51,10 @@ const postCheckAccountExist = (Email) => {
     });
 };
 
-
+// Hàm postResetPassword để gọi API reset password
+const postResetPassword = (Email, Token, NewPassword) => {
+  return axios.post("api/Account/ResetPassword", { Email, Token, NewPassword });
+};
 
 // Hàm postRegister để gọi API đăng ký
 const postRegister = (email, username, password, firstname, lastname) => {
@@ -78,5 +82,6 @@ export {
   postCheckConfirmEmailCode,
   postCheckAccountExist,
   postSendResetCode,
-  postCheckResetPasswordCode
+  postCheckResetPasswordCode,
+  postResetPassword
 };

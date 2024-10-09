@@ -31,7 +31,7 @@ const FindAccount = () => {
     }
 
     return (
-        <div className="container px-5 d-flex justify-content-center">
+        <div className="container px-5 d-flex justify-content-center pb-5 pt-5">
             <Card>
                 <Card.Header className='fs-4 text-start' style={{ fontWeight: '600' }}>Tìm tài khoản của bạn</Card.Header>
                 <Card.Body >

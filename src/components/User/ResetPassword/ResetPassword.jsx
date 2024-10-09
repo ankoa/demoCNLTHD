@@ -23,6 +23,7 @@ const ResetPassword = () => {
                         purpose: 'reset-password'
                     }
                 })
+                toast.warning("Mã code sẽ hết hạn trong 2 phút");
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
             }
@@ -33,7 +34,7 @@ const ResetPassword = () => {
     }
 
     return (
-        <div className="ResetPassword container px-5 d-flex justify-content-center">
+        <div className="ResetPassword pb-5 pt-5 container px-5 d-flex justify-content-center">
             <Card style={{ boxShadow: '0 1px 2px rgba(0, 0, 0, .1), 0 2px 4px rgba(0, 0, 0, .1)' }}>
                 <Card.Header className='ResetPassword-header fs-5 text-start'>Chúng tôi sẽ gửi mã đến email của bạn</Card.Header>
                 <Card.Body className='ResetPassword-body' >

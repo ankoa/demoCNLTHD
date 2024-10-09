@@ -104,16 +104,15 @@ const ConfirmCode = () => {
         } else {
           toast.error(response.EM);
         }
-      } else if (purpose === 'reset-password') {
+      } else if (dataFromRegister.purpose === 'reset-password') {
         // Xác minh mã OTP cho reset mật khẩu
         const response = await postCheckResetPasswordCode(dataFromRegister.Email, otp);
         if (response && response.EC === 0) {
           // Chuyển hướng sang trang đặt lại mật khẩu
-          // navigate('/reset-password', {
-          //   state: { email: dataFromRegister.Email },
-          //   replace: true
-          // });
-          toast.success(response.EM);
+          navigate('/changePassword', {
+            state: { Email: dataFromRegister.Email, Token: otp, purpose: 'reset-password' },
+            replace: true
+          });
         } else {
           toast.error(response.EM);
         }

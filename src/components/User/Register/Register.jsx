@@ -46,7 +46,6 @@ const Register = () => {
             return;
         }
 
-
         try {
             let response = await postSendConfirmEmailCode(email, username);
             if (response && response.EC === 0) {
@@ -60,6 +59,7 @@ const Register = () => {
                         purpose: 'register'
                     }
                 })
+                toast.warning("Mã code sẽ hết hạn trong 1 phút");
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
             }
