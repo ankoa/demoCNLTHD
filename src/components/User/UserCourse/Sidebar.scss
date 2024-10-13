@@ -1,0 +1,95 @@
+.sidebar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    max-height: 100vh;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #b8d9fc #f0f8ff;
+    transition: max-height 0.5s ease, padding 0.5s ease, overflow 0.5s ease;
+
+
+
+    .list-group-item {
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 15px;
+        transition: background-color 0.3s ease;
+
+        &.bg-primary {
+            background-color: #034a97 !important;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        &.active {
+            background-color: #3896fa;
+            color: #fff;
+        }
+
+        &:hover {
+            background-color: #9dafc0;
+        }
+
+        @media (max-width: 992px) {
+            border-radius: 0;
+
+            &:last-child {
+                border-bottom: 1px solid rgb(194, 194, 194);
+            }
+        }
+    }
+
+    @media (max-width: 992px) {
+        position: relative;
+        max-height: 0;
+        padding: 0;
+        width: 100%;
+        overflow: visible;
+
+        &.collapsed {
+            max-height: 0;
+            padding: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.5s ease, overflow 0.5s ease;
+        }
+
+        &.show {
+            max-height: 100vh;
+            transition: max-height 0.5s ease, padding 0.5s ease, overflow 0.5s ease;
+        }
+    }
+
+}
+
+.toggle {
+    background-color: rgb(47, 47, 253);
+    height: 60px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    /* Thêm vào để căn giữa các phần tử */
+    padding: 0 20px;
+    /* Căn đều 2 bên */
+    cursor: pointer;
+
+    &-title {
+        font-weight: 600;
+        color: #fff;
+    }
+
+    &-btn {
+        font-size: 30px;
+        color: #fff;
+    }
+
+    @media (max-width: 992px) {
+        display: flex;
+    }
+}

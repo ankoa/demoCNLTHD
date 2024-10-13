@@ -7,6 +7,12 @@ import MainText from "./components/User/TestPage/MainTest";
 import Login from "./components/User/Login/Login";
 import OnlineCourse from "./components/User/OnlineCourse/OnlineCourse";
 import Register from "./components/User/Register/Register";
+import ConfirmCode from "./components/User/ConfirmCode/ConfirmCode";
+import FindAccount from "./components/User/FindAccount/FindAccount";
+import ResetPassword from "./components/User/ResetPassword/ResetPassword";
+import UserCourse from "./components/User/UserCourse/UserCourse";
+import ChangePassword from "./components/ChangePassword/ChangePassword";
+
 
 const renderUserRouter = () => {
   const userRouters = [
@@ -37,6 +43,26 @@ const renderUserRouter = () => {
     {
       path: ROUTERS.USER.REGISTER,
       component: <Register />,
+    },
+    {
+      path: ROUTERS.USER.FINDACCOUNT,
+      component: <FindAccount />,
+    },
+    {
+      path: ROUTERS.USER.CONFIRMCODE,
+      component: <ConfirmCode />,
+    },
+    {
+      path: ROUTERS.USER.RESETPASSWORD,
+      component: <ResetPassword />,
+    },
+    {
+      path: ROUTERS.USER.USERCOURSE,
+      component: <UserCourse />,
+    },
+    {
+      path: ROUTERS.USER.CHANGEPASSWORD,
+      component: <ChangePassword />,
     },
   ];
 
