@@ -12,25 +12,7 @@ const Header = () => {
   const [showUpperHeader, setShowUpperHeader] = useState(true);
   const [addDropShadow, setAddDropShadow] = useState(false);
 
-  const handleScroll = () => {
-    const currentScrollPos = window.pageYOffset;
-    setScrollPosition(currentScrollPos);
 
-    if (currentScrollPos > 300) {
-      setShowUpperHeader(false);  // Ẩn upper-header
-      setAddDropShadow(true);     // Thêm hiệu ứng đổ bóng
-    } else {
-      setShowUpperHeader(true);   // Hiển thị lại upper-header
-      setAddDropShadow(false);    // Bỏ hiệu ứng đổ bóng
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
     <div className='header-container'>
@@ -57,7 +39,7 @@ const Header = () => {
         </div>
       )}
 
-      <div className={`main-header ${addDropShadow ? 'shadow' : ''}`}>
+      {/* <div className={`main-header ${addDropShadow ? 'shadow' : ''}`}>
         <Navbar expand="lg" className="bg-body-tertiary">
           <Container>
             <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
@@ -77,7 +59,7 @@ const Header = () => {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-      </div>
+      </div> */}
     </div>
   );
 }
