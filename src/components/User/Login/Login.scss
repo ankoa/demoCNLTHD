@@ -1,26 +1,55 @@
-.password-input-container {
-    position: relative;
-    width: 100%;
+// .password-input-container {
+//     position: relative;
+//     width: 100%;
+// }
+
+// .password-input {
+//     width: 100%;
+//     padding-right: 2.5rem;
+//     box-sizing: border-box;
+// }
+
+// .toggle-password-btn {
+//     position: absolute;
+//     top: 50%;
+//     transform: translateY(-50%);
+//     cursor: pointer;
+// }
+
+// .icon-animate {
+//     transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+// }
+
+// .toggle-password-btn:hover .icon-animate {
+//     transform: scale(1.2);
+//     opacity: 0.8;
+// }
+.login-container {
+    padding: 2rem;
+    max-width: 500px;
+    margin: auto;
+
+    &-content {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 15px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+        .title {
+            color: #333;
+            text-align: center;
+            line-height: 1.2;
+            width: 100%;
+        }
+    }
+
+
+
+
 }
 
-.password-input {
-    width: 100%;
-    padding-right: 2.5rem;
-    box-sizing: border-box;
-}
 
-.toggle-password-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-}
-
-.icon-animate {
-    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
-}
-
-.toggle-password-btn:hover .icon-animate {
-    transform: scale(1.2);
-    opacity: 0.8;
+.content-form {
+    width: 90%;
+    margin-top: 1rem;
 }

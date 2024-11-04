@@ -1,8 +1,16 @@
 export const ROUTERS = {
-    USER: {
-        HOMEPAGE: "/",
-        TESTPAGE: "/test",
-        LOGIN: "/login",
-        ONLINECOURSE: "/onlinecouse"
-    }
+  USER: {
+    HOMEPAGE: "/",
+    LIBRARY_TEST: "/library-test",
+    TEST_PAGE: "/test-page",
+    ONLINECOURSE: "/onlinecouse",
+    LOGIN: "/login",
+    REGISTER: "/register",
+    ConfirmCode: "/confirmCode",
+    USERCOURSE: "/usercourse",
+    CONFIRMCODE: "/confirmCode",
+    FINDACCOUNT: "/findAccount",
+    RESETPASSWORD: "/resetPassword",
+    CHANGEPASSWORD: "/changePassword",
+  },
 };
