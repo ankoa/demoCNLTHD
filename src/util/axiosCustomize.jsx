@@ -5,7 +5,7 @@ import { postRenewToken } from "../services/authService"; // Giả định bạn
 import { doRenewToken } from "../redux/action/userAction";
 
 const instance = axios.create({
-    baseURL: 'https://localhost:5555/',
+    baseURL: 'https://localhost:',
 });
 
 // Kiểm tra xem token đã hết hạn hay chưa

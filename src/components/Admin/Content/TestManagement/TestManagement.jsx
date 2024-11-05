@@ -9,6 +9,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Card } from 'react-bootstrap';
+import { getTests } from '../../../../services/testService';
 
 const TestManagement = () => {
     //--------------Khai báo ref
@@ -338,26 +339,71 @@ const TestManagement = () => {
             Status: "Pending",
         },
     ]);
+    const columns = [
+        {
+            name: "ID",
+            selector: (row) => row.Name,
+            sortable: true,
+            fixed: true
+        },
+        {
+            name: "Name",
+            selector: (row) => row.Position,
+            sortable: true,
+        },
+        {
+            name: "Desciption",
+            selector: (row) => row.Office,
+            sortable: true
+        },
+        {
+            name: "Difficulty",
+            selector: (row) => row.Age,
+            sortable: true
+        },
+        {
+            name: "Duaration",
+            selector: (row) => row.Startdate,
+            sortable: true
+        },
+        {
+            name: "Created",
+            selector: (row) => USDollar.format(+(row.Salary)),
+            sortable: true
+        },
+        {
+            name: "Updated",
+            selector: (row) => row.Status,
+            cell: (row) => <StatusLabel status={row.Status} />,
+        },
+        {
+            name: "Actions",
+            cell: (row) => <ActionButtons id={row.id} />,
+            ignoreRowClick: true,
+        },
+    ];
     const [dataToShow, setDataToShow] = useState(data);
     const fullData = data;
     const [lastid, setLastid] = useState(data[data.length - 1].id);
 
-    useDebounce(() => {
-        const filteredData = fullData.filter((item) => {
-            return (
-                item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Office.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Status.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        });
-        setDataToShow([...filteredData])
-    }, [searchTerm], 500
-    );
+    const fetchListTests = async () => {
+        try {
+            let response = await getTests();
+            if (response && response.EC === 0) {
+                setData(response.DT);
+            } else if (response && response.EC !== 0) {
+                toast.error(response.EM);
+            }
+        } catch (error) {
+            if (error.response) {
+                toast.error(error.response.data.EM || "Đã xảy ra lỗi");
+            } else {
+                console.error("Lỗi không xác định:", error);
+            }
+        }
+    }
 
-    useEffect(() => {
-        setDataToShow([...data])
-    }, [data])
+
 
     const handleSearch = (e) => {
         const value = e.target.value;
@@ -415,49 +461,7 @@ const TestManagement = () => {
         );
     };
 
-    const columns = [
-        {
-            name: "Name",
-            selector: (row) => row.Name,
-            sortable: true,
-            fixed: true
-        },
-        {
-            name: "Position",
-            selector: (row) => row.Position,
-            sortable: true,
-        },
-        {
-            name: "Office",
-            selector: (row) => row.Office,
-            sortable: true
-        },
-        {
-            name: "Age",
-            selector: (row) => row.Age,
-            sortable: true
-        },
-        {
-            name: "Start Date",
-            selector: (row) => row.Startdate,
-            sortable: true
-        },
-        {
-            name: "Salary",
-            selector: (row) => USDollar.format(+(row.Salary)),
-            sortable: true
-        },
-        {
-            name: "Status",
-            selector: (row) => row.Status,
-            cell: (row) => <StatusLabel status={row.Status} />,
-        },
-        {
-            name: "Actions",
-            cell: (row) => <ActionButtons id={row.id} />,
-            ignoreRowClick: true,
-        },
-    ];
+
 
     const StatusLabel = ({ status }) => {
         const statusStyles = {
@@ -516,6 +520,27 @@ const TestManagement = () => {
             });
         }
     };
+
+    useDebounce(() => {
+        const filteredData = fullData.filter((item) => {
+            return (
+                item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.Position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.Office.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.Status.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        });
+        setDataToShow([...filteredData])
+    }, [searchTerm], 500
+    );
+
+    useEffect(() => {
+        setDataToShow([...data])
+    }, [data])
+
+    useEffect(() => {
+        fetchListTests();
+    }, [])
 
     return (
         <>
