@@ -96,6 +96,13 @@ $highlight-color: #dee2ec;
         .admin-main {
             height: calc(100vh - 50px);
             float: left;
+            width: calc(100vw - 240px);
+            padding: 30px;
+            transition: width 0.3s ease;
+
+            &.collapsed {
+                width: 100vw;
+            }
 
             .welcome-container {
                 background-color: #0061f2 !important;

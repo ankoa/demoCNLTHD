@@ -5,8 +5,9 @@ import { BarLoader } from "react-spinners";
 import { useSelector } from "react-redux";
 import "./index.scss"
 import AdminSidebar from "../AdminSidebar/AdminSidebar";
+import { Outlet } from "react-router-dom";
 
-const AdminLayout = ({ children, ...props }) => {
+const AdminLayout = (props) => {
     const color = "#36d7b7"; // màu sắc loader
     const loading = useSelector(state => state.loadingReducer.loading);
     const [collapsed, setCollapsed] = useState(false);
@@ -23,9 +24,9 @@ const AdminLayout = ({ children, ...props }) => {
                         <AdminSidebar collapsed={collapsed}></AdminSidebar>
                         {/* </PerfectScrollbar> */}
                     </div>
-                    <div className="admin-main">
+                    <div className={`admin-main ${collapsed ? "collapsed" : ""}`}>
                         {/* <PerfectScrollbar> */}
-                        {children}
+                        <Outlet></Outlet>
                         {/* </PerfectScrollbar> */}
                     </div>
                 </div >
