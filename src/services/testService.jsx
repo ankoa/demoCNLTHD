@@ -3,7 +3,7 @@ import createAxiosInstance from "../util/axiosCustomize";
 
 const axios = createAxiosInstance(5001);
 const getTests = () => {
-    return axios.post("api/Test");
+    return axios.get("api/Test");
 };
 
 // const getUsers = () => {
