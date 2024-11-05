@@ -7,11 +7,13 @@ export const ROUTERS = {
     ONLINECOURSE: "/onlinecouse",
     LOGIN: "/login",
     REGISTER: "/register",
-    ConfirmCode: "/confirmCode",
-    USERCOURSE: "/usercourse",
     CONFIRMCODE: "/confirmCode",
+    USERCOURSE: "/usercourse",
     FINDACCOUNT: "/findAccount",
     RESETPASSWORD: "/resetPassword",
     CHANGEPASSWORD: "/changePassword",
+  },
+  ADMIN: {
+    DASHBOARD: "dashboard", // Chỉ cần để "dashboard" mà không có /
   },
 };

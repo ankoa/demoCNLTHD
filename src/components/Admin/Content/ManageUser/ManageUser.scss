@@ -1,0 +1,41 @@
+.modal-add-user {
+    .img-preview {
+        border-style: dashed !important;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        height: 150px;
+        color: #ccc;
+
+        img {
+            max-width: 100%;
+            max-height: 90%;
+        }
+    }
+}
+
+.manage-user-container {
+    padding: 15px;
+
+    .title {
+        font-weight: 600;
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    .user-content {
+        .btnAddUser {
+            margin-bottom: 10px;
+        }
+
+        .table-users {
+            .user-pagination {
+                margin-top: 40px;
+                display: flex;
+                justify-content: center;
+            }
+        }
+    }
+
+
+}
