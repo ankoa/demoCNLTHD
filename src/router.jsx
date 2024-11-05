@@ -12,6 +12,7 @@ import FindAccount from "./components/User/FindAccount/FindAccount";
 import ResetPassword from "./components/User/ResetPassword/ResetPassword";
 import UserCourse from "./components/User/UserCourse/UserCourse";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
+import HistoryResult from "./components/User/TestResult/HistoryResult";
 
 
 const renderUserRouter = () => {
@@ -64,6 +65,12 @@ const renderUserRouter = () => {
       path: ROUTERS.USER.CHANGEPASSWORD,
       component: <ChangePassword />,
     },
+    {
+      path: ROUTERS.USER.TESTRESULT,
+      component: <HistoryResult />,
+    }
+    
+    
   ];
 
   return (

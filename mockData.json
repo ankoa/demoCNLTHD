@@ -1,0 +1,43 @@
+{
+    "EC": 0,
+    "EM": "Fetch history successfully",
+    "DT": [
+      {
+        "id": 1,
+        "userID": 1,
+        "testID": 1,
+        "total_Listening": 20,
+        "total_Reading": 50,
+        "startTime": "2024-01-01T10:00:00Z",
+        "endTime": "2024-01-01T11:20:00Z"
+      },
+      {
+        "id": 2,
+        "userID": 2,
+        "testID": 2,
+        "total_Listening": 30,
+        "total_Reading": 40,
+        "startTime": "2024-01-02T10:00:00Z",
+        "endTime": "2024-01-02T11:00:00Z"
+      },
+      {
+        "id": 3,
+        "userID": 2,
+        "testID": 2,
+        "total_Listening": 10,
+        "total_Reading": 50,
+        "startTime": "2024-01-02T10:00:00Z",
+        "endTime": "2024-01-02T11:00:00Z"
+      },
+      {
+        "id": 4,
+        "userID": 2,
+        "testID": 2,
+        "total_Listening": 40,
+        "total_Reading": 40,
+        "startTime": "2024-01-02T10:00:00Z",
+        "endTime": "2024-01-02T11:00:00Z"
+      }
+    ]
+  }
+  

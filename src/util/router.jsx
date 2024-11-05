@@ -12,5 +12,6 @@ export const ROUTERS = {
     FINDACCOUNT: "/findAccount",
     RESETPASSWORD: "/resetPassword",
     CHANGEPASSWORD: "/changePassword",
+    TESTRESULT: "/testResults/:historyID",
   },
 };
