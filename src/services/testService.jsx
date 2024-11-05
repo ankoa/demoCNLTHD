@@ -1,9 +1,9 @@
 // Hàm postLogin để gọi API đăng nhập
-import axios from "../util/axiosCustomize";
+import createAxiosInstance from "../util/axiosCustomize";
 
-const port = '5001/'
+const axios = createAxiosInstance(5001);
 const getTests = () => {
-    return axios.post(port + "api/Test");
+    return axios.post("api/Test");
 };
 
 // const getUsers = () => {

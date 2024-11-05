@@ -1,10 +1,11 @@
 // Hàm postLogin để gọi API đăng nhập
-import axios from "../util/axiosCustomize";
 
-const port = '5555/'
+import createAxiosInstance from "../util/axiosCustomize";
+
+const axios = createAxiosInstance(5556);
 
 const postLogin = (Username, Password) => {
-  return axios.post(port + "api/Account/Login", {
+  return axios.post("api/Account/Login", {
     Username,
     Password,
     delay: 2000
@@ -12,12 +13,12 @@ const postLogin = (Username, Password) => {
 };
 
 const getUsers = () => {
-  return axios.get(port + "api/User");
+  return axios.get("api/User");
 };
 
 // Hàm postLogOut để gọi API đăng xuất
 const postLogOut = (email, refresh_token) => {
-  return axios.post(port + "api/v1/logout", {
+  return axios.post("api/v1/logout", {
     email,
     refresh_token,
     delay: 1000,
@@ -26,17 +27,17 @@ const postLogOut = (email, refresh_token) => {
 
 // Hàm postSendCode để gọi API gửi mail tạo tk
 const postSendConfirmEmailCode = (Email, Username) => {
-  return axios.post(port + "api/Account/SendConfirmEmailCode", { Email, Username });
+  return axios.post("api/Account/SendConfirmEmailCode", { Email, Username });
 };
 
 // Hàm postCheckConfirmEmailCode để gọi API gửi kiểm tra code tạo tk
 const postCheckConfirmEmailCode = (Email, ConfirmationCode) => {
-  return axios.post(port + "api/Account/CheckConfirmEmailCode", { Email, ConfirmationCode });
+  return axios.post("api/Account/CheckConfirmEmailCode", { Email, ConfirmationCode });
 };
 
 // Hàm postSendCode để gọi API gửi mail reset password
 const postSendResetCode = (Email) => {
-  return axios.post(port + "api/Account/SendResetCode",
+  return axios.post("api/Account/SendResetCode",
     { Email: Email }, // Truyền đối tượng chứa email
     {
       headers: { 'Content-Type': 'application/json' } // Đúng cú pháp headers
@@ -45,12 +46,12 @@ const postSendResetCode = (Email) => {
 
 // Hàm postCheckResetPasswordCode để gọi API gửi kiểm tra code reset password
 const postCheckResetPasswordCode = (Email, Token) => {
-  return axios.post(port + "api/Account/VerifyResetCode", { Email, Token });
+  return axios.post("api/Account/VerifyResetCode", { Email, Token });
 };
 
 // Hàm để gọi api check account có tồn tại hay không
 const postCheckAccountExist = (Email) => {
-  return axios.post(port + "api/Account/CheckAccountExist",
+  return axios.post("api/Account/CheckAccountExist",
     { email: Email }, // Truyền đối tượng chứa email
     {
       headers: { 'Content-Type': 'application/json' } // Đúng cú pháp headers
@@ -59,7 +60,7 @@ const postCheckAccountExist = (Email) => {
 
 // Hàm postResetPassword để gọi API reset password
 const postResetPassword = (Email, Token, NewPassword) => {
-  return axios.post(port + "api/Account/ResetPassword", { Email, Token, NewPassword });
+  return axios.post("api/Account/ResetPassword", { Email, Token, NewPassword });
 };
 
 // Hàm postRegister để gọi API đăng ký
@@ -72,7 +73,7 @@ const postRegister = (email, username, password, firstname, lastname) => {
     LastName: lastname
   };
 
-  return axios.post(port + "api/Account/SignUp", data, {
+  return axios.post("api/Account/SignUp", data, {
     header: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;application/json' }
 
   });
@@ -85,7 +86,7 @@ const postRenewToken = (AccessToken, RefreshToken) => {
     RefreshToken
   };
 
-  return axios.post(port + "api/Account/RenewToken", data, {
+  return axios.post("api/Account/RenewToken", data, {
     header: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;application/json' }
 
   });
