@@ -13,35 +13,35 @@ import FindAccount from "./components/User/FindAccount/FindAccount";
 import ResetPassword from "./components/User/ResetPassword/ResetPassword";
 import UserCourse from "./components/User/UserCourse/UserCourse";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
-
+import TestManagement from "./components/Admin/Content/TestManagement/TestManagement";
 
 const renderUserRouter = () => {
   const userRouters = [
-    { path: ROUTERS.USER.HOMEPAGE, component: <Homepage /> },
-    { path: ROUTERS.USER.LIBRARY_TEST, component: <TestLibrary /> },
-    { path: ROUTERS.USER.TEST_PAGE, component: <MainText /> },
-    { path: ROUTERS.USER.LOGIN, component: <Login /> },
-    { path: ROUTERS.USER.ONLINECOURSE, component: <OnlineCourse /> },
-    { path: ROUTERS.USER.REGISTER, component: <Register /> },
-    { path: ROUTERS.USER.FINDACCOUNT, component: <FindAccount /> },
-    { path: ROUTERS.USER.CONFIRMCODE, component: <ConfirmCode /> },
-    { path: ROUTERS.USER.RESETPASSWORD, component: <ResetPassword /> },
-    { path: ROUTERS.USER.USERCOURSE, component: <UserCourse /> },
-    { path: ROUTERS.USER.CHANGEPASSWORD, component: <ChangePassword /> },
+    { path: ROUTERS.USER.HOMEPAGE, element: <Homepage /> },
+    { path: ROUTERS.USER.LIBRARY_TEST, element: <TestLibrary /> },
+    { path: ROUTERS.USER.TEST_PAGE, element: <MainText /> },
+    { path: ROUTERS.USER.LOGIN, element: <Login /> },
+    { path: ROUTERS.USER.ONLINECOURSE, element: <OnlineCourse /> },
+    { path: ROUTERS.USER.REGISTER, element: <Register /> },
+    { path: ROUTERS.USER.FINDACCOUNT, element: <FindAccount /> },
+    { path: ROUTERS.USER.CONFIRMCODE, element: <ConfirmCode /> },
+    { path: ROUTERS.USER.RESETPASSWORD, element: <ResetPassword /> },
+    { path: ROUTERS.USER.USERCOURSE, element: <UserCourse /> },
+    { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
   ];
 
-  return userRouters.map((item, key) => (
-    <Route key={key} path={item.path} element={item.component} />
+  return userRouters.map((route, key) => (
+    <Route key={key} path={route.path} element={route.element} />
   ));
 };
 
 const renderAdminRouter = () => {
   const adminRouters = [
-    { path: ROUTERS.ADMIN.DASHBOARD, component: <>hihi</> },
+    { path: ROUTERS.ADMIN.DASHBOARD, element: <TestManagement /> },
   ];
 
-  return adminRouters.map((item, key) => (
-    <Route key={key} path={item.path} element={item.component} />
+  return adminRouters.map((route, key) => (
+    <Route key={key} path={route.path} element={route.element} />
   ));
 };
 

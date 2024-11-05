@@ -9,6 +9,10 @@ const postLogin = (Username, Password) => {
   });
 };
 
+const getUsers = () => {
+  return axios.get("api/User");
+};
+
 // Hàm postLogOut để gọi API đăng xuất
 const postLogOut = (email, refresh_token) => {
   return axios.post("api/v1/logout", {
@@ -72,6 +76,18 @@ const postRegister = (email, username, password, firstname, lastname) => {
   });
 };
 
+// Hàm postRegister để gọi API đăng ký
+const postRenewToken = (AccessToken, RefreshToken) => {
+  const data = {
+    AccessToken,
+    RefreshToken
+  };
+
+  return axios.post("api/Account/RenewToken", data, {
+    header: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;application/json' }
+
+  });
+};
 
 // Export các hàm để sử dụng trong các thành phần khác
 export {
@@ -83,5 +99,7 @@ export {
   postCheckAccountExist,
   postSendResetCode,
   postCheckResetPasswordCode,
-  postResetPassword
+  postResetPassword,
+  getUsers,
+  postRenewToken
 };
