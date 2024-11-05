@@ -3,7 +3,7 @@ import { ROUTERS } from "./util/router";
 import Homepage from "./components/User/Homepage/Homepage";
 import MasterLayout from "./components/User/MasterLayout/index";
 import TestLibrary from "./components/User/TestLibrary/TestLibrary";
-import MainText from "./components/User/TestPage/MainTest";
+import TestDetail from "./components/User/TestPage/TestDetail";
 import Login from "./components/User/Login/Login";
 import OnlineCourse from "./components/User/OnlineCourse/OnlineCourse";
 import Register from "./components/User/Register/Register";
@@ -12,7 +12,7 @@ import FindAccount from "./components/User/FindAccount/FindAccount";
 import ResetPassword from "./components/User/ResetPassword/ResetPassword";
 import UserCourse from "./components/User/UserCourse/UserCourse";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
-
+import MainTest from "./components/User/TestPage/MainTest/MainTest";
 
 const renderUserRouter = () => {
   const userRouters = [
@@ -26,11 +26,11 @@ const renderUserRouter = () => {
     },
     {
       path: ROUTERS.USER.TEST_PAGE,
-      component: <MainText />,
+      component: <TestDetail />,
     },
     {
-      path: ROUTERS.USER.LOGIN,
-      component: <Login />,
+      path: ROUTERS.USER.MAIN_TEST,
+      component: <MainTest />,
     },
     {
       path: ROUTERS.USER.ONLINECOURSE,

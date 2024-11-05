@@ -64,7 +64,7 @@ const Header = () => {
         </div>
       )}
 
-      <div className={`main-header ${addDropShadow ? "shadow" : ""}`}>
+      {/* <div className={`main-header ${addDropShadow ? "shadow" : ""}`}>
         <Navbar expand="lg" className="bg-body-tertiary">
           <Container>
             <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
@@ -90,7 +90,7 @@ const Header = () => {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-      </div>
+      </div> */}
     </div>
   );
 };
