@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { postLogin } from "../../../services/authService";
+import { getUsers, postLogin } from "../../../services/authService";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Login.scss";
 import { useDispatch } from "react-redux";
-import { doLogIn } from "../../../redux/action/userAction";
+import { doLogIn, doLogOut } from "../../../redux/action/userAction";
 import { toast } from "react-toastify";
 
 const Login = () => {
@@ -37,6 +37,7 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
+    dispatch(doLogOut());
     if (!username) {
       toast.error("Email không được để trống!");
       return;
@@ -49,7 +50,9 @@ const Login = () => {
       let response = await postLogin(username, password);
       if (response && response.EC === 0) {
         dispatch(doLogIn(response));
-        navigate('/');
+        // let res = await getUsers();
+        // console.log(res)
+        // navigate('/');
       } else if (response && response.EC !== 0) {
         toast.error(response.EM);
         console.log(response);

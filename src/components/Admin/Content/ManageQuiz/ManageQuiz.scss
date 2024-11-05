@@ -1,0 +1,30 @@
+.manage-quiz-container {
+    padding: 15px;
+
+    .title {
+        font-weight: 600;
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    legend {
+        font-size: 13px;
+
+    }
+
+    .add-new-quiz {
+        .img-preview {
+            border-style: dashed !important;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            height: 150px;
+            color: #ccc;
+
+            img {
+                max-width: 100%;
+                max-height: 90%;
+            }
+        }
+    }
+}

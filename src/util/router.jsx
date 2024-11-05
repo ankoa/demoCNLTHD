@@ -3,15 +3,17 @@ export const ROUTERS = {
     HOMEPAGE: "/",
     LIBRARY_TEST: "/library-test",
     TEST_PAGE: "/test-page",
-    ONLINECOURSE: "/onlinecouse",
+    ONLINECOURSE: "/onlinecourse", // Sửa lỗi chính tả ở đây
     LOGIN: "/login",
     REGISTER: "/register",
-    ConfirmCode: "/confirmCode",
-    USERCOURSE: "/usercourse",
     CONFIRMCODE: "/confirmCode",
+    USERCOURSE: "/usercourse",
     FINDACCOUNT: "/findAccount",
     RESETPASSWORD: "/resetPassword",
     CHANGEPASSWORD: "/changePassword",
     TESTRESULT: "/testResults/:historyID",
+  },
+  ADMIN: {
+    DASHBOARD: "dashboard", // Chỉ cần để "dashboard" mà không có /
   },
 };
