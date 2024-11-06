@@ -23,40 +23,41 @@ const createAxiosInstance = (port) => {
         store.dispatch(setLoading(true));
 
         const access_token = store.getState()?.userReducer?.account?.access_token;
-        const refresh_token = store.getState()?.userReducer?.account?.refresh_token;
+        // const refresh_token = store.getState()?.userReducer?.account?.refresh_token;
 
-        if (access_token) {
-            if (isTokenExpired(access_token)) {
-                console.log("Access token expired, refreshing...");
-                try {
-                    let response = await postRenewToken(access_token, refresh_token);
-                    console.log("Token refresh response:", response);
+        // if (access_token) {
+        //     if (isTokenExpired(access_token)) {
+        //         console.log("Access token expired, refreshing...");
+        //         try {
+        //             let response = await postRenewToken(access_token, refresh_token);
+        //             console.log("Token refresh response:", response);
 
-                    if (response && response.EC === 0) {
-                        const newAccessToken = response.DT.AccessToken;
-                        const newRefreshToken = response.DT.RefreshToken;
+        //             if (response && response.EC === 0) {
+        //                 const newAccessToken = response.DT.AccessToken;
+        //                 const newRefreshToken = response.DT.RefreshToken;
 
-                        store.dispatch(doRenewToken({
-                            DT: {
-                                token: {
-                                    AccessToken: newAccessToken,
-                                    RefreshToken: newRefreshToken
-                                }
-                            }
-                        }));
+        //                 store.dispatch(doRenewToken({
+        //                     DT: {
+        //                         token: {
+        //                             AccessToken: newAccessToken,
+        //                             RefreshToken: newRefreshToken
+        //                         }
+        //                     }
+        //                 }));
 
-                        config.headers["Authorization"] = "Bearer " + newAccessToken;
-                    } else {
-                        console.error("Failed to refresh token:", response);
-                    }
-                } catch (error) {
-                    console.error("Error refreshing token:", error);
-                    return Promise.reject(error); // Ngừng xử lý nếu có lỗi
-                }
-            } else {
-                config.headers["Authorization"] = "Bearer " + access_token;
-            }
-        }
+        //                 config.headers["Authorization"] = "Bearer " + newAccessToken;
+        //             } else {
+        //                 console.error("Failed to refresh token:", response);
+        //             }
+        //         } catch (error) {
+        //             console.error("Error refreshing token:", error);
+        //             return Promise.reject(error); // Ngừng xử lý nếu có lỗi
+        //         }
+        //     } else {
+        //         config.headers["Authorization"] = "Bearer " + access_token;
+        //     }
+        // }
+        config.headers["Authorization"] = "Bearer " + access_token;
 
         return config;
     }, function (error) {
