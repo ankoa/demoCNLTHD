@@ -10,6 +10,7 @@ import { MdDelete } from "react-icons/md";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Card } from 'react-bootstrap';
 import { getTests } from '../../../../services/testService';
+import { toast } from 'react-toastify';
 
 const TestManagement = () => {
     //--------------Khai báo ref
@@ -59,7 +60,7 @@ const TestManagement = () => {
         },
         {
             name: "Actions",
-            cell: (row) => <ActionButtons id={row.id} />,
+            cell: (row) => <ActionButtons id={row.Id} />,
             ignoreRowClick: true,
         },
     ];
@@ -67,12 +68,21 @@ const TestManagement = () => {
     const fullData = data;
     // const [lastid, setLastid] = useState(data[data.length - 1].id);
 
+
+    useEffect(() => {
+        fetchListTests();
+    }, [])
+
+    useEffect(() => {
+        setDataToShow([...data]);  // Cập nhật lại dataToShow khi data thay đổi
+    }, [data]);  // Chỉ gọi khi data thay đổi
+
     const fetchListTests = async () => {
         try {
             let response = await getTests();
             if (response && response.EC === 0) {
-                console.log(response)
                 setData(response.DT);
+                console.log(data);
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
             }
@@ -84,8 +94,6 @@ const TestManagement = () => {
             }
         }
     }
-
-
 
     const handleSearch = (e) => {
         const value = e.target.value;
@@ -108,7 +116,8 @@ const TestManagement = () => {
     const ActionButtons = ({ id }) => {
         const handleDelete = () => {
             if (window.confirm("Bạn có thực sự muốn xóa user có id=" + id)) {
-                setData(data.filter(item => item.id !== id));
+                setData([...data.filter(item => item.Id !== id)]);
+                console.log(data);
             }
         };
 
@@ -204,25 +213,21 @@ const TestManagement = () => {
     };
 
     useDebounce(() => {
-        const filteredData = fullData.filter((item) => {
+        const filteredData = data.filter((item) => {
             return (
                 item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Office.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Status.toLowerCase().includes(searchTerm.toLowerCase())
+                item.Description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.Difficulty.toLowerCase().includes(searchTerm.toLowerCase())
             );
         });
-        setDataToShow([...filteredData])
+        console.log(filteredData);
+        if (filteredData.length === 0) {
+            return;
+        }
+        setData([...filteredData])
     }, [searchTerm], 500
     );
 
-    useEffect(() => {
-        fetchListTests();
-    }, [])
-
-    useEffect(() => {
-        setDataToShow([...data])
-    }, [data])
 
 
 
@@ -255,7 +260,7 @@ const TestManagement = () => {
                                     <DataTable
                                         className='rdt_Table_Home'
                                         columns={columns}
-                                        data={dataToShow}
+                                        data={data}
                                         pagination
                                         paginationComponentOptions={paginationOptions}
                                     />
