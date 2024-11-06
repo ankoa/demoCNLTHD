@@ -7,14 +7,13 @@ const ModalAddUpdateUser = forwardRef(
         const [actionType, setActionType] = useState('');
 
         const [formData, setFormData] = useState({
-            id: 0,
-            Name: '',
-            Position: '',
-            Office: '',
-            Age: '',
-            Startdate: '',
-            Salary: '',
-            Status: 'Full-Time',
+            "Id": 0,
+            "Name": "",
+            "Description": "",
+            "Difficulty": "",
+            "Duration": 0,
+            "CreatedAt": "",
+            "UpdatedAt": ""
         });
 
         // Truyền hàm open() qua ref để có thể gọi từ component cha
@@ -26,14 +25,13 @@ const ModalAddUpdateUser = forwardRef(
                 setFormData(data); // Điền dữ liệu vào form nếu là cập nhật
             } else {
                 setFormData({
-                    id: 0,
-                    Name: '',
-                    Position: '',
-                    Office: '',
-                    Age: '',
-                    Startdate: '',
-                    Salary: '',
-                    Status: 'Full-Time',
+                    "Id": 0,
+                    "Name": "",
+                    "Description": "",
+                    "Difficulty": "",
+                    "Duration": 0,
+                    "CreatedAt": "",
+                    "UpdatedAt": ""
                 });
             }
             setSh(true);
@@ -43,14 +41,13 @@ const ModalAddUpdateUser = forwardRef(
             setSh(false);
             setActionType('');
             setFormData({
-                id: 0,
-                Name: '',
-                Position: '',
-                Office: '',
-                Age: '',
-                Startdate: '',
-                Salary: '',
-                Status: 'Full-Time',
+                "Id": 0,
+                "Name": "",
+                "Description": "",
+                "Difficulty": "",
+                "Duration": 0,
+                "CreatedAt": "",
+                "UpdatedAt": ""
             });
         };
 

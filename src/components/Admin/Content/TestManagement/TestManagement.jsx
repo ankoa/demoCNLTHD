@@ -9,7 +9,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Card } from 'react-bootstrap';
-import { getTests } from '../../../../services/testService';
+import { deleteTestById, getTests } from '../../../../services/testService';
 import { toast } from 'react-toastify';
 
 const TestManagement = () => {
@@ -95,6 +95,23 @@ const TestManagement = () => {
         }
     }
 
+    const delTestById = async (id) => {
+        try {
+            let response = await deleteTestById(id);
+            if (response && response.EC === 0) {
+                toast.success(response.EM);
+            } else if (response && response.EC !== 0) {
+                toast.error(response.EM);
+            }
+        } catch (error) {
+            if (error.response) {
+                toast.error(error.response.data.EM || "Đã xảy ra lỗi");
+            } else {
+                console.error("Lỗi không xác định:", error);
+            }
+        }
+    }
+
     const handleSearch = (e) => {
         const value = e.target.value;
         setSearchTerm(value);
@@ -114,10 +131,10 @@ const TestManagement = () => {
     };
 
     const ActionButtons = ({ id }) => {
-        const handleDelete = () => {
-            if (window.confirm("Bạn có thực sự muốn xóa user có id=" + id)) {
-                setData([...data.filter(item => item.Id !== id)]);
-                console.log(data);
+        const handleDelete = async () => {
+            if (window.confirm("Bạn có thực sự muốn xóa Test có id=" + id)) {
+                await delTestById(id);
+                await fetchListTests();
             }
         };
 
