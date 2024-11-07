@@ -1,4 +1,4 @@
-import './TestManagement.scss'
+import './UserManagement.scss'
 import React, { useEffect, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FaEllipsisV } from "react-icons/fa";
@@ -11,8 +11,11 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { Card } from 'react-bootstrap';
 import { deleteTestById, getTests, postNewTest, putUpdateTest } from '../../../../services/testService';
 import { toast } from 'react-toastify';
+import { getUsers } from '../../../../services/authService';
+import { MdModeEditOutline, MdOutlineLockReset } from "react-icons/md";
+import { getUserWithRoleById } from '../../../../services/userService';
 
-const TestManagement = () => {
+const UserManagement = () => {
     //--------------Khai báo ref
     const refModalUser = useRef()
 
@@ -23,63 +26,66 @@ const TestManagement = () => {
     ]);
     const columns = [
         {
-            name: "ID",
-            selector: (row) => row.Id,
+            name: "UserID",
+            selector: (row) => row.UserID,
             sortable: true,
-            fixed: true
+            fixed: true,
+            width: "10%"  // Chỉnh kích thước cột theo %
         },
         {
-            name: "Name",
-            selector: (row) => row.Name,
+            name: "Username",
+            selector: (row) => row.Username,
             sortable: true,
+            width: "15%"  // Ví dụ: 15% cho cột Username
         },
         {
-            name: "Description",
-            selector: (row) => row.Description,
-            sortable: true
+            name: "Email",
+            selector: (row) => row.Email,
+            sortable: true,
+            width: "20%"  // Ví dụ: 20% cho cột Email
         },
         {
-            name: "Difficulty",
-            selector: (row) => row.Difficulty,
-            sortable: true
+            name: "FirstName",
+            selector: (row) => row.FirstName,
+            sortable: true,
+            width: "15%"  // Ví dụ: 15% cho cột FirstName
         },
         {
-            name: "Duration",
-            selector: (row) => row.Duration,
-            sortable: true
+            name: "LastName",
+            selector: (row) => row.LastName,
+            sortable: true,
+            width: "15%"  // Ví dụ: 15% cho cột LastName
         },
         {
             name: "Created",
-            selector: (row) => row.CreatedAt,
-            sortable: true
-        },
-        {
-            name: "Updated",
-            selector: (row) => row.UpdatedAt,
-            sortable: true
+            selector: (row) => new Date(row.CreatedAt).toLocaleString("vi-VN"),
+            sortable: true,
+            width: "15%"  // Ví dụ: 15% cho cột Created
         },
         {
             name: "Actions",
-            cell: (row) => <ActionButtons id={row.Id} />,
+            cell: (row) => <ActionButtons id={row.UserID} />,
             ignoreRowClick: true,
+            width: "15%"  // Ví dụ: 10% cho cột Actions
         },
     ];
+
     const [dataToShow, setDataToShow] = useState(data);
     const fullData = data;
     // const [lastid, setLastid] = useState(data[data.length - 1].id);
 
 
     useEffect(() => {
-        fetchListTests();
+        fetchListUsers();
     }, [])
 
     useEffect(() => {
         setDataToShow([...data]);  // Cập nhật lại dataToShow khi data thay đổi
     }, [data]);  // Chỉ gọi khi data thay đổi
 
-    const fetchListTests = async () => {
+    const fetchListUsers = async () => {
         try {
-            let response = await getTests();
+            let response = await getUsers();
             if (response && response.EC === 0) {
                 setData(response.DT);
                 console.log(data);
@@ -95,7 +101,7 @@ const TestManagement = () => {
         }
     }
 
-    const delTestById = async (id) => {
+    const delUserById = async (id) => {
         try {
             let response = await deleteTestById(id);
             if (response && response.EC === 0) {
@@ -126,15 +132,15 @@ const TestManagement = () => {
 
     var temp = false;
 
-    const findTestById = (id) => {
-        return data.find(item => item.Id === id);
+    const findTestById = async (id) => {
+        return await getUserWithRoleById(id);
     };
 
     const ActionButtons = ({ id }) => {
         const handleDelete = async () => {
             if (window.confirm("Bạn có thực sự muốn xóa Test có id=" + id)) {
-                await delTestById(id);
-                await fetchListTests();
+                await delUserById(id);
+                await fetchListUsers();
             }
         };
 
@@ -148,12 +154,20 @@ const TestManagement = () => {
             <div
                 style={{
                     display: "flex",
+                    justifyContent: "center",
                     // gap: '5px',
                     width: "100%",
                 }}
             >
                 <button className='btn-action' onClick={handleEdit}>
-                    <FaEllipsisV
+                    <MdModeEditOutline
+                        style={{ color: "#A5A6B1", cursor: "pointer" }}
+
+                    />
+                </button>
+
+                <button className='btn-action' onClick={handleDelete}>
+                    <MdOutlineLockReset size={'18px'}
                         style={{ color: "#A5A6B1", cursor: "pointer" }}
 
                     />
@@ -206,8 +220,9 @@ const TestManagement = () => {
     }
 
     //Hiện modal update user
-    const handleShowModalUpdate = (id) => {
-        refModalUser.current.open(findTestById(id), "Update");
+    const handleShowModalUpdate = async (id) => {
+        // console.log(await findTestById(id));
+        refModalUser.current.open(await findTestById(id), "Update");
     }
 
     //Hàm thêm user
@@ -217,7 +232,7 @@ const TestManagement = () => {
         let response = await postNewTest(newUser);
         if (response.EC === 0 && response) {
             toast.success(response.EM)
-            fetchListTests();
+            fetchListUsers();
         } else {
             toast.error(response.EM)
         }
@@ -230,7 +245,7 @@ const TestManagement = () => {
         let response = await putUpdateTest(updatedUser);
         if (response.EC === 0 && response) {
             toast.success(response.EM)
-            fetchListTests();
+            fetchListUsers();
         } else {
             toast.error(response.EM)
         }
@@ -303,4 +318,4 @@ const TestManagement = () => {
         </>
     );
 }
-export default TestManagement;
+export default UserManagement;

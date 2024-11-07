@@ -14,6 +14,7 @@ export const ROUTERS = {
   },
   ADMIN: {
     DASHBOARD: "dashboard", // Chỉ cần để "dashboard" mà không có /
-    TEST: "test", // Chỉ cần để "dashboard" mà không có /
+    TEST: "test",
+    USER: "user",
   },
 };

@@ -14,6 +14,7 @@ import ResetPassword from "./components/User/ResetPassword/ResetPassword";
 import UserCourse from "./components/User/UserCourse/UserCourse";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
 import TestManagement from "./components/Admin/Content/TestManagement/TestManagement";
+import UserManagement from "./components/Admin/Content/UserManagement/UserManagement";
 
 const renderUserRouter = () => {
   const userRouters = [
@@ -39,6 +40,7 @@ const renderAdminRouter = () => {
   const adminRouters = [
     { path: ROUTERS.ADMIN.DASHBOARD, element: <TestManagement /> },
     { path: ROUTERS.ADMIN.TEST, element: <TestManagement /> },
+    { path: ROUTERS.ADMIN.USER, element: <UserManagement /> },
   ];
 
   return adminRouters.map((route, key) => (
