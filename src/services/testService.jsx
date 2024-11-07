@@ -10,6 +10,15 @@ const deleteTestById = async (id) => {
     return axios.delete(`api/Test/${id}`);
 };
 
+const postNewTest = (newTest) => {
+    return axios.post("api/Test", newTest);
+};
+
+const putUpdateTest = (updateTest) => {
+    return axios.put(`api/Test/${updateTest.Id}`, updateTest);
+};
+
+
 // const getUsers = () => {
 //     return axios.get("api/User");
 // };
@@ -93,5 +102,7 @@ const deleteTestById = async (id) => {
 // Export các hàm để sử dụng trong các thành phần khác
 export {
     getTests,
-    deleteTestById
+    deleteTestById,
+    postNewTest,
+    putUpdateTest
 };
