@@ -133,7 +133,8 @@ const UserManagement = () => {
     var temp = false;
 
     const findTestById = async (id) => {
-        return await getUserWithRoleById(id);
+        let res = await getUserWithRoleById(id);
+        return res.DT;
     };
 
     const ActionButtons = ({ id }) => {
@@ -157,6 +158,7 @@ const UserManagement = () => {
                     justifyContent: "center",
                     // gap: '5px',
                     width: "100%",
+                    padding: '10px'
                 }}
             >
                 <button className='btn-action' onClick={handleEdit}>

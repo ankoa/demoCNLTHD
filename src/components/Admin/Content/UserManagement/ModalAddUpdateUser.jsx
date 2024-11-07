@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Stack, Badge } from 'react-bootstrap';
+import './ModalAddUpdateUser.scss'
 
 const ModalAddUpdateUser = forwardRef(
     ({ handleAdd, handleUpdate }, ref) => {
@@ -12,10 +13,11 @@ const ModalAddUpdateUser = forwardRef(
             Email: "",
             FirstName: "",
             LastName: "",
-            CreatedAt: ""
+            CreatedAt: "",
+            NewPass: ""
         });
 
-        const [role, setRole] = useState();
+        const [role, setRole] = useState([]);
 
         // Truyền hàm open() qua ref để có thể gọi từ component cha
         useImperativeHandle(ref, () => ({ open }), []);
@@ -23,8 +25,17 @@ const ModalAddUpdateUser = forwardRef(
         const open = (data, action) => {
             setActionType(action);
             if (action === 'Update') {
-                setFormData(data.user); // Điền dữ liệu vào form nếu là cập nhật
+                setFormData({
+                    UserID: data.user.UserID,
+                    Username: data.user.Username,
+                    Email: data.user.Email,
+                    FirstName: data.user.FirstName,
+                    LastName: data.user.LastName,
+                    CreatedAt: data.user.CreatedAt,
+                    NewPass: ""
+                });
                 setRole(data.roles);
+                console.log(data);
             } else {
                 setFormData({
                     UserID: 0,
@@ -32,8 +43,10 @@ const ModalAddUpdateUser = forwardRef(
                     Email: "",
                     FirstName: "",
                     LastName: "",
-                    CreatedAt: new Date().toISOString()
+                    CreatedAt: new Date().toISOString(),
+                    NewPass: ""
                 });
+                setRole([]);
             }
             setSh(true);
         };
@@ -47,8 +60,10 @@ const ModalAddUpdateUser = forwardRef(
                 Email: "",
                 FirstName: "",
                 LastName: "",
-                CreatedAt: ""
+                CreatedAt: "",
+                NewPass: ""
             });
+            setRole([]);
         };
 
         const handleChange = (e) => {
@@ -78,17 +93,18 @@ const ModalAddUpdateUser = forwardRef(
                 </Modal.Header>
                 <Modal.Body className="p-5 pt-2" style={{ height: '500px', overflowY: 'scroll' }}>
                     <Form onSubmit={handleSubmit}>
-                        {actionType === 'Add' ? '' : (<Form.Group className="mb-3" controlId="UserID">
-                            <Form.Label>UserID</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="UserID"
-                                value={formData.UserID}
-                                onChange={handleChange}
-                                disabled
-                            />
-                        </Form.Group>)}
-
+                        {actionType === 'Update' && (
+                            <Form.Group className="mb-3" controlId="UserID">
+                                <Form.Label>UserID</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="UserID"
+                                    value={formData.UserID}
+                                    onChange={handleChange}
+                                    disabled
+                                />
+                            </Form.Group>
+                        )}
 
                         <Form.Group className="mb-3" controlId="Username">
                             <Form.Label>Username</Form.Label>
@@ -97,7 +113,7 @@ const ModalAddUpdateUser = forwardRef(
                                 name="Username"
                                 value={formData.Username}
                                 onChange={handleChange}
-                                required
+                                disabled={actionType === 'Update'}
                             />
                         </Form.Group>
 
@@ -134,7 +150,20 @@ const ModalAddUpdateUser = forwardRef(
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="CreatedAt">
+                        {actionType === 'Add' && (
+                            <Form.Group className="mb-3" controlId="NewPass">
+                                <Form.Label>New Password</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    name="NewPass"
+                                    value={formData.NewPass}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                        )}
+
+                        {/* <Form.Group className="mb-3" controlId="CreatedAt">
                             <Form.Label>Created At</Form.Label>
                             <Form.Control
                                 type="text"
@@ -142,9 +171,32 @@ const ModalAddUpdateUser = forwardRef(
                                 value={new Date(formData.CreatedAt).toLocaleString("vi-VN")}
                                 disabled
                             />
+                        </Form.Group> */}
+
+
+                        <Form.Group className="mb-3" controlId="Role">
+                            <Form.Label>Role</Form.Label>
+                            <div className='d-flex flex-wrap'>
+                                {role.map((role, index) => (
+                                    <Badge
+                                        key={index}
+                                        bg="primary"
+                                        className="role-badge"
+                                    >
+                                        {role.RoleName}
+                                        <span
+                                            onClick={() => handleDeleteRole(index)} // Hàm xóa role
+                                            className="badge-delete-icon"
+                                        >
+                                            × {/* Hoặc dùng icon X */}
+                                        </span>
+                                    </Badge>
+                                ))}
+                            </div>
                         </Form.Group>
 
-                        <Button variant="primary" type="submit">
+
+                        <Button variant="primary" type="submit" style={{ margin: 'auto' }}>
                             {actionType === 'Add' ? 'Add User' : 'Update User'}
                         </Button>
                     </Form>
