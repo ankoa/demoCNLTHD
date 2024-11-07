@@ -8,6 +8,7 @@ import {
 } from "../../../../services/testsService";
 import { getAnswersOfQuestion } from "../../../../services/questionService";
 import Question from "../Question/Question";
+import _ from "lodash";
 
 const MainTest = () => {
   const { testId } = useParams();
@@ -51,7 +52,6 @@ const MainTest = () => {
       console.error("Lỗi khi lấy dữ liệu phần:", error);
     }
   };
-
   const fetchQuizData = async (parts) => {
     const quizDataArray = [];
     for (const part of parts) {
@@ -66,9 +66,16 @@ const MainTest = () => {
             answerResponse.EC === 0 &&
             Array.isArray(answerResponse.DT.answers)
           ) {
+            const answersWithSelection = answerResponse.DT.answers.map(
+              (answer) => ({
+                ...answer,
+                isSelected: false, // Thêm isSelected cho mỗi câu trả lời
+              })
+            );
+
             quizDataArray.push({
-              question: answerResponse.DT.question,
-              answers: answerResponse.DT.answers,
+              question,
+              answers: answersWithSelection,
             });
           } else {
             console.error(
@@ -89,6 +96,89 @@ const MainTest = () => {
       }
     }
     setQuizData(quizDataArray); // Lưu dữ liệu vào quizData
+    console.log("=>>>>>>>QuizData: ", quizData);  
+  };
+
+  /*   console.log("List Quiz: ", quizData);
+   */
+  const handelPrevious = () => {
+    if (index - 1 < 0) return;
+    setIndex(index - 1);
+  };
+
+  const handelNext = () => {
+    if (quizData && quizData.length > index + 1) setIndex(index + 1);
+  };
+  const handelFinishQuiz = () => {
+    console.log("check data before submid: ", quizData);
+    if (quizData && quizData.length > 0) {
+      console.log();
+    }
+  };
+  /* const handelCheckBox = (answerID, questionID) => {
+    console.log("=>>>>>>>>>>> Q and A: ", questionID, answerID);
+    let dataQuizClone = _.cloneDeep(quizData);
+    // Tìm câu hỏi tương ứng với questionID
+    let questions = dataQuizClone.find(
+      (item) => +item.question.Id === questionID // Truy cập đúng thuộc tính question.Id
+    );
+
+    // Kiểm tra nếu câu hỏi và mảng câu trả lời tồn tại
+    if (questions && questions.answers) {
+      // Cập nhật isSelected cho từng câu trả lời
+      let b = (questions.answers = questions.answers.map((item) => {
+        if (+item.Id === +answerID) {
+          item.isSelected = !item.isSelected;
+        }
+        return item;
+      }));
+      questions.answers = b;
+    } else {
+      console.error(
+        `Không tìm thấy câu hỏi hoặc câu trả lời cho questionID: ${questionID}`
+      );
+    }
+    let index = dataQuizClone.findIndex(
+      (item) => +item.question.Id === +questionID
+    );
+    if (index > -1) {
+      dataQuizClone[index] = questions;
+      setQuizData(dataQuizClone);
+    }
+  }; */
+  const handelRadioButton = (answerID, questionID) => {
+    console.log("=>>>>>>>>>>> Q and A: ", questionID, answerID);
+    let dataQuizClone = _.cloneDeep(quizData);
+
+    // Tìm câu hỏi tương ứng với questionID
+    let questions = dataQuizClone.find(
+      (item) => +item.question.Id === questionID // Truy cập đúng thuộc tính question.Id
+    );
+
+    // Kiểm tra nếu câu hỏi và mảng câu trả lời tồn tại
+    if (questions && questions.answers) {
+      // Đặt lại isSelected cho tất cả câu trả lời của câu hỏi này
+      questions.answers = questions.answers.map((item) => {
+        if (+item.Id === +answerID) {
+          item.isSelected = true; // Chỉ đánh dấu đáp án đã chọn là true
+        } else {
+          item.isSelected = false; // Đặt các đáp án khác thành false
+        }
+        return item;
+      });
+    } else {
+      console.error(
+        `Không tìm thấy câu hỏi hoặc câu trả lời cho questionID: ${questionID}`
+      );
+    }
+    console.log("==>>>> Check click radio: ", questions);
+    let index = dataQuizClone.findIndex(
+      (item) => +item.question.Id === +questionID
+    );
+    if (index > -1) {
+      dataQuizClone[index] = questions;
+      setQuizData(dataQuizClone);
+    }
   };
 
   return (
@@ -96,36 +186,39 @@ const MainTest = () => {
       <div className="left-content">
         <div className="title">{testData ? testData.Name : "Loading..."}</div>
         <div className="q-body">
-          <img
+          {/* <img
             src={testData ? testData.imageUrl : ""}
             alt={testData ? testData.Name : "Loading..."}
-          />
+          /> */}
         </div>
         <div className="q-content">
-          {quizData.length > 0 ? (
-            <Question question={quizData[index]} />
-          ) : (
-            <div>Loading questions...</div>
-          )}
+          <Question
+            index={index}
+            handelRadioButton={handelRadioButton}
+            data={quizData && quizData.length > 0 ? quizData[index] : []}
+          />
         </div>
         <div className="footer">
           <button
-            className="btn btn-primary ml-3"
-            onClick={() => setIndex(index + 1)}
-            disabled={index >= quizData.length - 1}
-          >
-            Next
-          </button>
-          <button
             className="btn btn-secondary"
-            onClick={() => setIndex(index - 1)}
-            disabled={index <= 0}
+            onClick={() => handelPrevious()}
           >
             Previous
           </button>
+          <button className="btn btn-primary" onClick={() => handelNext()}>
+            Next
+          </button>
+          <button
+            className="btn btn-warning"
+            onClick={() => handelFinishQuiz()}
+          >
+            Finish
+          </button>
         </div>
       </div>
-      <div className="right-content">count down</div>
+      <div className="right-content">
+        <div className="countdown">Count down: 00:00</div>
+      </div>
     </div>
   );
 };

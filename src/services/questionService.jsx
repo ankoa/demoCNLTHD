@@ -4,8 +4,8 @@ import axios from "../util/axiosCustomize";
 const getAllQuestions = async () => {
   try {
     const response = await axios.get("https://localhost:5001/api/Question");
-    console.log("Data from API:", response.data.DT);
-    return response.data.DT;
+    /*     console.log("Data from API:", response.data.DT);
+     */ return response.data.DT;
   } catch (error) {
     console.error("Error fetching questions:", error);
     throw error;
@@ -18,8 +18,8 @@ const getQuestionById = async (id) => {
     const response = await axios.get(
       `https://localhost:5001/api/Question/${id}`
     );
-    console.log("Question data by ID:", response.data.DT);
-    return response.data.DT;
+    /*     console.log("Question data by ID:", response.data.DT);
+     */ return response.data.DT;
   } catch (error) {
     console.error("Error fetching question by ID:", error);
     throw error;
@@ -32,8 +32,8 @@ const getAnswersOfQuestion = async (id) => {
     const response = await axios.get(
       `https://localhost:5001/api/Question/answer/${id}`
     );
-    console.log("Answers of question:", response);
-    return response;
+    /*     console.log("Answers of question:", response);
+     */ return response;
   } catch (error) {
     console.error("Error fetching answers of question:", error);
     throw error;

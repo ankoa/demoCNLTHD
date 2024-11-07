@@ -3,8 +3,8 @@ import axios from "../util/axiosCustomize";
 const getAllTests = async () => {
   try {
     const response = await axios.get("https://localhost:5001/api/Test");
-    console.log("Data from API:", response); // Kiểm tra dữ liệu
-    return response;
+    /*     console.log("Data from API:", response); // Kiểm tra dữ liệu
+     */ return response;
   } catch (error) {
     console.error("Error fetching tests:", error);
     throw error; // Ném lại lỗi để xử lý ở nơi khác
@@ -14,8 +14,8 @@ const getAllTests = async () => {
 const getTestById = async (id) => {
   try {
     const response = await axios.get(`https://localhost:5001/api/Test/${id}`);
-    console.log("Data from API:", response); // Kiểm tra dữ liệu
-
+    /*     console.log("Data from API:", response); // Kiểm tra dữ liệu
+     */
     return response;
   } catch (error) {
     console.error(`Error fetching test with id=${id}:`, error);
@@ -57,8 +57,8 @@ const getAllPartByTestID = async (id) => {
     const response = await axios.get(
       `https://localhost:5001/api/Test/part/${id}`
     );
-    console.log("Data from API:", response); // Check data
-    return response;
+    /*     console.log("Data from API:", response); // Check data
+     */ return response;
   } catch (error) {
     console.error(`Error fetching parts of test with id=${id}:`, error);
     throw error;
@@ -70,8 +70,8 @@ const getAllQuestionsByPartID = async (partId) => {
     const response = await axios.get(
       `https://localhost:5001/api/Part/question/${partId}`
     );
-    console.log("Data question from API:", response.DT); // Kiểm tra dữ liệu
-    return response; // Giả sử dữ liệu bạn cần nằm trong trường DT
+    /*     console.log("Data question from API:", response.DT); // Kiểm tra dữ liệu
+     */ return response; // Giả sử dữ liệu bạn cần nằm trong trường DT
   } catch (error) {
     console.error(
       `Error fetching questions from part with id=${partId}:`,

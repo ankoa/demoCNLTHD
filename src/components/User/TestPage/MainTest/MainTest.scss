@@ -2,27 +2,91 @@
   display: flex;
   gap: 20px;
   padding: 50px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+
   .left-content {
-    border: 1px solid red;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
     width: 70%;
+    padding: 20px;
+    background-color: #fff;
+    position: relative;
+
     .title {
       font-size: 30px;
       font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
     }
+
+    .q-body {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+
+      img {
+        max-width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+    }
+
     .q-content {
+      text-align: center;
+
       .question {
         font-size: 20px;
         font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .q-image {
+        width: 100%; // Chiều rộng cố định cho q-image
+        height: 300px; // Chiều cao cố định (có thể điều chỉnh)
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px; // Bo góc cho div
+
+        img {
+          max-width: 100%;
+          max-height: 100%;
+          border-radius: 8px;
+          box-shadow: 0 2px 50px rgba(0, 0, 0, 0.1);
+        }
+      }
+
+      .answer {
+        .a-child {
+          text-align: left;
+          padding-left: 40%;
+        }
       }
     }
+
     .footer {
       display: flex;
       gap: 15px;
       justify-content: center;
+      margin-top: 20px;
     }
   }
+
   .right-content {
-    border: 1px solid green;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
     width: 30%;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+    .countdown {
+      font-size: 24px;
+      text-align: center;
+      color: #ff0000;
+    }
   }
 }
