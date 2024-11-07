@@ -38,6 +38,7 @@ const renderUserRouter = () => {
 const renderAdminRouter = () => {
   const adminRouters = [
     { path: ROUTERS.ADMIN.DASHBOARD, element: <TestManagement /> },
+    { path: ROUTERS.ADMIN.TEST, element: <TestManagement /> },
   ];
 
   return adminRouters.map((route, key) => (
