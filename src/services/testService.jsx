@@ -18,6 +18,10 @@ const putUpdateTest = (updateTest) => {
     return axios.put(`api/Test/${updateTest.Id}`, updateTest);
 };
 
+const getParfOfTestById = (id) => {
+    return axios.get(`api/Test/part/${id}`);
+};
+
 
 // const getUsers = () => {
 //     return axios.get("api/User");
@@ -104,5 +108,6 @@ export {
     getTests,
     deleteTestById,
     postNewTest,
-    putUpdateTest
+    putUpdateTest,
+    getParfOfTestById
 };

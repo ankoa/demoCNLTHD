@@ -16,5 +16,6 @@ export const ROUTERS = {
     DASHBOARD: "dashboard", // Chỉ cần để "dashboard" mà không có /
     TEST: "test",
     USER: "user",
+    PART: "part",
   },
 };
