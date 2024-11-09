@@ -1,5 +1,8 @@
 // Hàm postLogin để gọi API đăng nhập
-import axios from "../util/axiosCustomize";
+
+import createAxiosInstance from "../util/axiosCustomize";
+
+const axios = createAxiosInstance(5556);
 
 const postLogin = (Username, Password) => {
   return axios.post("api/Account/Login", {
