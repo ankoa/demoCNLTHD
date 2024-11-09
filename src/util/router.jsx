@@ -2,8 +2,9 @@ export const ROUTERS = {
   USER: {
     HOMEPAGE: "/",
     LIBRARY_TEST: "/library-test",
-    TEST_PAGE: "/test-page",
-    ONLINECOURSE: "/onlinecourse", // Sửa lỗi chính tả ở đây
+    TEST_PAGE: "/test/:testId",
+    MAIN_TEST: "/test/:testId/:type",
+    ONLINECOURSE: "/onlinecouse",
     LOGIN: "/login",
     REGISTER: "/register",
     CONFIRMCODE: "/confirmCode",
