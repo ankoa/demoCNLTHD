@@ -28,6 +28,7 @@ const MainTest = () => {
       const response = await getTestById(testId);
       if (response.EC === 0 && response.DT) {
         setTestData(response.DT);
+        console.log(testData);
       } else {
         setError("Không thể lấy dữ liệu bài kiểm tra do EC khác 0.");
       }
@@ -45,6 +46,7 @@ const MainTest = () => {
         );
         setPartsData(sortedParts);
         await fetchQuizData(sortedParts);
+        console.log(partsData);
       } else {
         setError("Không thể lấy dữ liệu phần do EC khác 0.");
       }
@@ -52,10 +54,11 @@ const MainTest = () => {
       console.error("Lỗi khi lấy dữ liệu phần:", error);
     }
   };
-  const fetchQuizData = async (parts) => {
+  /* const fetchQuizData = async (parts) => {
     const quizDataArray = [];
     for (const part of parts) {
       const questionResponse = await getAllQuestionsByPartID(part.Id);
+      console.log(questionResponse);
       if (
         questionResponse.EC === 0 &&
         Array.isArray(questionResponse.DT.questions)
@@ -96,7 +99,52 @@ const MainTest = () => {
       }
     }
     setQuizData(quizDataArray); // Lưu dữ liệu vào quizData
-    console.log("=>>>>>>>QuizData: ", quizData);  
+    console.log("=>>>>>>>QuizData: ", quizData);
+  }; */
+  const fetchQuizData = async (parts) => {
+    const quizDataArray = [];
+
+    // Lặp qua từng phần (part) và lấy dữ liệu câu hỏi
+    for (const part of parts) {
+      const questionResponse = await getAllQuestionsByPartID(part.Id); // Lấy câu hỏi và đáp án cho phần
+
+      console.log("=>>>>>>>QuestionResponse: ", questionResponse);
+
+      // Kiểm tra nếu dữ liệu trả về hợp lệ
+      if (
+        questionResponse.EC === 0 &&
+        questionResponse.DT &&
+        questionResponse.DT.part &&
+        questionResponse.DT.part.questions
+      ) {
+        // Lặp qua từng câu hỏi trong phần và lấy dữ liệu
+        for (const questionData of questionResponse.DT.part.questions) {
+          const question = questionData.question; // Lấy thông tin câu hỏi
+
+          // Lấy danh sách các đáp án từ `questionData.answers`
+          const answersWithSelection = questionData.answers.map((answer) => ({
+            ...answer,
+            isSelected: false, // Thêm thuộc tính 'isSelected' để lưu trạng thái đáp án
+          }));
+
+          // Thêm câu hỏi và các đáp án vào mảng quizDataArray
+          quizDataArray.push({
+            question,
+            answers: answersWithSelection,
+          });
+        }
+      } else {
+        // Nếu không lấy được dữ liệu hợp lệ, ghi lại lỗi
+        console.error(
+          `Không thể lấy câu hỏi cho phần ${part.Id}:`,
+          questionResponse
+        );
+      }
+    }
+
+    // Lưu dữ liệu vào quizData state
+    setQuizData(quizDataArray);
+    console.log("=>>>>>>>QuizData: ", quizDataArray); // In ra dữ liệu quizData
   };
 
   /*   console.log("List Quiz: ", quizData);
