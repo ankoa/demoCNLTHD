@@ -1,8 +1,8 @@
-import axios from "../util/axiosCustomize";
-
+import createAxiosInstance from "../util/axiosCustomize";
+const axios = createAxiosInstance(5001);
 const getAllTests = async () => {
   try {
-    const response = await axios.get("https://localhost:5001/api/Test");
+    const response = await axios.get("api/Test");
     /*     console.log("Data from API:", response); // Kiểm tra dữ liệu
      */ return response;
   } catch (error) {
@@ -13,7 +13,7 @@ const getAllTests = async () => {
 
 const getTestById = async (id) => {
   try {
-    const response = await axios.get(`https://localhost:5001/api/Test/${id}`);
+    const response = await axios.get(`api/Test/${id}`);
     /*     console.log("Data from API:", response); // Kiểm tra dữ liệu
      */
     return response;
@@ -54,9 +54,7 @@ const deleteTest = async (id) => {
 // Function to get all parts of a test by test ID
 const getAllPartByTestID = async (id) => {
   try {
-    const response = await axios.get(
-      `https://localhost:5001/api/Test/part/${id}`
-    );
+    const response = await axios.get(`api/Test/part/${id}`);
     /*     console.log("Data from API:", response); // Check data
      */ return response;
   } catch (error) {
@@ -67,9 +65,7 @@ const getAllPartByTestID = async (id) => {
 // Function to get all questions from a specific part by part ID
 const getAllQuestionsByPartID = async (partId) => {
   try {
-    const response = await axios.get(
-      `https://localhost:5001/api/Part/question/${partId}`
-    );
+    const response = await axios.get(`api/Part/question/${partId}`);
     /*     console.log("Data question from API:", response.DT); // Kiểm tra dữ liệu
      */ return response; // Giả sử dữ liệu bạn cần nằm trong trường DT
   } catch (error) {

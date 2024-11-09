@@ -1,9 +1,9 @@
-import axios from "../util/axiosCustomize";
-
+import createAxiosInstance from "../util/axiosCustomize";
+const axios = createAxiosInstance(5001);
 // Get all questions
 const getAllQuestions = async () => {
   try {
-    const response = await axios.get("https://localhost:5001/api/Question");
+    const response = await axios.get("api/Question");
     /*     console.log("Data from API:", response.data.DT);
      */ return response.data.DT;
   } catch (error) {
@@ -15,9 +15,7 @@ const getAllQuestions = async () => {
 // Get a single question by ID
 const getQuestionById = async (id) => {
   try {
-    const response = await axios.get(
-      `https://localhost:5001/api/Question/${id}`
-    );
+    const response = await axios.get(`api/Question/${id}`);
     /*     console.log("Question data by ID:", response.data.DT);
      */ return response.data.DT;
   } catch (error) {
@@ -29,9 +27,7 @@ const getQuestionById = async (id) => {
 // Get answers of a question by ID
 const getAnswersOfQuestion = async (id) => {
   try {
-    const response = await axios.get(
-      `https://localhost:5001/api/Question/answer/${id}`
-    );
+    const response = await axios.get(`api/Question/answer/${id}`);
     /*     console.log("Answers of question:", response);
      */ return response;
   } catch (error) {
@@ -43,13 +39,9 @@ const getAnswersOfQuestion = async (id) => {
 // Add a new question
 const addQuestion = async (questionData) => {
   try {
-    const response = await axios.post(
-      "https://localhost:5001/api/Question",
-      questionData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    const response = await axios.post("api/Question", questionData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     console.log("Question added:", response.data.DT);
     return response.data.DT;
   } catch (error) {
@@ -61,13 +53,9 @@ const addQuestion = async (questionData) => {
 // Update an existing question
 const updateQuestion = async (id, questionData) => {
   try {
-    const response = await axios.put(
-      `https://localhost:5001/api/Question/${id}`,
-      questionData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    const response = await axios.put(`api/Question/${id}`, questionData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     console.log("Question updated:", response.data.DT);
     return response.data.DT;
   } catch (error) {
@@ -79,9 +67,7 @@ const updateQuestion = async (id, questionData) => {
 // Delete a question
 const deleteQuestion = async (id) => {
   try {
-    const response = await axios.delete(
-      `https://localhost:5001/api/Question/${id}`
-    );
+    const response = await axios.delete(`api/Question/${id}`);
     console.log("Question deleted:", response.data);
     return response.data;
   } catch (error) {

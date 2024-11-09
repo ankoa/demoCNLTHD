@@ -8,7 +8,7 @@ const postLogin = (Username, Password) => {
   return axios.post("api/Account/Login", {
     Username,
     Password,
-    delay: 2000
+    delay: 2000,
   });
 };
 
@@ -32,16 +32,21 @@ const postSendConfirmEmailCode = (Email, Username) => {
 
 // Hàm postCheckConfirmEmailCode để gọi API gửi kiểm tra code tạo tk
 const postCheckConfirmEmailCode = (Email, ConfirmationCode) => {
-  return axios.post("api/Account/CheckConfirmEmailCode", { Email, ConfirmationCode });
+  return axios.post("api/Account/CheckConfirmEmailCode", {
+    Email,
+    ConfirmationCode,
+  });
 };
 
 // Hàm postSendCode để gọi API gửi mail reset password
 const postSendResetCode = (Email) => {
-  return axios.post("api/Account/SendResetCode",
+  return axios.post(
+    "api/Account/SendResetCode",
     { Email: Email }, // Truyền đối tượng chứa email
     {
-      headers: { 'Content-Type': 'application/json' } // Đúng cú pháp headers
-    });
+      headers: { "Content-Type": "application/json" }, // Đúng cú pháp headers
+    }
+  );
 };
 
 // Hàm postCheckResetPasswordCode để gọi API gửi kiểm tra code reset password
@@ -51,11 +56,13 @@ const postCheckResetPasswordCode = (Email, Token) => {
 
 // Hàm để gọi api check account có tồn tại hay không
 const postCheckAccountExist = (Email) => {
-  return axios.post("api/Account/CheckAccountExist",
+  return axios.post(
+    "api/Account/CheckAccountExist",
     { email: Email }, // Truyền đối tượng chứa email
     {
-      headers: { 'Content-Type': 'application/json' } // Đúng cú pháp headers
-    });
+      headers: { "Content-Type": "application/json" }, // Đúng cú pháp headers
+    }
+  );
 };
 
 // Hàm postResetPassword để gọi API reset password
@@ -70,12 +77,14 @@ const postRegister = (email, username, password, firstname, lastname) => {
     Email: email,
     PasswordHash: password,
     FirstName: firstname,
-    LastName: lastname
+    LastName: lastname,
   };
 
   return axios.post("api/Account/SignUp", data, {
-    header: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;application/json' }
-
+    header: {
+      "Content-Type":
+        "application/x-www-form-urlencoded; charset=UTF-8;application/json",
+    },
   });
 };
 
@@ -83,12 +92,14 @@ const postRegister = (email, username, password, firstname, lastname) => {
 const postRenewToken = (AccessToken, RefreshToken) => {
   const data = {
     AccessToken,
-    RefreshToken
+    RefreshToken,
   };
 
   return axios.post("api/Account/RenewToken", data, {
-    header: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;application/json' }
-
+    header: {
+      "Content-Type":
+        "application/x-www-form-urlencoded; charset=UTF-8;application/json",
+    },
   });
 };
 
@@ -104,5 +115,5 @@ export {
   postCheckResetPasswordCode,
   postResetPassword,
   getUsers,
-  postRenewToken
+  postRenewToken,
 };

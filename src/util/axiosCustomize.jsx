@@ -1,9 +1,6 @@
 import axios from "axios";
 import { store } from "../redux/store";
 import { setLoading } from "../redux/action/loadingAction"; // Import action để set loading
-import { postRenewToken } from "../services/authService"; // Giả định bạn có hàm này
-import { doRenewToken } from "../redux/action/userAction";
-
 // Hàm tạo instance Axios với cổng
 const createAxiosInstance = (port) => {
   const instance = axios.create({
