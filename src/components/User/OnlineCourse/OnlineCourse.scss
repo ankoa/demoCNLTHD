@@ -1,0 +1,76 @@
+.online-course-container{
+  padding: 5vh 10vh 10vh 10vh;
+  background-color: rgb(248, 248, 248);
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+
+  @media (max-width: 1200px) {
+    padding-left: 15vh;
+    padding-right: 15vh;
+  }
+
+  @media (max-width: 992px) {
+    padding-left: 10vh;
+    padding-right: 10vh;
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 30px;
+    padding-left: 5vh;
+    padding-right: 5vh;
+    flex-direction: column;
+    align-items: center;
+    gap: 5vh;
+  }
+
+  @media (max-width: 576px) {
+    padding-top: 20px;
+    padding-left: 2vh;
+    padding-right: 2vh;
+    flex-direction: column;
+    align-items: center;
+    gap: 5vh;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .site-content-wrapper .content-header .image-wrapper {
+    img {
+      height: 19rem;
+      width: 100%;
+    }
+  }
+
+  .site-content-wrapper{
+    display: flex;
+    position: relative;
+  }
+
+  .content-wrapper{
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 430px);
+
+    .container{
+      padding-top: .75rem;
+      padding-bottom: .75rem;
+      
+      h3 {
+        float: left;
+        padding-top: 3rem;
+      }
+
+      .courses-grid-wrapper {
+        float: left;
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+  }
+}
+
