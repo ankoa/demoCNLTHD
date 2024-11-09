@@ -1,6 +1,7 @@
 import axios from "axios";
 import { store } from "../redux/store";
 import { setLoading } from "../redux/action/loadingAction"; // Import action để set loading
+
 // Hàm tạo instance Axios với cổng
 const createAxiosInstance = (port) => {
   const instance = axios.create({
@@ -18,7 +19,8 @@ const createAxiosInstance = (port) => {
   // Add a request interceptor
   instance.interceptors.request.use(
     async function (config) {
-      store.dispatch(setLoading(true));
+      if (store.getState()?.loadingReducer?.loading == false)
+        store.dispatch(setLoading(true));
 
       const access_token = store.getState()?.userReducer?.account?.access_token;
       // const refresh_token = store.getState()?.userReducer?.account?.refresh_token;

@@ -56,7 +56,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
                     <MenuItem>
                         ACCOUNT
                     </MenuItem>
-                    <SubMenu title="Dashboards" icon={<FiActivity />}>
+                    <SubMenu title="Users" icon={<FiActivity />} onClick={() => navigate("/admin/user")}>
                         <MenuItem suffix={<span className="badge bg-primary-soft text-primary ms-auto">Updated</span>}>Default <Link to="/admin/manage-user" /></MenuItem>
                         <MenuItem>Multiopurpose <Link to="/admin/manage-quiz" /></MenuItem>
                         <MenuItem>Affiliate <Link to="/admin/manage-question" /></MenuItem>

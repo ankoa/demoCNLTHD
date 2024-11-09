@@ -1,4 +1,4 @@
-import './TestManagement.scss'
+import './PartManagement.scss'
 import React, { useEffect, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FaEllipsisV } from "react-icons/fa";
@@ -8,19 +8,23 @@ import useDebounce from '../../../../util/useDeboune';
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { Card } from 'react-bootstrap';
-import { deleteTestById, getTests, postNewTest, putUpdateTest } from '../../../../services/testService';
+import { Card, Dropdown, Form } from 'react-bootstrap';
+import { deleteTestById, getParfOfTestById, getTests, postNewTest, putUpdateTest } from '../../../../services/testService';
 import { toast } from 'react-toastify';
+import { postNewPart, putUpdatePart } from '../../../../services/partService';
 
-const TestManagement = () => {
+const PartManagement = () => {
     //--------------Khai báo ref
     const refModalUser = useRef()
 
     //----------------Khai báo state
     const [searchTerm, setSearchTerm] = useState("");
     const [data, setData] = useState([
-
     ]);
+    const [tests, setTests] = useState([]);
+    const [selectedTestID, setSelectedTestID] = useState(null);
+    const requiredParts = [1, 2, 3, 4, 5, 6, 7];
+    const [missingParts, setMissingParts] = useState([]);
     const columns = [
         {
             name: "ID",
@@ -35,27 +39,21 @@ const TestManagement = () => {
         },
         {
             name: "Description",
-            selector: (row) => row.Description,
-            sortable: true
-        },
-        {
-            name: "Difficulty",
-            selector: (row) => row.Difficulty,
-            sortable: true
-        },
-        {
-            name: "Duration",
-            selector: (row) => row.Duration,
-            sortable: true
-        },
-        {
-            name: "Created",
-            selector: (row) => row.CreatedAt,
-            sortable: true
-        },
-        {
-            name: "Updated",
-            selector: (row) => row.UpdatedAt,
+            cell: (row) => (
+                <EditableDescription
+                    row={row}
+                    onUpdate={async (id, newDescription) => {
+                        // Cập nhật dữ liệu của bảng với giá trị mới
+                        console.log(`Updating description of row with ID ${id} to "${newDescription}"`);
+                        let response = await putUpdatePart(id, newDescription);
+                        if (response.EC === 0 && response) {
+                            toast.success(response.EM);
+                        } else {
+                            toast.error(response.EM);
+                        }
+                    }}
+                />
+            ),
             sortable: true
         },
         {
@@ -74,14 +72,45 @@ const TestManagement = () => {
     }, [])
 
     useEffect(() => {
+        if (selectedTestID === '-1' || selectedTestID === null) {
+            setData([])
+            return;
+        }
+        fetchListPartOfTest(selectedTestID);
+    }, [selectedTestID])
+
+    useEffect(() => {
         setDataToShow([...data]);  // Cập nhật lại dataToShow khi data thay đổi
     }, [data]);  // Chỉ gọi khi data thay đổi
+
+    const handleSelectTest = (testID) => {
+        setSelectedTestID(testID); // Cập nhật testID đã chọn
+        console.log(`Đã chọn Test ID: ${testID}`); // Có thể in ra để kiểm tra
+    };
+
+    const fetchListPartOfTest = async (id) => {
+        try {
+            let response = await getParfOfTestById(id);
+            if (response && response.EC === 0) {
+                setData(response.DT.parts);
+                // console.log(response.DT);
+            } else if (response && response.EC !== 0) {
+                toast.error(response.EM);
+            }
+        } catch (error) {
+            if (error.response) {
+                toast.error(error.response.data.EM || "Đã xảy ra lỗi");
+            } else {
+                console.error("Lỗi không xác định:", error);
+            }
+        }
+    }
 
     const fetchListTests = async () => {
         try {
             let response = await getTests();
             if (response && response.EC === 0) {
-                setData(response.DT);
+                setTests(response.DT);
                 console.log(data);
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
@@ -148,7 +177,8 @@ const TestManagement = () => {
             <div
                 style={{
                     display: "flex",
-                    // gap: '5px',
+                    justifyContent: "center",
+                    gap: '20px',
                     width: "100%",
                 }}
             >
@@ -169,6 +199,44 @@ const TestManagement = () => {
         );
     };
 
+    const EditableDescription = ({ row, onUpdate }) => {
+        const [isEditing, setIsEditing] = useState(false);
+        const [description, setDescription] = useState(row.Description);
+
+        const handleDoubleClick = () => {
+            setIsEditing(true);
+        };
+
+        const handleChange = (e) => {
+            setDescription(e.target.value);
+        };
+
+        const handleKeyDown = (e) => {
+            if (e.key === 'Enter') {
+                setIsEditing(false);
+                // Gọi hàm onUpdate để cập nhật giá trị mới của Description
+                onUpdate(row.Id, description);
+            }
+        };
+
+        return (
+            <>
+                {isEditing ? (
+                    <input
+                        type="text"
+                        value={description}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
+                        onBlur={() => setIsEditing(false)} // Thoát khỏi chế độ chỉnh sửa khi mất focus
+                        autoFocus
+                        class="form-control"
+                    />
+                ) : (
+                    <span onDoubleClick={handleDoubleClick}>{description}</span>
+                )}
+            </>
+        );
+    };
 
 
     const StatusLabel = ({ status }) => {
@@ -202,6 +270,21 @@ const TestManagement = () => {
 
     //Hiện modal add user
     const handleShowModalAdd = () => {
+        if (selectedTestID === '-1' || selectedTestID === null) {
+            toast.warning("Choose a test before adding parts");
+            return;
+        }
+        if (data.length >= 7) {
+            console.log(data.length);
+            toast.warning("Cannot add more than 7 parts");
+            return
+        }
+        // Lấy các `Number` của các part đã có từ dữ liệu
+        const existingParts = data.map(part => part.Number);
+
+        // Lọc ra các part còn thiếu
+        setMissingParts(requiredParts.filter(partNumber => !existingParts.includes(partNumber)));
+
         refModalUser.current.open("", "Add");
     }
 
@@ -211,13 +294,17 @@ const TestManagement = () => {
     }
 
     //Hàm thêm user
-    const handleAdd = async (newUser) => {
-        newUser.UpdatedAt = new Date().toISOString();
-        newUser.CreatedAt = new Date().toISOString();
-        let response = await postNewTest(newUser);
+    const handleAdd = async (newPart) => {
+        newPart.TestID = +selectedTestID;
+        newPart.Name = "Part " + newPart.Number;
+        newPart.Number = +newPart.Number;
+        newPart.CreatedAt = new Date().toISOString();  // Đảm bảo thời gian theo định dạng chuẩn ISO
+        newPart.UpdatedAt = new Date().toISOString();
+        console.log(newPart);
+        let response = await postNewPart(newPart);
         if (response.EC === 0 && response) {
             toast.success(response.EM)
-            fetchListTests();
+            fetchListPartOfTest(selectedTestID);
         } else {
             toast.error(response.EM)
         }
@@ -261,7 +348,7 @@ const TestManagement = () => {
                 <div className='AdminPersonnel-item'>
                     <Card>
                         <Card.Header>
-                            Test Management
+                            Part Management
                         </Card.Header>
                         <Card.Body>
                             <div className='AdminPersonnel-item-wrapper'>
@@ -275,6 +362,18 @@ const TestManagement = () => {
                                             value={searchTerm}
                                             onChange={handleSearch}>
                                         </input>
+                                    </div>
+                                    <div>
+                                        <Form.Group controlId="testSelect">
+                                            <Form.Select onChange={(e) => handleSelectTest(e.target.value)}>
+                                                <option value="-1">Select a test</option>
+                                                {tests.map(test => (
+                                                    <option key={test.Id} value={test.Id}>
+                                                        {test.Id} - {test.Name} - {test.Description} - {test.Difficulty}
+                                                    </option>
+                                                ))}
+                                            </Form.Select>
+                                        </Form.Group>
                                     </div>
                                     <div className='AdminPersonnel-item-wrapper-top-dropdown'>
                                         <button className='btn btn-primary ms-4' onClick={() => handleShowModalAdd()}>Add</button>
@@ -297,10 +396,12 @@ const TestManagement = () => {
 
             <ModalAddUpdateUser
                 ref={refModalUser}
-                handleAdd={handleAdd}
+                handleAddPart={handleAdd}
                 handleUpdate={handleUpdate}
+                parts={missingParts}
+
             />
         </>
     );
 }
-export default TestManagement;
+export default PartManagement;
