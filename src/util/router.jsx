@@ -17,5 +17,6 @@ export const ROUTERS = {
     TEST: "test",
     USER: "user",
     PART: "part",
+    QUESTION: "question",
   },
 };

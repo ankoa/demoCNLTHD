@@ -16,6 +16,7 @@ import ChangePassword from "./components/ChangePassword/ChangePassword";
 import TestManagement from "./components/Admin/Content/TestManagement/TestManagement";
 import UserManagement from "./components/Admin/Content/UserManagement/UserManagement";
 import PartManagement from "./components/Admin/Content/PartManagement/PartManagement";
+import QuestionManagement from "./components/Admin/Content/QuestionManagement/QuestionManagement";
 
 const renderUserRouter = () => {
   const userRouters = [
@@ -43,6 +44,7 @@ const renderAdminRouter = () => {
     { path: ROUTERS.ADMIN.TEST, element: <TestManagement /> },
     { path: ROUTERS.ADMIN.USER, element: <UserManagement /> },
     { path: ROUTERS.ADMIN.PART, element: <PartManagement /> },
+    { path: ROUTERS.ADMIN.QUESTION, element: <QuestionManagement /> },
   ];
 
   return adminRouters.map((route, key) => (

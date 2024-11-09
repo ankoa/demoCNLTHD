@@ -4,10 +4,9 @@ import { Modal, Button, Form } from 'react-bootstrap';
 const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts }, ref) => {
     const [showModal, setShowModal] = useState(false);
     const [actionType, setActionType] = useState('');
-    console.log(parts)
     const [formData, setFormData] = useState({
         Id: 0,
-        PartId: "", // Thay thế Name bằng PartId để lưu giá trị đã chọn từ Select
+        Number: "", // Thay thế Name bằng Number để lưu giá trị đã chọn từ Select
         Description: "",
         CreatedAt: "",
         UpdatedAt: ""
@@ -26,7 +25,7 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
             // Thiết lập dữ liệu trống cho form nếu là thêm mới
             setFormData({
                 Id: 0,
-                PartId: "",
+                Number: "",
                 Description: "",
                 CreatedAt: "",
                 UpdatedAt: ""
@@ -40,7 +39,7 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
         setActionType('');
         setFormData({
             Id: 0,
-            PartId: "",
+            Number: "",
             Description: "",
             CreatedAt: "",
             UpdatedAt: ""
@@ -61,7 +60,7 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
             }
         } else if (actionType === 'Update') {
             if (window.confirm('Are you sure you want to update this part?')) {
-                handleUpdatePart(formData);
+                // handleUpdatePart(formData);
             }
         }
         handleCloseModal();
@@ -77,8 +76,8 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
                     <Form.Group className="mb-3" controlId="Part">
                         <Form.Label>Part</Form.Label>
                         <Form.Select
-                            name="PartId"
-                            value={formData.PartId}
+                            name="Number"
+                            value={formData.Number}
                             onChange={handleChange}
                             required
                         >

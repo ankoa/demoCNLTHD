@@ -50,12 +50,12 @@ const TestManagement = () => {
         },
         {
             name: "Created",
-            selector: (row) => row.CreatedAt,
+            selector: (row) => new Date(row.CreatedAt).toLocaleString("vi-VN"),
             sortable: true
         },
         {
             name: "Updated",
-            selector: (row) => row.UpdatedAt,
+            selector: (row) => new Date(row.UpdatedAt).toLocaleString("vi-VN"),
             sortable: true
         },
         {

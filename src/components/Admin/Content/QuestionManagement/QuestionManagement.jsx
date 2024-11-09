@@ -1,4 +1,4 @@
-import './PartManagement.scss'
+import './QuestionManagement.scss'
 import React, { useEffect, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FaEllipsisV } from "react-icons/fa";
@@ -11,9 +11,9 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { Card, Dropdown, Form } from 'react-bootstrap';
 import { deleteTestById, getParfOfTestById, getTests, postNewTest, putUpdateTest } from '../../../../services/testService';
 import { toast } from 'react-toastify';
-import { postNewPart, putUpdatePart } from '../../../../services/partService';
+import { getQuestionOfPart, postNewPart, putUpdatePart } from '../../../../services/partService';
 
-const PartManagement = () => {
+const QuestionManagement = () => {
     //--------------Khai báo ref
     const refModalUser = useRef()
 
@@ -22,40 +22,58 @@ const PartManagement = () => {
     const [data, setData] = useState([
     ]);
     const [tests, setTests] = useState([]);
+    const [parts, setParts] = useState([]);
     const [selectedTestID, setSelectedTestID] = useState(null);
+    const [selectedPartID, setSelectedPartID] = useState(null);
     const requiredParts = [1, 2, 3, 4, 5, 6, 7];
     const [missingParts, setMissingParts] = useState([]);
     const columns = [
         {
             name: "ID",
-            selector: (row) => row.Id,
+            selector: (row) => row.Order,
             sortable: true,
             fixed: true
         },
         {
-            name: "Name",
-            selector: (row) => row.Name,
+            name: "Text",
+            selector: (row) => row.Text,
             sortable: true,
         },
         {
-            name: "Description",
-            cell: (row) => (
-                <EditableDescription
-                    row={row}
-                    onUpdate={async (id, newDescription) => {
-                        // Cập nhật dữ liệu của bảng với giá trị mới
-                        console.log(`Updating description of row with ID ${id} to "${newDescription}"`);
-                        let response = await putUpdatePart(id, newDescription);
-                        if (response.EC === 0 && response) {
-                            toast.success(response.EM);
-                        } else {
-                            toast.error(response.EM);
-                        }
-                    }}
-                />
-            ),
-            sortable: true
+            name: "Audio",
+            selector: (row) => row.AudioName ? row.AudioName : "Null",
+            sortable: true,
         },
+        {
+            name: "Image ",
+            selector: (row) => row.ImageName ? row.ImageName : "Null",
+            sortable: true,
+        },
+        {
+            name: "Answer Count",
+            selector: (row) => row.AnswerCounts,
+            sortable: true,
+        },
+        // {
+        //     name: "Description",
+        //     cell: (row) => (
+        //         <EditableDescription
+        //             row={row}
+        //             onUpdate={async (id, newDescription) => {
+        //                 // Cập nhật dữ liệu của bảng với giá trị mới
+        //                 console.log(`Updating description of row with ID ${id} to "${newDescription}"`);
+        //                 let response = await putUpdatePart(id, newDescription);
+        //                 if (response.EC === 0 && response) {
+        //                     toast.success(response.EM);
+        //                 } else {
+        //                     toast.error(response.EM);
+        //                 }
+        //             }
+        //             }
+        //         />
+        //     ),
+        //     sortable: true
+        // },
         {
             name: "Actions",
             cell: (row) => <ActionButtons id={row.Id} />,
@@ -73,10 +91,20 @@ const PartManagement = () => {
 
     useEffect(() => {
         if (selectedTestID === '-1' || selectedTestID === null) {
-            setData([])
+            setParts([])
             return;
         }
         fetchListPartOfTest(selectedTestID);
+        if (selectedPartID === '-1' || selectedPartID === null) {
+            setData([])
+            return;
+        }
+        fetchQuestionOfPart(selectedPartID);
+    }, [selectedTestID, selectedPartID])
+
+    useEffect(() => {
+        setSelectedPartID('-1');
+        setData([])
     }, [selectedTestID])
 
     useEffect(() => {
@@ -85,15 +113,35 @@ const PartManagement = () => {
 
     const handleSelectTest = (testID) => {
         setSelectedTestID(testID); // Cập nhật testID đã chọn
-        console.log(`Đã chọn Test ID: ${testID}`); // Có thể in ra để kiểm tra
     };
+
+    const handleSelectPart = (partID) => {
+        setSelectedPartID(partID); // Cập nhật testID đã chọn
+    };
+
+    const fetchQuestionOfPart = async (id) => {
+        try {
+            let response = await getQuestionOfPart(id);
+            if (response && response.EC === 0) {
+                console.log(response.DT.questions);
+                setData(response.DT.questions);
+            } else if (response && response.EC !== 0) {
+                toast.error(response.EM);
+            }
+        } catch (error) {
+            if (error.response) {
+                toast.error(error.response.data.EM || "Đã xảy ra lỗi");
+            } else {
+                console.error("L strugglNotFound xác định:", error);
+            }
+        }
+    }
 
     const fetchListPartOfTest = async (id) => {
         try {
             let response = await getParfOfTestById(id);
             if (response && response.EC === 0) {
-                setData(response.DT.parts);
-                // console.log(response.DT);
+                setParts(response.DT.parts);
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
             }
@@ -111,7 +159,6 @@ const PartManagement = () => {
             let response = await getTests();
             if (response && response.EC === 0) {
                 setTests(response.DT);
-                console.log(data);
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
             }
@@ -323,21 +370,21 @@ const PartManagement = () => {
         }
     };
 
-    useDebounce(() => {
-        const filteredData = data.filter((item) => {
-            return (
-                item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Difficulty.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        });
-        console.log(filteredData);
-        if (filteredData.length === 0) {
-            return;
-        }
-        setData([...filteredData])
-    }, [searchTerm], 500
-    );
+    // useDebounce(() => {
+    //     const filteredData = data.filter((item) => {
+    //         return (
+    //             item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //             item.Description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //             item.Difficulty.toLowerCase().includes(searchTerm.toLowerCase())
+    //         );
+    //     });
+    //     console.log(filteredData);
+    //     if (filteredData.length === 0) {
+    //         return;
+    //     }
+    //     setData([...filteredData])
+    // }, [searchTerm], 500
+    // );
 
 
 
@@ -348,7 +395,7 @@ const PartManagement = () => {
                 <div className='AdminPersonnel-item'>
                     <Card>
                         <Card.Header>
-                            Part Management
+                            Questions And Answers Management
                         </Card.Header>
                         <Card.Body>
                             <div className='AdminPersonnel-item-wrapper'>
@@ -370,6 +417,18 @@ const PartManagement = () => {
                                                 {tests.map(test => (
                                                     <option key={test.Id} value={test.Id}>
                                                         {test.Id} - {test.Name} - {test.Description} - {test.Difficulty}
+                                                    </option>
+                                                ))}
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </div>
+                                    <div>
+                                        <Form.Group controlId="partSelect">
+                                            <Form.Select onChange={(e) => handleSelectPart(e.target.value)}>
+                                                <option value="-1">Select a part</option>
+                                                {parts.map(test => (
+                                                    <option key={test.Id} value={test.Id}>
+                                                        {test.Name}
                                                     </option>
                                                 ))}
                                             </Form.Select>
@@ -404,4 +463,4 @@ const PartManagement = () => {
         </>
     );
 }
-export default PartManagement;
+export default QuestionManagement;
