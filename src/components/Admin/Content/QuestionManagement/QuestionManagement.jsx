@@ -103,6 +103,14 @@ const QuestionManagement = () => {
     }, [selectedTestID, selectedPartID])
 
     useEffect(() => {
+        if (selectedPartID === '-1' || selectedPartID === null) {
+            setData([])
+            return;
+        }
+        fetchQuestionOfPart(selectedPartID);
+    }, [, selectedPartID])
+
+    useEffect(() => {
         setSelectedPartID('-1');
         setData([])
     }, [selectedTestID])
