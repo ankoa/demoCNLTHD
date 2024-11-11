@@ -8,8 +8,14 @@ import {
 } from "../../../../services/testsService";
 import { getAnswersOfQuestion } from "../../../../services/questionService";
 import Question from "../Question/Question";
-import _ from "lodash";
+import ModalResult from "./ModalResult";
+import QuizAudio from "./QuizAudio";
 
+import _ from "lodash";
+import { useSelector } from "react-redux";
+import { createHistory } from "../../../../services/historyService";
+import { SubmitPart } from "../../../../services/partService";
+import RightTestContent from "../RightTestContent/RightTestContent";
 const MainTest = () => {
   const { testId } = useParams();
   const [partsData, setPartsData] = useState([]);
@@ -17,11 +23,36 @@ const MainTest = () => {
   const [error, setError] = useState(null);
   const [quizData, setQuizData] = useState([]); // Đổi tên từ questions thành quizData
   const [index, setIndex] = useState(0);
+  const userId = useSelector((state) => state.userReducer.account.userid);
+  const [isShowModalResult, setIsShowModalResult] = useState(false);
+  const [dataModalResult, setDataModalResult] = useState({});
+  const [audio, setAudio] = useState(null); // Lưu trữ audio hiện tại
 
   useEffect(() => {
     fetchTestData();
     fetchAllPartsData();
   }, [testId]);
+  useEffect(() => {
+    // Dừng audio trước đó nếu tồn tại
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0; // Reset lại thời gian phát về đầu
+    }
+
+    if (quizData && quizData[index]?.question?.AudioPath) {
+      const newAudio = new Audio(quizData[index].question.AudioPath);
+      setAudio(newAudio);
+
+      // Phát audio của câu hỏi hiện tại
+      newAudio.play();
+
+      // Cleanup function để dừng audio khi useEffect chạy lại
+      return () => {
+        newAudio.pause();
+        newAudio.currentTime = 0; // Reset lại thời gian phát về đầu
+      };
+    }
+  }, [index, quizData]);
 
   const fetchTestData = async () => {
     try {
@@ -157,12 +188,116 @@ const MainTest = () => {
   const handelNext = () => {
     if (quizData && quizData.length > index + 1) setIndex(index + 1);
   };
-  const handelFinishQuiz = () => {
-    console.log("check data before submid: ", quizData);
-    if (quizData && quizData.length > 0) {
-      console.log();
+
+  const handelFinishQuiz = async () => {
+    console.log("check data before submit: ", quizData);
+    let totalScore = 5;
+    let correctAnswers = 0;
+
+    // Kiểm tra nếu quizData hợp lệ
+    if (!quizData || quizData.length === 0) {
+      console.log("Không có dữ liệu bài kiểm tra.");
+      return;
+    }
+
+    // Kiểm tra nếu người dùng và bài kiểm tra đã được xác định
+    if (!userId || !testId) {
+      console.log("Thiếu UserID hoặc TestID.");
+      return;
+    }
+
+    // Tạo dữ liệu lịch sử khi dữ liệu hợp lệ
+    const historyData = {
+      Id: 0,
+      UserID: userId,
+      TestID: +testId,
+      Total_Listening: 0,
+      Total_Reading: 0,
+      StartTime: "2024-11-09T16:50:18.554Z",
+      EndTime: "2024-11-09T16:50:18.554Z",
+    };
+    console.log("HistoryData: ", historyData);
+
+    const history = await createHistory(historyData);
+
+    // Kiểm tra nếu tạo lịch sử thành công
+    if (history.EC !== 0) {
+      console.log("Không thể tạo lịch sử bài kiểm tra.");
+      return;
+    }
+
+    // Sử dụng for...of để có thể sử dụng await bên trong
+    for (const part of partsData) {
+      const dataAnswer = [];
+
+      for (const quiz of quizData) {
+        if (quiz.question.PartID === part.Id) {
+          const selectedAnswer = quiz.answers.find(
+            (answer) => answer.isSelected === true
+          );
+
+          if (selectedAnswer) {
+            dataAnswer.push({
+              QuestionId: quiz.question.Id,
+              UserAnswerId: selectedAnswer.Id || -1,
+            });
+          }
+        }
+      }
+
+      const data = {
+        PartId: part.Id, // ID của phần
+        HistoryId: history.DT.Id, // ID lịch sử
+        UserId: userId, // ID người dùng
+        Answers: dataAnswer, // Mảng câu trả lời đã chọn
+      };
+
+      console.log(data);
+
+      // Gọi submitData và chờ đợi kết quả
+      const response = await submitData(data);
+      if (response && response.EC === 0) {
+        console.log(
+          "Submit successfully",
+          response.DT.TotalQuestions,
+          response.DT.CorrectAnswers
+        );
+        const calculatedScore = +response.DT.CorrectAnswers * 5;
+        totalScore += calculatedScore;
+        correctAnswers += +response.DT.CorrectAnswers;
+      } else {
+        console.log("Submit failed", response);
+      }
+    }
+
+    // Sau khi hoàn thành tất cả các phần, cập nhật dữ liệu kết quả
+    setDataModalResult({
+      TotalQuestions: quizData.length, // Tổng số câu hỏi
+      CorrectAnswers: correctAnswers, // Tổng số câu trả lời đúng
+      Score: totalScore, // Tổng điểm
+      quizData: quizData,
+    });
+
+    console.log("TotalScore: ", dataModalResult);
+    setIsShowModalResult(true);
+  };
+
+  // Hàm submitData gọi SubmitPart
+  const submitData = async (data) => {
+    try {
+      const response = await SubmitPart(data);
+      if (response.EC === 0) {
+        return response;
+      } else {
+        console.error("KO SUBMIT DATA:", response.EM);
+        return false;
+      }
+    } catch (error) {
+      console.error("Lỗi:", error);
+      return false;
     }
   };
+
   /* const handelCheckBox = (answerID, questionID) => {
     console.log("=>>>>>>>>>>> Q and A: ", questionID, answerID);
     let dataQuizClone = _.cloneDeep(quizData);
@@ -240,12 +375,22 @@ const MainTest = () => {
           /> */}
         </div>
         <div className="q-content">
+          {/* Kiểm tra điều kiện và truyền đúng prop cho QuizAudio */}
+          {quizData &&
+            quizData.length > 0 &&
+            quizData[index]?.question?.AudioPath && (
+              <QuizAudio audioPath={quizData[index].question.AudioPath} />
+            )}
+
+          {/* Render component Question */}
           <Question
             index={index}
             handelRadioButton={handelRadioButton}
             data={quizData && quizData.length > 0 ? quizData[index] : []}
+            handelNext={handelNext}
           />
         </div>
+
         <div className="footer">
           <button
             className="btn btn-secondary"
@@ -265,8 +410,16 @@ const MainTest = () => {
         </div>
       </div>
       <div className="right-content">
-        <div className="countdown">Count down: 00:00</div>
+        <RightTestContent
+          quizData={quizData}
+          handelFinishQuiz={handelFinishQuiz}
+        />
       </div>
+      <ModalResult
+        show={isShowModalResult}
+        setShow={setIsShowModalResult}
+        dataModalResult={dataModalResult}
+      />
     </div>
   );
 };

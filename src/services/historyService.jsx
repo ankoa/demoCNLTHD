@@ -1,7 +1,7 @@
-import axios from "../util/axiosCustomize";
+import createAxiosInstance from "../util/axiosCustomize";
 
-const BASE_URL = "https://localhost:5001/api/History";
-
+const axios = createAxiosInstance(5001);
+// Get all questions
 const getAllHistories = async () => {
   try {
     const response = await axios.get(BASE_URL);
@@ -22,10 +22,10 @@ const getHistoryById = async (id) => {
   }
 };
 
-const createHistory = async (history) => {
+const createHistory = async (data) => {
   try {
-    const response = await axios.post(BASE_URL, history);
-    return response.data;
+    const response = await axios.post(`api/History`, data);
+    return response;
   } catch (error) {
     console.error("Error creating history:", error);
     throw error;

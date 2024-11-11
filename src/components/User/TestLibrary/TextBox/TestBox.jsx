@@ -1,11 +1,11 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom"; // Negative import cho useNavigate
+import { useNavigate } from "react-router-dom";
 
 const TextBox = ({ tests }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4; // Số bài kiểm tra hiển thị trên mỗi trang
-  const navigate = useNavigate(); // Khai báo biến navigate
+  const itemsPerPage = 8; // Số bài kiểm tra hiển thị trên mỗi trang
+  const navigate = useNavigate();
 
   // Tính toán chỉ số của bài kiểm tra để hiển thị
   const indexOfLastTest = currentPage * itemsPerPage;
@@ -24,7 +24,7 @@ const TextBox = ({ tests }) => {
 
   // Hàm xử lý khi nhấn nút "Chi tiết"
   const handleDetailClick = (testId) => {
-    navigate(`/test/${testId}`); // Chuyển hướng đến trang chi tiết bài kiểm tra
+    navigate(`/test/${testId}`);
   };
 
   return (
@@ -44,11 +44,8 @@ const TextBox = ({ tests }) => {
                       <span className="testitem-info">
                         <span className="far fa-clock mr-1"></span>
                         {test.Duration} phút |{" "}
-                        <span className="far fa-user-edit mr-1"></span>
-                        {test.Difficulty} |{" "}
-                        <span className="far fa-calendar-alt mr-1"></span>
-                        Ngày tạo:{" "}
-                        {new Date(test.CreatedAt).toLocaleDateString()}
+                        <span className="fa-regular fa-star mr-1"></span>
+                        {test.Difficulty}
                       </span>
                     </div>
                     <div>
@@ -57,11 +54,18 @@ const TextBox = ({ tests }) => {
                         {new Date(test.UpdatedAt).toLocaleDateString()}
                       </span>
                     </div>
+                    <div>
+                      <span className="testitem-info">
+                        <span className="far fa-calendar-alt mr-1"></span>
+                        Ngày tạo:{" "}
+                        {new Date(test.CreatedAt).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
-                  <div className="testitem-start-test mt-2">
+                  <div className="testitem-start-test mt-2 d-flex justify-content-center">
                     <button
                       className="btn btn-block btn-outline-primary"
-                      onClick={() => handleDetailClick(test.Id)} // Gọi hàm khi nhấn nút
+                      onClick={() => handleDetailClick(test.Id)}
                     >
                       Chi tiết
                     </button>
@@ -72,7 +76,7 @@ const TextBox = ({ tests }) => {
           </div>
 
           {/* Phân trang */}
-          <div className="pagination">
+          <div className="pagination mt-4">
             {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index + 1}

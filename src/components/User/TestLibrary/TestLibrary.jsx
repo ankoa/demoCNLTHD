@@ -14,10 +14,12 @@ const TestLibrary = () => {
       try {
         const data = await getAllTests();
         if (data.EC === 0) {
-          setTests(data.DT); // Nếu EC = 0, set dữ liệu vào tests
-          console.log("Get all tests success:", data.DT);
+          // Lọc các phần tử có Id khác -1
+          const filteredTests = data.DT.filter((test) => test.Id !== -1);
+          setTests(filteredTests);
+          console.log("Get all tests success:", filteredTests);
         } else {
-          console.error("Error:", data.EM); // Nếu EC khác 0, log lỗi
+          console.error("Error:", data.EM);
         }
       } catch (error) {
         console.error("Error fetching tests:", error);
