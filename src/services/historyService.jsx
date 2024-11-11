@@ -1,7 +1,18 @@
-import axios from "../util/axiosCustomize";
+// import axios from "../util/axiosCustomize";
+// const BASE_URL = "https://localhost:5001/api/History";
+// import createAxiosInstance from "../util/axiosCustomize";
+// const axios1 = createAxiosInstance(5001);
+
+
+import createAxiosInstance from "../util/axiosCustomize";
 
 const BASE_URL = "https://localhost:5001/api/History";
+const getPartOfHis = (userID, historyID) => {
+  return axios.get(`${BASE_URL}/PartOfHistory/${userID}/${historyID}`);
+};
 
+const axios = createAxiosInstance(5001);
+// Get all questions
 const getAllHistories = async () => {
   try {
     const response = await axios.get(BASE_URL);
@@ -22,10 +33,10 @@ const getHistoryById = async (id) => {
   }
 };
 
-const createHistory = async (history) => {
+const createHistory = async (data) => {
   try {
-    const response = await axios.post(BASE_URL, history);
-    return response.data;
+    const response = await axios.post(`api/History`, data);
+    return response;
   } catch (error) {
     console.error("Error creating history:", error);
     throw error;
@@ -74,10 +85,6 @@ const getCombinedHistories = async (userId, hisId) => {
     );
     throw error;
   }
-};
-
-const getPartOfHis = (userID, historyID) => {
-  return axios.get(`${BASE_URL}/PartOfHistory/${userID}/${historyID}`);
 };
 
 // Export functions including the new function

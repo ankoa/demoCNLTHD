@@ -25,6 +25,10 @@ const TestResult = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [showQuestion, setShowQuestion] = useState(false);// State để điều khiển hiển thị câu hỏi
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const overlayRef = useRef();
   const navigate = useNavigate(); // Hook để điều hướng
   const partRefs = useRef({});// Tạo ref cho mỗi part section
 
@@ -48,13 +52,13 @@ const TestResult = () => {
         }
         setHistoryData(historyResponse.DT);
 
-        // Lấy partData
         const partResponse = await getPartOfHis(userID, historyID);
         if (partResponse.EC !== 0) {
           setError(partResponse.EM);
           return;
         }
         setPartData(partResponse.DT);
+
 
         // Lấy testData sau khi có historyData
         const testResponse = await getTestByID(historyResponse.DT.TestID);
@@ -63,7 +67,6 @@ const TestResult = () => {
           return;
         }
         setTestData(testResponse.DT);
-        console.log(testResponse.DT.Name)
 
         // Lấy userAnswers
         const userAnswersResponse = await getUserAnswerByHisID(historyID);
@@ -72,6 +75,7 @@ const TestResult = () => {
           return;
         }
         setUserAnswers(userAnswersResponse.DT);
+
       } catch (error) {
         setError("Lỗi khi lấy dữ liệu");
       } finally {
@@ -169,13 +173,35 @@ const TestResult = () => {
 
   const convertSelectedToLetter = (selectedId) => {
     const letters = ['A', 'B', 'C', 'D']; // Tương ứng với 1, 2, 3, 4
-    return letters[selectedId - 1]; // Giả sử SelectedID là từ 1 đến 4
+    return letters[(selectedId - 1) % 4]; // Giả sử SelectedID là từ 1 đến 4
   };
 
 
-  const toggleDetails = () => {
-    
-  } 
+  // Xử lý khi người dùng chọn câu trả lời
+  const handleAnswerSelect = (answer) => {
+    setData({ ...data, userAnswer: answer });
+  };
+
+  const handleShowDetails = (question) => {
+    setSelectedQuestion(question);
+    setShowQuestion(true);
+  };
+
+  const handleCloseOverlay = () => {
+    setShowQuestion(false);
+    setSelectedQuestion(null);
+  };
+
+  // Hàm xử lý cuộn đến phần cụ thể
+  const handleScrollToPart = (partName) => {
+    // Kiểm tra nếu ref của phần tử đó tồn tại
+    if (partRefs.current[partName]) {
+      partRefs.current[partName].scrollIntoView({
+        behavior: "smooth", // Cuộn mượt mà
+        block: "start",     // Cuộn đến phần đầu của phần tử
+      });
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -247,8 +273,8 @@ const TestResult = () => {
             >
               <div className="part-title">{part.PartName}</div>
               <div className="answer-grid">
-                {part.questions.map((item, indexQues) =>{
-                  console.log(item) 
+                {part.questions.map((item, indexQues) => {
+                  // console.log(item)
                   return (
                     <div key={indexQues} className="answer-item">
                       <div className="question-number">{indexQues + 1}</div>
@@ -257,10 +283,10 @@ const TestResult = () => {
                           <span>Chưa chọn</span> // Hiển thị nếu không có userAnswer
                         ) : (
                           <div className="answer-choice">
-                            <span>{convertSelectedToLetter(item.userAnswer.SelectedAnswerID % item.question.AnswerCounts)}</span>
-                            <div className={`correct-answer ${item.userAnswer.IsCorrect === true ? "correct" : "incorrect"}`}></div>
+                            <span>{convertSelectedToLetter(item.userAnswer.SelectedAnswerID)}</span>
+                            <div className={`selected-answer ${item.userAnswer.IsCorrect === true ? "correct" : "incorrect"}`}></div>
                             {item.userAnswer.IsCorrect === true ? (
-                              <span className="correct-icon"><FaCheck /></span>
+                              <span className="correct-icon" >  <FaCheck />  </span>
                             ) : (
                               <span className="incorrect-icon"><FaTimes /></span>
                             )}
@@ -268,9 +294,43 @@ const TestResult = () => {
                         )}
                       </div>
 
-                      <span class="details-toggle" onclick="toggleDetails()">[Chi tiết]</span>
+                      <span
+                        className="details-toggle"
+                        onClick={() => handleShowDetails(item)}
+                      >
+                        [Chi tiết]
+                      </span>
+                      {showQuestion && selectedQuestion && (
+                        <div className="overlay" ref={overlayRef}>
+                          <div className="overlay-content">
+                            <button className="close-button" onClick={handleCloseOverlay}><FaTimes/></button>
+                            <h3>{selectedQuestion.question.Text}</h3>
+                            <ul>
+                              {selectedQuestion.answers.map((answer) => {
+                                 return (
+                                <li
+                                  key={answer.Id}
+                                  className={`answer-list-item ${
+                                    answer.IsCorrect == true
+                                      ? 'correct-answer-bg'
+                                      : selectedQuestion.userAnswer != null && 
+                                      (selectedQuestion.userAnswer.SelectedAnswerID === answer.Id) &&
+                                      selectedQuestion.userAnswer.IsCorrect == false
+                                      ? 'incorrect-answer-bg'
+                                      : ''
+                                  }`}
+                                >
+                                  <span style={{ fontWeight: "bold"}}>{convertSelectedToLetter(answer.Id)}</span>
+                                  . {answer.Text}
+                                </li>
+                              )})}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )})}
+                  )
+                })}
               </div>
             </div>
           );
@@ -278,7 +338,6 @@ const TestResult = () => {
       </div>
     </div >
   );
-
 };
 
 export default TestResult;
