@@ -1,4 +1,16 @@
+
 import createAxiosInstance from "../util/axiosCustomize";
+
+// import axios from "../util/axiosCustomize";
+// const BASE_URL = "https://localhost:5001/api/History";
+// import createAxiosInstance from "../util/axiosCustomize";
+// const axios1 = createAxiosInstance(5001);
+
+const BASE_URL = "https://localhost:5001/api/History";
+const getPartOfHis = (userID, historyID) => {
+  return axios.get(`${BASE_URL}/PartOfHistory/${userID}/${historyID}`);
+};
+
 
 const axios = createAxiosInstance(5001);
 // Get all questions
@@ -85,4 +97,5 @@ export {
   deleteHistory,
   getAllPartsByHistoryId,
   getCombinedHistories,
+  getPartOfHis
 };

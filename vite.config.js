@@ -53,5 +53,12 @@ export default defineConfig({
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
         }
-    }
+    },
+    css: {
+        preprocessorOptions: {
+          scss: {
+            silenceDeprecations: ["legacy-js-api"],
+          },
+        },
+      },
 })

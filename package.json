@@ -13,6 +13,7 @@
     "@fortawesome/fontawesome-free": "^6.6.0",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "express": "^4.21.1",
     "lodash": "^4.17.21",
     "owl.carousel": "^2.3.4",
     "react": "^18.3.1",
@@ -28,12 +29,16 @@
     "react-router-dom": "^6.26.2",
     "react-slick": "^0.30.2",
     "react-spinners": "^0.14.1",
-    "react-toastify": "^10.0.5",
+    "react-toastify": "^10.0.6",
     "react-verification-input": "^4.1.2",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
+<<<<<<< HEAD
+=======
+    "sass": "^1.80.6",
+>>>>>>> 914114ec00938b28f8cd3edf2b0f64aa26247d05
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.13"
   },

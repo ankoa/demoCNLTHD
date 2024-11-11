@@ -24,6 +24,11 @@ const getQuestionOfPart = (id) => {
   return axios.get(`api/Part/question2/${id}`);
 };
 
+//đường dẫn ở trên là "/question2/${id}
+const getQuestionByPartID = (partId) => {
+    return axios.get(`/api/Part/question/${partId}`);
+  };
+
 const getAnswerOfQuestion = (id) => {
   return axios.get(`api/Question/answer/${id}`);
 };
@@ -51,4 +56,6 @@ export {
   getQuestionOfPart,
   getAnswerOfQuestion,
   SubmitPart,
+  getQuestionByPartID
+
 };

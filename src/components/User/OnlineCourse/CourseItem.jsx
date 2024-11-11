@@ -18,7 +18,7 @@ export default function (props) {
               <span className="rating-star fas fa-star checked"></span>
               <span className="rating-star fas fa-star checked"></span>
               <span className="rating-star fas fa-star checked"></span>
-              <span className="rating-star fas fa-star-half-all checked"></span>
+              <span className="rating-star fas fa-star-half-stroke checked"></span>
               ({numberOfReview})
               <span className="ml-1">{numberOfStudent} Học viên</span>
             </div>

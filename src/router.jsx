@@ -15,6 +15,7 @@ import UserCourse from "./components/User/UserCourse/UserCourse";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
 import MainTest from "./components/User/TestPage/MainTest/MainTest";
 import TestManagement from "./components/Admin/Content/TestManagement/TestManagement";
+import TestResult from "./components/User/TestResult/TestResult";
 import UserManagement from "./components/Admin/Content/UserManagement/UserManagement";
 import PartManagement from "./components/Admin/Content/PartManagement/PartManagement";
 import QuestionManagement from "./components/Admin/Content/QuestionManagement/QuestionManagement";
@@ -33,6 +34,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.RESETPASSWORD, element: <ResetPassword /> },
     { path: ROUTERS.USER.USERCOURSE, element: <UserCourse /> },
     { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
+    { path: ROUTERS.USER.TESTRESULT, element: <TestResult />},
   ];
 
   return userRouters.map((route, key) => (
