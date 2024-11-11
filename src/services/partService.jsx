@@ -1,10 +1,11 @@
-import axios from 'axios';
+import createAxiosInstance from "../util/axiosCustomize";
+const axios = createAxiosInstance(5001);
 
-const getPartsByTestId = async (testId) => {
-    return await axios.get(`/api/Parts/${testId}`);
+// lấy kết quả bài test từ ID
+const getQuestionByPartID = (partId) => {
+  return axios.get(`/api/Part/question/${partId}`);
 };
 
-
 export {
-  getPartsByTestId
-}
+  getQuestionByPartID,
+};

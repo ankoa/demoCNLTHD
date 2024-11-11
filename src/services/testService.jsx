@@ -6,6 +6,10 @@ const getTests = () => {
     return axios.post("api/Test");
 };
 
+const getTestByID = (testID) => {
+    return axios.get(`/api/Test/${testID}`);
+};
+
 // const getUsers = () => {
 //     return axios.get("api/User");
 // };
@@ -88,5 +92,6 @@ const getTests = () => {
 
 // Export các hàm để sử dụng trong các thành phần khác
 export {
-    getTests
+    getTests,
+    getTestByID,
 };

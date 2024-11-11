@@ -3,29 +3,54 @@
   padding: 1.5rem;
   border-radius: 1rem;
   background-color: #faf8f8;
-  
-  
 
   &__header {
-    justify-content: space-between;
     align-items: center;
     text-align: left;
+    display: flex;
+    margin-bottom: 1rem;
 
-    h3 {
-      font-size: 1.5rem;
+    h2 {
+      margin: 0;
+      font-weight: bold;
     }
-    button {
-      margin: 1rem 0;
-      background-color: rgb(158, 213, 240);
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      border: 1px solid;
+
+    .part-buttons {
+      display: flex;
+      gap: 10px;
     }
-    button:hover {
+
+    .partButton {
+      background-color: #facc43;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-left: 1rem;
+    }
+    .partButton:hover {
       color: #fff;
-      background-color: rgb(17, 66, 158);
+      background-color: #FFA500;
       outline: none;
     }
+  }
+
+  &__back {
+    display: flex;
+    justify-content: flex-start; /* Căn lề trái */
+    margin: 1rem 1.5rem;
+    background-color: rgb(158, 213, 240);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid;
+  }
+  &__back:hover {
+    color: #fff;
+    background-color: rgb(17, 66, 158);
+    outline: none;
   }
 
   &__content {
@@ -42,9 +67,9 @@
     border-radius: 0.5rem;
     background-color: #f2f1f1;
 
-    &__element{
-      display: flex; /* Sử dụng flexbox */
-      justify-content: space-between; /* Phân bổ khoảng trống đều giữa các phần tử con */
+    &__element {
+      display: flex;
+      justify-content: space-between;
       margin: 1.5rem;
       span {
         font-size: 1.3rem;
@@ -69,8 +94,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    justify-content: space-between;
+    justify-content: space-between; 
     padding: 2rem;
     margin: 0 1.5rem;
     .icon {
@@ -88,7 +112,6 @@
 
     &.incorrect {
       color: red;
-
     }
 
     &.skipped {
@@ -98,16 +121,16 @@
 
   .answer-list {
     padding: 20px;
-    
+
     h3 {
       font-weight: bold;
       text-align: left;
     }
-  
+
     .part-section {
       margin-bottom: 20px;
     }
-  
+
     .part-title {
       font-size: 1.3rem;
       font-weight: bold;
@@ -115,19 +138,19 @@
       color: #333;
       text-align: left;
     }
-  
+
     .answer-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); // Tạo 3 cột
-      gap: 10px; // Khoảng cách giữa các cột
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
     }
-  
+
     .answer-item {
       display: flex;
+      flex: 1;
       align-items: center;
       padding: 1rem;
-      font-size: 1.5rem;
-  
+
       .question-number {
         background-color: #e0f0ff;
         border-radius: 50%;
@@ -139,42 +162,44 @@
         font-weight: bold;
         color: #333;
         margin-right: 10px;
-        padding: 1.5rem;
+        padding: 1.5rem; /* Có thể cần điều chỉnh hoặc bỏ */
       }
-  
-      .answer-choice {
-        // font-weight: bold;
-        color: #565353;
-        margin-right: 5px;
-      }
-  
-      .correct-answer {
-        font-weight: bold;
-        margin-right: 5px;
-  
-        &.correct {
+
+      .answer-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        .answer-choice {
+          color: #565353;
+          margin-right: 5px;
+          display: inline-flex;
+          align-items: center;
+        }
+        .correct-answer {
+          font-weight: bold;
+          margin-right: 5px;
+        }
+        .correct-icon {
           color: green;
+          font-size: 1.2rem;
+          margin-left: 5px
         }
-  
-        &.incorrect {
+    
+        .incorrect-icon {
           color: red;
+          font-size: 1.2rem;
+          margin-left: 5px;
         }
-      }
-    }
-  
-    // Đoạn SCSS để xử lý các icon đúng sai
-    .correct-icon {
-      color: green;
-      font-size: 1.2rem;
-      margin-left: 5px;
-    }
-  
-    .incorrect-icon {
-      color: red;
-      font-size: 1.2rem;
-      margin-left: 5px;
+        
+        .details-toggle {
+          color: #565353;
+          cursor: pointer;
+          text-decoration: underline;
+          margin-left: 1.5rem;
+        } 
+      }     
     }
   }
-  
-  
 }
