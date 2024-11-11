@@ -1,138 +1,109 @@
-import { useState, useEffect } from "react"; // Tạo dữ liệu giả định (mock data)
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom"; // Negative import cho useNavigate
 
-const mockTests = Array.from({ length: 100 }, (_, index) => ({
-  id: index + 1,
-  title: `Test title ${index + 1}`,
-  duration: 40,
-  participants: 500 + index,
-  comments: 20 + index,
-  sections: 4,
-  questions: 40,
-  tags: ["TOEIC"],
-}));
+const TextBox = ({ tests }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4; // Số bài kiểm tra hiển thị trên mỗi trang
+  const navigate = useNavigate(); // Khai báo biến navigate
 
-const TextBox = () => {
-  const [tests, setTests] = useState([]); // Dữ liệu bài test
-  const [page, setPage] = useState(1); // Trang hiện tại
-  const [totalPages, setTotalPages] = useState(0); // Tổng số trang
-  const limit = 20; // Số item mỗi trang
+  // Tính toán chỉ số của bài kiểm tra để hiển thị
+  const indexOfLastTest = currentPage * itemsPerPage;
+  const indexOfFirstTest = indexOfLastTest - itemsPerPage;
+  const currentTests = tests
+    ? tests.slice(indexOfFirstTest, indexOfLastTest)
+    : [];
 
-  // Giả lập việc load dữ liệu từ "API"
-  useEffect(() => {
-    const fetchTests = () => {
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginatedTests = mockTests.slice(startIndex, endIndex); // Lấy 20 phần tử của trang hiện tại
-      setTests(paginatedTests);
-      setTotalPages(Math.ceil(mockTests.length / limit)); // Tính tổng số trang
-    };
+  // Tính toán tổng số trang
+  const totalPages = tests ? Math.ceil(tests.length / itemsPerPage) : 1;
 
-    fetchTests();
-  }, [page]);
+  // Hàm thay đổi trang
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-  const handlePageChange = (newPage) => {
-    if (newPage > 0 && newPage <= totalPages) {
-      setPage(newPage); // Cập nhật trang hiện tại
-    }
+  // Hàm xử lý khi nhấn nút "Chi tiết"
+  const handleDetailClick = (testId) => {
+    navigate(`/test/${testId}`); // Chuyển hướng đến trang chi tiết bài kiểm tra
   };
 
   return (
     <div className="col-12 col-md-12">
-      <div className="testitem-grid row align-items-center">
-        {tests.map((test, index) => (
-          <div className="col-6 col-md-3 my-2" key={index}>
-            <div className="testitem-wrapper border rounded shadow-sm p-3">
-              <a className="text-dark" href={`/tests/${test.id}`}>
-                <h2 className="testitem-title">{test.title}</h2>
-                <div className="testitem-info-wrapper">
-                  <div>
-                    <span className="testitem-info">
-                      <span className="far fa-clock mr-1"></span>
-                      {test.duration} phút |{" "}
-                      <span className="far fa-user-edit mr-1"></span>
-                      {test.participants} |{" "}
-                      <span className="far fa-comments mr-1"></span>
-                      {test.comments}
-                    </span>
+      {!tests || tests.length === 0 ? (
+        <p>Không có bài kiểm tra nào để hiển thị.</p>
+      ) : (
+        <>
+          <div className="testitem-grid row align-items-center">
+            {currentTests.map((test) => (
+              <div className="col-6 col-md-3 my-2" key={test.Id}>
+                <div className="testitem-wrapper border rounded shadow-sm p-3">
+                  <h2 className="testitem-title">{test.Name}</h2>
+                  <p className="testitem-description">{test.Description}</p>
+                  <div className="testitem-info-wrapper">
+                    <div>
+                      <span className="testitem-info">
+                        <span className="far fa-clock mr-1"></span>
+                        {test.Duration} phút |{" "}
+                        <span className="far fa-user-edit mr-1"></span>
+                        {test.Difficulty} |{" "}
+                        <span className="far fa-calendar-alt mr-1"></span>
+                        Ngày tạo:{" "}
+                        {new Date(test.CreatedAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="testitem-info">
+                        Cập nhật lần cuối:{" "}
+                        {new Date(test.UpdatedAt).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="testitem-info">
-                      {test.sections} phần thi | {test.questions} câu hỏi
-                    </span>
+                  <div className="testitem-start-test mt-2">
+                    <button
+                      className="btn btn-block btn-outline-primary"
+                      onClick={() => handleDetailClick(test.Id)} // Gọi hàm khi nhấn nút
+                    >
+                      Chi tiết
+                    </button>
                   </div>
                 </div>
-                <div className="testitem-tags mt-2">
-                  {test.tags.map((tag, i) => (
-                    <span key={i} className="tag badge bg-primary me-1">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="testitem-start-test mt-2">
-                  <a
-                    href={`/tests/${test.id}`}
-                    className="btn btn-block btn-outline-primary"
-                  >
-                    Chi tiết
-                  </a>
-                </div>
-              </a>
-            </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* Phân trang sử dụng Bootstrap */}
-      <nav aria-label="Page navigation example" className="mt-4">
-        <ul className="pagination justify-content-start">
-          <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
-            <a
-              className="page-link"
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                handlePageChange(page - 1);
-              }}
-            >
-              Previous
-            </a>
-          </li>
-
-          {/* Danh sách các nút trang */}
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <li
-              key={index}
-              className={`page-item ${page === index + 1 ? "active" : ""}`}
-            >
-              <a
-                className="page-link"
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handlePageChange(index + 1);
-                }}
+          {/* Phân trang */}
+          <div className="pagination">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                className={`page-button ${
+                  currentPage === index + 1 ? "active" : ""
+                }`}
+                onClick={() => handlePageChange(index + 1)}
               >
                 {index + 1}
-              </a>
-            </li>
-          ))}
-
-          <li className={`page-item ${page === totalPages ? "disabled" : ""}`}>
-            <a
-              className="page-link"
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                handlePageChange(page + 1);
-              }}
-            >
-              Next
-            </a>
-          </li>
-        </ul>
-      </nav>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
+};
+
+// Định nghĩa kiểu dữ liệu cho props
+TextBox.propTypes = {
+  tests: PropTypes.arrayOf(
+    PropTypes.shape({
+      Id: PropTypes.number.isRequired,
+      Name: PropTypes.string.isRequired,
+      Description: PropTypes.string.isRequired,
+      Difficulty: PropTypes.string.isRequired,
+      Duration: PropTypes.number.isRequired,
+      CreatedAt: PropTypes.string.isRequired,
+      UpdatedAt: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default TextBox;

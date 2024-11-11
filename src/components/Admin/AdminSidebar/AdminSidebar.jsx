@@ -18,7 +18,7 @@ import {
 import { FaTachometerAlt, FaGem, FaList, FaGithub, FaRegLaughWink, FaHeart } from 'react-icons/fa';
 import 'react-pro-sidebar/dist/css/styles.css';
 import './AdminSidebar.scss';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
     const navigate = useNavigate();
@@ -56,7 +56,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
                     <MenuItem>
                         ACCOUNT
                     </MenuItem>
-                    <SubMenu title="Dashboards" icon={<FiActivity />}>
+                    <SubMenu title="Users" icon={<FiActivity />} onClick={() => navigate("/admin/user")}>
                         <MenuItem suffix={<span className="badge bg-primary-soft text-primary ms-auto">Updated</span>}>Default <Link to="/admin/manage-user" /></MenuItem>
                         <MenuItem>Multiopurpose <Link to="/admin/manage-quiz" /></MenuItem>
                         <MenuItem>Affiliate <Link to="/admin/manage-question" /></MenuItem>
@@ -66,12 +66,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
                     <MenuItem>
                         EXAM
                     </MenuItem>
-                    <SubMenu title="Tests" icon={<AiOutlineAppstore />}>
-                        <MenuItem>List tests <Link to="/admin/manage-user" /></MenuItem>
-                        {/* <MenuItem>Authentication <Link to="/admin/manage-quiz" /></MenuItem>
-                        <MenuItem>Error <Link to="/admin/manage-question" /></MenuItem>
-                        <MenuItem>Pricing <Link to="/admin/manage-question" /></MenuItem>
-                        <MenuItem>Invoice <Link to="/admin/manage-question" /></MenuItem> */}
+                    <SubMenu title="Tests" icon={<AiOutlineAppstore />} onClick={() => navigate("/admin/test")}>
                     </SubMenu>
                     <SubMenu title="Parts" icon={<FiGlobe />}>
                         <MenuItem>Default <Link to="/admin/manage-user" /></MenuItem>

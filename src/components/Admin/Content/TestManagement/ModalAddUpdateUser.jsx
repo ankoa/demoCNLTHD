@@ -7,14 +7,13 @@ const ModalAddUpdateUser = forwardRef(
         const [actionType, setActionType] = useState('');
 
         const [formData, setFormData] = useState({
-            id: 0,
-            Name: '',
-            Position: '',
-            Office: '',
-            Age: '',
-            Startdate: '',
-            Salary: '',
-            Status: 'Full-Time',
+            Id: 0,
+            Name: "",
+            Description: "",
+            Difficulty: "",
+            Duration: 0,
+            CreatedAt: "",
+            UpdatedAt: ""
         });
 
         // Truyền hàm open() qua ref để có thể gọi từ component cha
@@ -26,14 +25,13 @@ const ModalAddUpdateUser = forwardRef(
                 setFormData(data); // Điền dữ liệu vào form nếu là cập nhật
             } else {
                 setFormData({
-                    id: 0,
-                    Name: '',
-                    Position: '',
-                    Office: '',
-                    Age: '',
-                    Startdate: '',
-                    Salary: '',
-                    Status: 'Full-Time',
+                    Id: 0,
+                    Name: "",
+                    Description: "",
+                    Difficulty: "",
+                    Duration: 0,
+                    CreatedAt: "",
+                    UpdatedAt: ""
                 });
             }
             setSh(true);
@@ -43,48 +41,30 @@ const ModalAddUpdateUser = forwardRef(
             setSh(false);
             setActionType('');
             setFormData({
-                id: 0,
-                Name: '',
-                Position: '',
-                Office: '',
-                Age: '',
-                Startdate: '',
-                Salary: '',
-                Status: 'Full-Time',
+                Id: 0,
+                Name: "",
+                Description: "",
+                Difficulty: "",
+                Duration: 0,
+                CreatedAt: "",
+                UpdatedAt: ""
             });
         };
 
-        useEffect(() => {
-            if (actionType === 'Add') {
-                setFormData((prev) => ({ ...prev, id: 0 }));
-            }
-        }, [actionType]);
-
         const handleChange = (e) => {
             const { name, value } = e.target;
-            const updatedValue = name === 'Startdate' ? value.split('-').join('/') : value;
-            setFormData({ ...formData, [name]: updatedValue });
-        };
-
-        const convertTypeOfDate = (str) => {
-            if (!str) return '';
-            const [year, month, day] = str.split('/');
-            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            setFormData({ ...formData, [name]: value });
         };
 
         const handleSubmit = (e) => {
             e.preventDefault();
-            if (formData.Age <= 0) {
-                alert('Invalid Age');
-                return;
-            }
 
             if (actionType === 'Add') {
-                if (window.confirm('Are you sure you want to save this thing into the database?')) {
+                if (window.confirm('Are you sure you want to save this test into the database?')) {
                     handleAdd(formData);
                 }
             } else if (actionType === 'Update') {
-                if (window.confirm('Are you sure you want to update this user?')) {
+                if (window.confirm('Are you sure you want to update this test?')) {
                     handleUpdate(formData);
                 }
             }
@@ -94,7 +74,7 @@ const ModalAddUpdateUser = forwardRef(
         return (
             <Modal className="mt-5" show={sh} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{actionType === 'Add' ? 'Add New User' : 'Update User'}</Modal.Title>
+                    <Modal.Title>{actionType === 'Add' ? 'Add New Test' : 'Update Test'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="p-5 pt-2" style={{ height: '500px', overflowY: 'scroll' }}>
                     <Form onSubmit={handleSubmit}>
@@ -109,77 +89,43 @@ const ModalAddUpdateUser = forwardRef(
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="Position">
-                            <Form.Label>Position</Form.Label>
+                        <Form.Group className="mb-3" controlId="Description">
+                            <Form.Label>Description</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="Position"
-                                value={formData.Position}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="Office">
-                            <Form.Label>Office</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="Office"
-                                value={formData.Office}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="Age">
-                            <Form.Label>Age</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="Age"
-                                value={formData.Age}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="Startdate">
-                            <Form.Label>Start Date</Form.Label>
-                            <Form.Control
-                                type="date"
-                                name="Startdate"
-                                value={formData.Startdate ? convertTypeOfDate(formData.Startdate) : ''}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="Salary">
-                            <Form.Label>Salary</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="Salary"
-                                value={formData.Salary}
+                                name="Description"
+                                value={formData.Description}
                                 onChange={handleChange}
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="Status">
-                            <Form.Label>Status</Form.Label>
+                        <Form.Group className="mb-3" controlId="Difficulty">
+                            <Form.Label>Difficulty</Form.Label>
                             <Form.Select
-                                name="Status"
-                                value={formData.Status}
+                                name="Difficulty"
+                                value={formData.Difficulty}
                                 onChange={handleChange}
                                 required
                             >
-                                <option value="Full-Time">Full-Time</option>
-                                <option value="Part-Time">Part-Time</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Contract">Contract</option>
+                                <option value="">Select Difficulty</option>
+                                <option value="Easy">Easy</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Hard">Hard</option>
                             </Form.Select>
                         </Form.Group>
 
+                        <Form.Group className="mb-3" controlId="Duration">
+                            <Form.Label>Duration (minutes)</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="Duration"
+                                value={formData.Duration}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+
                         <Button variant="primary" type="submit">
-                            {actionType === 'Add' ? 'Add User' : 'Update User'}
+                            {actionType === 'Add' ? 'Add Record' : 'Update Record'}
                         </Button>
                     </Form>
                 </Modal.Body>

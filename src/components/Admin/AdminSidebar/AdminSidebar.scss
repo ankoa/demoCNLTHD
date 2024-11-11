@@ -50,6 +50,11 @@
 .pro-sidebar {
     /* Ẩn thanh cuộn mặc định */
     overflow: hidden;
+    color: #212832;
+
+    &-content {
+        overflow: auto;
+    }
 
     &:hover {
         /* Hiển thị thanh cuộn khi hover vào */

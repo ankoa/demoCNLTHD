@@ -1,35 +1,26 @@
 // Hàm postLogin để gọi API đăng nhập
+
 import createAxiosInstance from "../util/axiosCustomize";
 
-const axios = createAxiosInstance(5001);
-const getTests = () => {
-    return axios.get("api/Test");
+const axios = createAxiosInstance(5556);
+
+
+const getUsers = () => {
+    return axios.get("api/User");
 };
 
-const getTestByID = (testID) => {
-    return axios.get(`/api/Test/${testID}`);
+const getUserWithRoleById = async (id) => {
+    return axios.get(`api/User/usernrole/${id}`);
 };
 
-const deleteTestById = async (id) => {
-    return axios.delete(`api/Test/${id}`);
+const postNewUser = (newUser) => {
+    return axios.post("api/User", newTest);
 };
 
-const postNewTest = (newTest) => {
-    return axios.post("api/Test", newTest);
+const putUpdateUser = (updateUser) => {
+    return axios.put(`api/Test`, updateUser);
 };
 
-const putUpdateTest = (updateTest) => {
-    return axios.put(`api/Test/${updateTest.Id}`, updateTest);
-};
-
-const getParfOfTestById = (id) => {
-    return axios.get(`api/Test/part/${id}`);
-};
-
-
-// const getUsers = () => {
-//     return axios.get("api/User");
-// };
 
 // // Hàm postLogOut để gọi API đăng xuất
 // const postLogOut = (email, refresh_token) => {
@@ -109,10 +100,8 @@ const getParfOfTestById = (id) => {
 
 // Export các hàm để sử dụng trong các thành phần khác
 export {
-    getTests,
-    getTestByID,
-    deleteTestById,
-    postNewTest,
-    putUpdateTest,
-    getParfOfTestById
+    getUsers,
+    postNewUser,
+    putUpdateUser,
+    getUserWithRoleById
 };
