@@ -12,6 +12,7 @@ import { Card, Dropdown, Form } from 'react-bootstrap';
 import { deleteTestById, getParfOfTestById, getTests, postNewTest, putUpdateTest } from '../../../../services/testService';
 import { toast } from 'react-toastify';
 import { getQuestionOfPart, postNewPart, putUpdatePart } from '../../../../services/partService';
+import { addQuestion, updateQuestion } from '../../../../services/questionService';
 
 const QuestionManagement = () => {
     //--------------Khai báo ref
@@ -89,18 +90,18 @@ const QuestionManagement = () => {
         fetchListTests();
     }, [])
 
-    useEffect(() => {
-        if (selectedTestID === '-1' || selectedTestID === null) {
-            setParts([])
-            return;
-        }
-        fetchListPartOfTest(selectedTestID);
-        if (selectedPartID === '-1' || selectedPartID === null) {
-            setData([])
-            return;
-        }
-        fetchQuestionOfPart(selectedPartID);
-    }, [selectedTestID, selectedPartID])
+    // useEffect(() => {
+    //     if (selectedTestID === '-1' || selectedTestID === null) {
+    //         setParts([])
+    //         return;
+    //     }
+    //     fetchListPartOfTest(selectedTestID);
+    //     if (selectedPartID === '-1' || selectedPartID === null) {
+    //         setData([])
+    //         return;
+    //     }
+    //     fetchQuestionOfPart(selectedPartID);
+    // }, [selectedTestID, selectedPartID])
 
     useEffect(() => {
         if (selectedPartID === '-1' || selectedPartID === null) {
@@ -111,8 +112,13 @@ const QuestionManagement = () => {
     }, [, selectedPartID])
 
     useEffect(() => {
-        setSelectedPartID('-1');
-        setData([])
+        if (selectedTestID === '-1' || selectedTestID === null) {
+            setData([])
+            setSelectedPartID('-1')
+            return;
+        }
+        fetchListPartOfTest(selectedTestID);
+        setSelectedPartID('-1')
     }, [selectedTestID])
 
     useEffect(() => {
@@ -131,7 +137,6 @@ const QuestionManagement = () => {
         try {
             let response = await getQuestionOfPart(id);
             if (response && response.EC === 0) {
-                console.log(response.DT.questions);
                 setData(response.DT.questions);
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
@@ -326,13 +331,12 @@ const QuestionManagement = () => {
     //Hiện modal add user
     const handleShowModalAdd = () => {
         if (selectedTestID === '-1' || selectedTestID === null) {
-            toast.warning("Choose a test before adding parts");
+            toast.warning("Choose a test before adding questions");
             return;
         }
-        if (data.length >= 7) {
-            console.log(data.length);
-            toast.warning("Cannot add more than 7 parts");
-            return
+        if (selectedPartID === '-1' || selectedPartID === null) {
+            toast.warning("Choose a part before adding questions");
+            return;
         }
         // Lấy các `Number` của các part đã có từ dữ liệu
         const existingParts = data.map(part => part.Number);
@@ -348,35 +352,43 @@ const QuestionManagement = () => {
         refModalUser.current.open(findTestById(id), "Update");
     }
 
-    //Hàm thêm user
-    const handleAdd = async (newPart) => {
-        newPart.TestID = +selectedTestID;
-        newPart.Name = "Part " + newPart.Number;
-        newPart.Number = +newPart.Number;
-        newPart.CreatedAt = new Date().toISOString();  // Đảm bảo thời gian theo định dạng chuẩn ISO
-        newPart.UpdatedAt = new Date().toISOString();
-        console.log(newPart);
-        let response = await postNewPart(newPart);
+    //Hàm thêm question
+    const handleAdd = async (newTest) => {
+        newTest.PartID = +selectedPartID;
+        newTest.CreatedAt = new Date().toISOString();  // Đảm bảo thời gian theo định dạng chuẩn ISO
+        newTest.UpdatedAt = new Date().toISOString();
+        let response = await addQuestion(newTest);
         if (response.EC === 0 && response) {
             toast.success(response.EM)
-            fetchListPartOfTest(selectedTestID);
+            fetchQuestionOfPart(selectedPartID);
+            console.log(response)
         } else {
             toast.error(response.EM)
         }
+        console.log(newTest);
     }
 
-    //Hàm update user
     const handleUpdate = async (updatedUser) => {
         updatedUser.UpdatedAt = new Date().toISOString();
-        console.log(updatedUser);
-        let response = await putUpdateTest(updatedUser);
-        if (response.EC === 0 && response) {
-            toast.success(response.EM)
-            fetchListTests();
-        } else {
-            toast.error(response.EM)
+        updatedUser.PartID = +selectedPartID;
+
+        try {
+            let response = await updateQuestion(updatedUser.Id, updatedUser);
+            console.log(response); // Xem chi tiết phản hồi từ API
+
+            if (response && response.EC === 0) {
+                toast.success(response.EM);
+                fetchQuestionOfPart(selectedPartID); // Làm mới danh sách bài kiểm tra sau khi cập nhật
+            } else {
+                toast.error(response.EM);
+            }
+        } catch (error) {
+            toast.error("Error updating question");
         }
+
     };
+
+
 
     // useDebounce(() => {
     //     const filteredData = data.filter((item) => {
@@ -464,7 +476,7 @@ const QuestionManagement = () => {
             <ModalAddUpdateUser
                 ref={refModalUser}
                 handleAddPart={handleAdd}
-                handleUpdate={handleUpdate}
+                handleUpdatePart={handleUpdate}
                 parts={missingParts}
 
             />
