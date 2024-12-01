@@ -282,7 +282,7 @@ const TestResult = () => {
                   return (
                     <div key={indexQues} className="answer-item">
                       <div className="question-number">{indexQues + 1}</div>
-                      <div class="answer-wrapper">
+                      <div className="answer-wrapper">
                         {item.userAnswer == null ? (
                           <span>Chưa chọn</span> // Hiển thị nếu không có userAnswer
                         ) : (
