@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef, useId } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Import useHistory
+import React, { useEffect, useState, useRef} from "react";
+import { useParams, useNavigate} from "react-router-dom"; // Import useHistory
+import { useSelector } from 'react-redux';
 
 import { GiCheckMark, GiBullseye } from "react-icons/gi";
 import { MdOutlineTimer } from "react-icons/md";
@@ -13,7 +14,8 @@ import { getUserAnswerByHisID } from "../../../services/userAnswerService";
 
 const TestResult = () => {
   const { historyID } = useParams(); // Lấy historyID từ URL
-  const userID = "1"; //thêm userID khi cấu hình xong login
+  // const userID = "4"; //thêm userID khi cấu hình xong login
+  const userID = useSelector((state) => state.userReducer.account.userid);
   const [historyData, setHistoryData] = useState([]);
   const [partData, setPartData] = useState([]);
   const [testData, setTestData] = useState([]);
@@ -57,6 +59,7 @@ const TestResult = () => {
           setError(partResponse.EM);
           return;
         }
+        console.log(partResponse)
         setPartData(partResponse.DT);
 
 
@@ -96,7 +99,8 @@ const TestResult = () => {
         try {
           // Fetch initial part data (assume it's already set in partData)
           const partsWithQuestionsPromises = partData.map(async (part) => {
-            const response = await getQuestionByPartID(part.PartId);
+            const response = await getQuestionByPartID(part.PardId);
+            console.log(part.PardId)
             if (response.EC === 0) {
               const { questions } = response.DT.part;
               // Add `userAnswer` field to each question based on `userAnswers`
