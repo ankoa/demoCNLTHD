@@ -1,5 +1,5 @@
 import createAxiosInstance from "../util/axiosCustomize";
-const axios = createAxiosInstance(5001);
+const axios = createAxiosInstance("https://localhost:5001/"); // Specify your base URL
 // Get all questions
 const getAllQuestions = async () => {
   try {

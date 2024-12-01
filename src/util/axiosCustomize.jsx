@@ -2,6 +2,65 @@ import axios from "axios";
 import { store } from "../redux/store";
 import { setLoading } from "../redux/action/loadingAction"; // Import action để set loading
 
+// Hàm tạo instance Axios với đường dẫn API
+const createAxiosInstance = (apiURL) => {
+  const instance = axios.create({
+    baseURL: apiURL, // Sử dụng đường dẫn API truyền vào
+  });
+
+  // Kiểm tra xem token đã hết hạn hay chưa
+  const isTokenExpired = (token) => {
+    if (!token) return true;
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const exp = payload.exp * 1000; // Chuyển đổi sang milliseconds
+    return Date.now() >= exp; // So sánh thời gian hiện tại với thời gian hết hạn
+  };
+
+  // Add a request interceptor
+  instance.interceptors.request.use(
+    async function (config) {
+      if (store.getState()?.loadingReducer?.loading === false)
+        store.dispatch(setLoading(true));
+
+      const access_token = store.getState()?.userReducer?.account?.access_token;
+
+      // Gán token vào header Authorization
+      config.headers["Authorization"] = "Bearer " + access_token;
+
+      return config;
+    },
+    function (error) {
+      store.dispatch(setLoading(false));
+      return Promise.reject(error);
+    }
+  );
+
+  // Add a response interceptor
+  instance.interceptors.response.use(
+    function (response) {
+      // Tắt loading sau khi nhận được response
+      store.dispatch(setLoading(false));
+      return response && response.data ? response.data : response;
+    },
+    function (error) {
+      // Tắt loading nếu có lỗi xảy ra
+      store.dispatch(setLoading(false));
+      return error && error.response && error.response.data
+        ? error.response.data
+        : Promise.reject(error);
+    }
+  );
+
+  return instance; // Trả về instance Axios
+};
+
+// Xuất hàm tạo instance
+export default createAxiosInstance;
+
+/* import axios from "axios";
+import { store } from "../redux/store";
+import { setLoading } from "../redux/action/loadingAction"; // Import action để set loading
+
 // Hàm tạo instance Axios với cổng
 const createAxiosInstance = (port) => {
   const instance = axios.create({
@@ -88,3 +147,4 @@ const createAxiosInstance = (port) => {
 
 // Xuất hàm tạo instance
 export default createAxiosInstance;
+ */
