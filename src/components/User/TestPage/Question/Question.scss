@@ -1,41 +1,64 @@
-/* .q-image {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px; // Khoảng cách giữa hình ảnh và câu hỏi
+.question-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.q-image {
+  text-align: center;
+  margin-bottom: 15px;
+
   img {
-    max-width: 100%; // Đảm bảo hình ảnh không vượt quá chiều rộng của div
-    height: auto; // Tự động điều chỉnh chiều cao
-    border-radius: 8px; // Bo góc cho hình ảnh
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Đổ bóng cho hình ảnh
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
   }
 }
 
+.q-audio {
+  margin-bottom: 15px;
+}
+
 .question {
-  font-size: 1.2em; // Kích thước font cho câu hỏi
-  font-weight: bold; // Đậm câu hỏi
-  margin-bottom: 10px; // Khoảng cách dưới câu hỏi
-  color: #333; // Màu chữ cho câu hỏi
+  margin-bottom: 15px;
+
+  h2 {
+    font-size: 1.5em;
+    margin: 0;
+  }
+
+  p {
+    font-size: 1.1em;
+    line-height: 1.5;
+  }
 }
 
 .answer {
-  margin-top: 10px; // Khoảng cách giữa câu hỏi và đáp án
   .a-child {
-    padding: 10px; // Padding cho mỗi đáp án
-    background-color: #f9f9f9; // Màu nền cho đáp án
-    border: 1px solid #ddd; // Đường viền cho đáp án
-    border-radius: 4px; // Bo góc cho đáp án
-    margin-bottom: 8px; // Khoảng cách giữa các đáp án
-    transition: background-color 0.3s ease; // Hiệu ứng chuyển màu nền
+    margin-bottom: 10px;
 
-    &:hover {
-      background-color: #eaeaea; // Màu nền khi hover
+    .form-check {
+      display: flex;
+      align-items: center;
+
+      .form-check-input {
+        margin-right: 10px;
+      }
+
+      .form-check-label {
+        font-size: 1em;
+        line-height: 1.5;
+      }
     }
   }
 }
 
 .no-data {
-  text-align: center; // Canh giữa khi không có dữ liệu
-  color: #888; // Màu chữ nhạt cho thông báo không có dữ liệu
-  font-size: 1em; // Kích thước font cho thông báo
+  color: #ff0000;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
 }
- */

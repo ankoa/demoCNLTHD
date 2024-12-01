@@ -1,10 +1,9 @@
+import createAxiosInstance from "../util/axiosCustomize";
+
 // import axios from "../util/axiosCustomize";
 // const BASE_URL = "https://localhost:5001/api/History";
 // import createAxiosInstance from "../util/axiosCustomize";
 // const axios1 = createAxiosInstance(5001);
-
-
-import createAxiosInstance from "../util/axiosCustomize";
 
 const BASE_URL = "https://localhost:5001/api/History";
 const getPartOfHis = (userID, historyID) => {
@@ -96,5 +95,5 @@ export {
   deleteHistory,
   getAllPartsByHistoryId,
   getCombinedHistories,
-  getPartOfHis
+  getPartOfHis,
 };

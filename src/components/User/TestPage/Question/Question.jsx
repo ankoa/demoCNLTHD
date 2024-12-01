@@ -1,28 +1,23 @@
-import "./Question.scss";
-import _ from "lodash";
 import PropTypes from "prop-types";
 
 const Question = (props) => {
   const { data, index } = props;
 
-  // Kiểm tra dữ liệu có hợp lệ không
-  if (_.isEmpty(data)) {
-    return <div>No data available.</div>; // Trả về thông báo nếu không có dữ liệu
-  }
-
   const handelRadioButton = (event, aID, qID) => {
-    console.log(">>>> data props: ", aID, qID);
-    props.handelRadioButton(aID, qID); // Cập nhật sự kiện cho radio button
+    props.handelRadioButton(aID, qID);
   };
+
+  // Đảm bảo dữ liệu hợp lệ được truyền vào
+  if (!data || !data.question) {
+    return <div>No data available.</div>;
+  }
 
   return (
     <>
-      {data.question.ImagePath ? (
+      {data?.question?.ImagePath && (
         <div className="q-image">
           <img src={data.question.ImagePath} alt="Question" />
         </div>
-      ) : (
-        <div className="q-image"></div>
       )}
 
       <div className="question">
@@ -36,8 +31,8 @@ const Question = (props) => {
               <div className="form-check">
                 <input
                   className="form-check-input"
-                  type="radio" // Sử dụng radio button
-                  name={`question-${data.question.Id}`} // Đảm bảo tất cả radio buttons có name giống nhau
+                  type="radio"
+                  name={`question-${data.question.Id}`}
                   checked={answer.isSelected}
                   value=""
                   onChange={(event) =>
@@ -53,17 +48,15 @@ const Question = (props) => {
   );
 };
 
-// Xác thực kiểu cho props
+// Xác thực các kiểu prop
 Question.propTypes = {
   data: PropTypes.shape({
     question: PropTypes.shape({
       AnswerCounts: PropTypes.number.isRequired,
-      AudioName: PropTypes.string,
-      AudioPath: PropTypes.string,
-      CreatedAt: PropTypes.string.isRequired,
-      Id: PropTypes.number.isRequired,
       ImageName: PropTypes.string,
       ImagePath: PropTypes.string,
+      CreatedAt: PropTypes.string.isRequired,
+      Id: PropTypes.number.isRequired,
       PartID: PropTypes.number.isRequired,
       Text: PropTypes.string.isRequired,
       UpdatedAt: PropTypes.string.isRequired,
@@ -78,7 +71,8 @@ Question.propTypes = {
     ).isRequired,
   }).isRequired,
   index: PropTypes.number.isRequired,
-  handelRadioButton: PropTypes.func.isRequired, // Thêm xác thực cho handelCheckBox
+  handelRadioButton: PropTypes.func.isRequired,
+  handelNext: PropTypes.func.isRequired,
 };
 
 export default Question;
