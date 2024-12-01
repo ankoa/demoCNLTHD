@@ -1,26 +1,23 @@
 // Hàm postLogin để gọi API đăng nhập
 
 import createAxiosInstance from "../util/axiosCustomize";
-
-const axios = createAxiosInstance(5556);
-
+const axios = createAxiosInstance("https://localhost:5556/"); // Specify your base URL
 
 const getUsers = () => {
-    return axios.get("api/User");
+  return axios.get("api/User");
 };
 
 const getUserWithRoleById = async (id) => {
-    return axios.get(`api/User/usernrole/${id}`);
+  return axios.get(`api/User/usernrole/${id}`);
 };
 
 const postNewUser = (newUser) => {
-    return axios.post("api/User", newTest);
+  return axios.post("api/User", newTest);
 };
 
 const putUpdateUser = (updateUser) => {
-    return axios.put(`api/Test`, updateUser);
+  return axios.put(`api/Test`, updateUser);
 };
-
 
 // // Hàm postLogOut để gọi API đăng xuất
 // const postLogOut = (email, refresh_token) => {
@@ -99,9 +96,4 @@ const putUpdateUser = (updateUser) => {
 // };
 
 // Export các hàm để sử dụng trong các thành phần khác
-export {
-    getUsers,
-    postNewUser,
-    putUpdateUser,
-    getUserWithRoleById
-};
+export { getUsers, postNewUser, putUpdateUser, getUserWithRoleById };

@@ -1,119 +1,77 @@
-// Hàm postLogin để gọi API đăng nhập
-
 import createAxiosInstance from "../util/axiosCustomize";
+const axios = createAxiosInstance("http://courseservice.somee.co/");
 
-const axios = createAxiosInstance(5556);
-
-const postLogin = (Username, Password) => {
-  return axios.post("api/Account/Login", {
-    Username,
-    Password,
-    delay: 2000,
-  });
-};
-
-const getUsers = () => {
-  return axios.get("api/User");
-};
-
-// Hàm postLogOut để gọi API đăng xuất
-const postLogOut = (email, refresh_token) => {
-  return axios.post("api/v1/logout", {
-    email,
-    refresh_token,
-    delay: 1000,
-  });
-};
-
-// Hàm postSendCode để gọi API gửi mail tạo tk
-const postSendConfirmEmailCode = (Email, Username) => {
-  return axios.post("api/Account/SendConfirmEmailCode", { Email, Username });
-};
-
-// Hàm postCheckConfirmEmailCode để gọi API gửi kiểm tra code tạo tk
-const postCheckConfirmEmailCode = (Email, ConfirmationCode) => {
-  return axios.post("api/Account/CheckConfirmEmailCode", {
-    Email,
-    ConfirmationCode,
-  });
-};
-
-// Hàm postSendCode để gọi API gửi mail reset password
-const postSendResetCode = (Email) => {
-  return axios.post(
-    "api/Account/SendResetCode",
-    { Email: Email }, // Truyền đối tượng chứa email
-    {
-      headers: { "Content-Type": "application/json" }, // Đúng cú pháp headers
+// Hàm lấy danh sách khóa học
+const getCourses = async () => {
+  try {
+    const response = await axios.get("/api/Course");
+    if (response.data.ec === 1) {
+      console.log("Courses data:", response.data.dt);
+      return response.data.dt; // Trả về dữ liệu trong phần 'dt'
+    } else {
+      console.error("Error:", response.data.em);
+      throw new Error(response.data.em);
     }
-  );
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    throw error;
+  }
 };
 
-// Hàm postCheckResetPasswordCode để gọi API gửi kiểm tra code reset password
-const postCheckResetPasswordCode = (Email, Token) => {
-  return axios.post("api/Account/VerifyResetCode", { Email, Token });
-};
-
-// Hàm để gọi api check account có tồn tại hay không
-const postCheckAccountExist = (Email) => {
-  return axios.post(
-    "api/Account/CheckAccountExist",
-    { email: Email }, // Truyền đối tượng chứa email
-    {
-      headers: { "Content-Type": "application/json" }, // Đúng cú pháp headers
+// Hàm thêm khóa học mới
+const addCourse = async (courseData) => {
+  try {
+    const response = await axios.post("/api/Course", courseData, {
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.data.ec === 1) {
+      console.log("Course added:", response.data.dt);
+      return response.data.dt; // Trả về dữ liệu trong phần 'dt'
+    } else {
+      console.error("Error:", response.data.em);
+      throw new Error(response.data.em);
     }
-  );
+  } catch (error) {
+    console.error("Error adding course:", error);
+    throw error;
+  }
 };
 
-// Hàm postResetPassword để gọi API reset password
-const postResetPassword = (Email, Token, NewPassword) => {
-  return axios.post("api/Account/ResetPassword", { Email, Token, NewPassword });
+// Hàm xóa khóa học theo ID
+const deleteCourse = async (courseID) => {
+  try {
+    const response = await axios.delete(`/api/Course/${courseID}`);
+    if (response.data.ec === 1) {
+      console.log("Course deleted:", response.data.dt);
+      return response.data.dt; // Trả về dữ liệu trong phần 'dt'
+    } else {
+      console.error("Error:", response.data.em);
+      throw new Error(response.data.em);
+    }
+  } catch (error) {
+    console.error("Error deleting course:", error);
+    throw error;
+  }
 };
 
-// Hàm postRegister để gọi API đăng ký
-const postRegister = (email, username, password, firstname, lastname) => {
-  const data = {
-    Username: username,
-    Email: email,
-    PasswordHash: password,
-    FirstName: firstname,
-    LastName: lastname,
-  };
-
-  return axios.post("api/Account/SignUp", data, {
-    header: {
-      "Content-Type":
-        "application/x-www-form-urlencoded; charset=UTF-8;application/json",
-    },
-  });
-};
-
-// Hàm postRegister để gọi API đăng ký
-const postRenewToken = (AccessToken, RefreshToken) => {
-  const data = {
-    AccessToken,
-    RefreshToken,
-  };
-
-  return axios.post("api/Account/RenewToken", data, {
-    header: {
-      "Content-Type":
-        "application/x-www-form-urlencoded; charset=UTF-8;application/json",
-    },
-  });
+// Hàm cập nhật thông tin khóa học theo ID
+const updateCourse = async (courseID, courseData) => {
+  try {
+    const response = await axios.put(`/api/Course/${courseID}`, courseData, {
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.data.ec === 1) {
+      console.log("Course updated:", response.data.dt);
+      return response.data.dt; // Trả về dữ liệu trong phần 'dt'
+    } else {
+      console.error("Error:", response.data.em);
+      throw new Error(response.data.em);
+    }
+  } catch (error) {
+    console.error("Error updating course:", error);
+    throw error;
+  }
 };
 
 // Export các hàm để sử dụng trong các thành phần khác
-export {
-  postLogin,
-  postRegister,
-  postLogOut,
-  postSendConfirmEmailCode,
-  postCheckConfirmEmailCode,
-  postCheckAccountExist,
-  postSendResetCode,
-  postCheckResetPasswordCode,
-  postResetPassword,
-  getUsers,
-  postRenewToken,
-};
+export { getCourses, addCourse, deleteCourse, updateCourse };
