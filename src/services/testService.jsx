@@ -6,6 +6,10 @@ const getTests = () => {
     return axios.get("api/Test");
 };
 
+const getTestByID = (testID) => {
+    return axios.get(`/api/Test/${testID}`);
+};
+
 const deleteTestById = async (id) => {
     return axios.delete(`api/Test/${id}`);
 };
@@ -106,6 +110,7 @@ const getParfOfTestById = (id) => {
 // Export các hàm để sử dụng trong các thành phần khác
 export {
     getTests,
+    getTestByID,
     deleteTestById,
     postNewTest,
     putUpdateTest,

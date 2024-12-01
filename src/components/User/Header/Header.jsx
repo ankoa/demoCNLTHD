@@ -1,28 +1,27 @@
 import { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import { FaPhoneAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import "./Header.scss";
+import _ from "lodash";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [showUpperHeader, setShowUpperHeader] = useState(true);
   const [addDropShadow, setAddDropShadow] = useState(false);
-  const handleScroll = () => {
-    const currentScrollPos = window.pageYOffset;
-    setScrollPosition(currentScrollPos);
 
-    if (currentScrollPos > 300) {
+  const navigate = useNavigate(); // Initialize navigate function
+
+  const handleScroll = _.throttle(() => {
+    const currentScrollPos = window.pageYOffset;
+
+    /* if (currentScrollPos > 450) {
       setShowUpperHeader(false);
       setAddDropShadow(true);
-    } else {
-      setShowUpperHeader(true);
-      setAddDropShadow(false);
-    }
-  };
+    } else { */
+    setShowUpperHeader(true);
+    setAddDropShadow(false);
+    /* } */
+  }, 200);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -34,63 +33,53 @@ const Header = () => {
   return (
     <div className="header-container">
       {showUpperHeader && (
-        <div className="upper-header d-flex justify-content-evenly">
+        <div className={`upper-header ${addDropShadow ? "with-shadow" : ""}`}>
+          {/* Logo */}
+          <div className="logo" onClick={() => navigate("/")}>
+            <img
+              src="src\assets\images\logo-TOEIC.webp" // Thay thế đường dẫn này bằng đường dẫn thực tế của logo
+              alt="Logo"
+              className="logo-image"
+            />
+          </div>
+
+          {/* Phone Number */}
           <div className="phone-number">
             <FaPhoneAlt /> 0123456789
           </div>
-          <div className="header-banner">Thi toeic 990đ quá dễ</div>
+
+          {/* Navigation */}
+          <nav className="navigation">
+            <button className="nav-item" onClick={() => navigate("/test")}>
+              Khóa học của tôi
+            </button>
+            <button
+              className="nav-item"
+              onClick={() => navigate("/onlinecouse")}
+            >
+              Khóa học
+            </button>
+            <button
+              className="nav-item"
+              onClick={() => navigate("/library-test")}
+            >
+              Đề thi online
+            </button>
+          </nav>
+
+          {/* Login Button */}
           <div className="login-option">
-            {isLogin ? (
-              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  Something
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown>
-            ) : (
-              <div className="auth-container d-flex gap-3">
-                <button className="btn btn-primary">Login</button>
-                <button className="btn btn-primary">Sign up</button>
-              </div>
+            {!isLogin && (
+              <button
+                className="btn btn-round btn-block btn-primary"
+                onClick={() => navigate("/login")}
+              >
+                Đăng nhập
+              </button>
             )}
           </div>
         </div>
       )}
-
-      {/* <div className={`main-header ${addDropShadow ? "shadow" : ""}`}>
-        <Navbar expand="lg" className="bg-body-tertiary">
-          <Container>
-            <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="me-auto">
-                <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#link">Link</Nav.Link>
-                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">
-                    Another action
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">
-                    Something
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.4">
-                    Separated link
-                  </NavDropdown.Item>
-                </NavDropdown>
-              </Nav>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
-      </div> */}
     </div>
   );
 };

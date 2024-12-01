@@ -5,6 +5,95 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import CourseItem from "./CourseItem";
 
 const OnlineCourse = () => {
+  const courseType = [
+    { id: 1, name: "Danh sách chương trình học" },
+    { id: 2, name: "Combo đặc biệt" },
+    { id: 3, name: "Ưu đãi hấp dẫn" },
+  ];
+
+  const courseData = [
+    {
+      image: "./src/assets/online_course/online_course.png",
+      title: "Combo 4 kỹ năng IELTS Intensive",
+      numberOfReview: "1,681",
+      numberOfStudent: "100,000",
+      price: "1.500.000đ",
+      listingPrice: "3.596.000đ",
+      reduce: "57",
+      courseTypeID: 1
+    },
+    {
+      image: "./src/assets/online_course/online_course.png",
+      title: "Combo 4 kỹ năng IELTS Intensive",
+      numberOfReview: "1,681",
+      numberOfStudent: "100,000",
+      price: "1.500.000đ",
+      listingPrice: "3.596.000đ",
+      reduce: "57",
+      courseTypeID: 1
+    },
+    {
+      image: "./src/assets/online_course/online_course.png",
+      title: "Combo 4 kỹ năng IELTS Intensive",
+      numberOfReview: "1,681",
+      numberOfStudent: "100,000",
+      price: "1.500.000đ",
+      listingPrice: "3.596.000đ",
+      reduce: "57",
+      courseTypeID: 2
+    },
+    {
+      image: "./src/assets/online_course/online_course.png",
+      title: "Combo 4 kỹ năng IELTS Intensive",
+      numberOfReview: "1,681",
+      numberOfStudent: "100,000",
+      price: "1.500.000đ",
+      listingPrice: "3.596.000đ",
+      reduce: "57",
+      courseTypeID: 2
+    },
+    {
+      image: "./src/assets/online_course/online_course.png",
+      title: "Combo 4 kỹ năng IELTS Intensive",
+      numberOfReview: "1,681",
+      numberOfStudent: "100,000",
+      price: "1.500.000đ",
+      listingPrice: "3.596.000đ",
+      reduce: "57",
+      courseTypeID: 2
+    },
+    {
+      image: "./src/assets/online_course/online_course.png",
+      title: "Combo 4 kỹ năng IELTS Intensive",
+      numberOfReview: "1,681",
+      numberOfStudent: "100,000",
+      price: "1.500.000đ",
+      listingPrice: "3.596.000đ",
+      reduce: "57",
+      courseTypeID: 2
+    },
+    {
+      image: "./src/assets/online_course/online_course.png",
+      title: "Combo 4 kỹ năng IELTS Intensive",
+      numberOfReview: "1,681",
+      numberOfStudent: "100,000",
+      price: "1.500.000đ",
+      listingPrice: "3.596.000đ",
+      reduce: "57",
+      courseTypeID: 2
+    },
+    {
+      image: "./src/assets/online_course/online_course.png",
+      title: "Combo 4 kỹ năng IELTS Intensive",
+      numberOfReview: "1,681",
+      numberOfStudent: "100,000",
+      price: "1.500.000đ",
+      listingPrice: "3.596.000đ",
+      reduce: "57",
+      courseTypeID: 3
+    },
+  ];
+
   return (
     <div className='online-course-container'>
       <div className="site-content-wrapper">
@@ -20,98 +109,40 @@ const OnlineCourse = () => {
           </p>
         </div>
       </div>
-      <div className="content-wrapper">
-        <div className="container">
-          {/* các loại course khác nhau */}
-          <div className="course-type">
-            <h3>Combo đặc biệt</h3>
-            <div className="courses-grid-wrapper">
-              {/* map dữ liệu từ db lên */}
-              <CourseItem
-                image="./src/assets/online_course/online_course.png"
-                title="Combo 4 kỹ năng IELTS Intensive"
-                numberOfReview="1,681"
-                numberOfStudent="100,000"
-                price="1.500.000đ"
-                listingPrice="3.596.000đ"
-                reduce="57"
-              ></CourseItem>
-              <CourseItem
-                image="./src/assets/online_course/online_course.png"
-                title="Combo 4 kỹ năng IELTS Intensive"
-                numberOfReview="1,681"
-                numberOfStudent="100,000"
-                price="1.500.000đ"
-                listingPrice="3.596.000đ"
-                reduce="57"
-              ></CourseItem>
-              <CourseItem
-                image="./src/assets/online_course/online_course.png"
-                title="Combo 4 kỹ năng IELTS Intensive"
-                numberOfReview="1,681"
-                numberOfStudent="100,000"
-                price="1.500.000đ"
-                listingPrice="3.596.000đ"
-                reduce="57"
-              ></CourseItem>
-              <CourseItem
-                image="./src/assets/online_course/online_course.png"
-                title="Combo 4 kỹ năng IELTS Intensive"
-                numberOfReview="1,681"
-                numberOfStudent="100,000"
-                price="1.500.000đ"
-                listingPrice="3.596.000đ"
-                reduce="57"
-              ></CourseItem>
-            </div>
-          </div>
-          
-          <div className="course-type">
-            <h3>Danh sách chương trình học</h3>
-            <div className="courses-grid-wrapper">
-              {/* map dữ liệu từ db lên */}
-              <CourseItem
-                image="./src/assets/online_course/online_course.png"
-                title="Combo 4 kỹ năng IELTS Intensive"
-                numberOfReview="1,681"
-                numberOfStudent="100,000"
-                price="1.500.000đ"
-                listingPrice="3.596.000đ"
-                reduce="57"
-              ></CourseItem>
-              <CourseItem
-                image="./src/assets/online_course/online_course.png"
-                title="Combo 4 kỹ năng IELTS Intensive"
-                numberOfReview="1,681"
-                numberOfStudent="100,000"
-                price="1.500.000đ"
-                listingPrice="3.596.000đ"
-                reduce="57"
-              ></CourseItem>
-              <CourseItem
-                image="./src/assets/online_course/online_course.png"
-                title="Combo 4 kỹ năng IELTS Intensive"
-                numberOfReview="1,681"
-                numberOfStudent="100,000"
-                price="1.500.000đ"
-                listingPrice="3.596.000đ"
-                reduce="57"
-              ></CourseItem>
-              <CourseItem
-                image="./src/assets/online_course/online_course.png"
-                title="Combo 4 kỹ năng IELTS Intensive"
-                numberOfReview="1,681"
-                numberOfStudent="100,000"
-                price="1.500.000đ"
-                listingPrice="3.596.000đ"
-                reduce="57"
-              ></CourseItem>
-            </div>
-          </div>
-        </div>
-      </div>
+      <CourseList courseData={courseData} courseType={courseType} />
     </div>
   )
 }
+
+
+const CourseList = ({ courseData, courseType }) => {
+  return (
+    <div className="content-wrapper">
+      <div className="container">
+        {courseType.map((type) => (
+          <div key={type.id} className="course-type">
+            <h3>{type.name}</h3>
+            <div className="courses-grid-wrapper">
+              {courseData
+                .filter((course) => course.courseTypeID === type.id)
+                .map((course, index) => (
+                  <CourseItem
+                    key={index}
+                    image={course.image}
+                    title={course.title}
+                    numberOfReview={course.numberOfReview}
+                    numberOfStudent={course.numberOfStudent}
+                    price={course.price}
+                    listingPrice={course.listingPrice}
+                    reduce={course.reduce}
+                  />
+                ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default OnlineCourse;
