@@ -1,22 +1,13 @@
-import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const Question = (props) => {
   const { data, index } = props;
-  const [count, setCount] = useState(15); // Countdown timer
-
-  // Countdown timer logic
-  useEffect(() => {
-    const timer =
-      count > 0 && setInterval(() => setCount((prev) => prev - 1), 1000);
-    return () => clearInterval(timer); // Clean up timer on component unmount or count change
-  }, [count]);
 
   const handelRadioButton = (event, aID, qID) => {
     props.handelRadioButton(aID, qID);
   };
 
-  // Ensure valid data is passed
+  // Đảm bảo dữ liệu hợp lệ được truyền vào
   if (!data || !data.question) {
     return <div>No data available.</div>;
   }
@@ -32,7 +23,6 @@ const Question = (props) => {
       <div className="question">
         Question {index + 1}: {data.question.Text}
       </div>
-      <div className="countdown">Time Remaining: {count} seconds</div>
       <div className="answer">
         {data.answers &&
           data.answers.length > 0 &&
@@ -58,7 +48,7 @@ const Question = (props) => {
   );
 };
 
-// Prop types validation
+// Xác thực các kiểu prop
 Question.propTypes = {
   data: PropTypes.shape({
     question: PropTypes.shape({

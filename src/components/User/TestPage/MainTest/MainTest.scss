@@ -42,6 +42,9 @@
         font-weight: 600;
         margin-bottom: 15px;
       }
+      .hidden {
+        display: none; /* Hoặc dùng visibility: hidden; nếu muốn giữ không gian của thành phần */
+      }
 
       .q-image {
         width: 100%; // Chiều rộng cố định cho q-image

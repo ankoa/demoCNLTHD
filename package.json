@@ -35,12 +35,10 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
-<<<<<<< HEAD
-=======
     "sass": "^1.80.6",
->>>>>>> 914114ec00938b28f8cd3edf2b0f64aa26247d05
     "slick-carousel": "^1.8.1",
-    "styled-components": "^6.1.13"
+    "styled-components": "^6.1.13",
+    "sweetalert2": "^11.14.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

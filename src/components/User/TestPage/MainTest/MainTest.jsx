@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import "./MainTest.scss";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   getAllPartByTestID,
   getTestById,
   getAllQuestionsByPartID,
 } from "../../../../services/testsService";
-import { getAnswersOfQuestion } from "../../../../services/questionService";
+/* import { getAnswersOfQuestion } from "../../../../services/questionService";
+ */
 import Question from "../Question/Question";
 import ModalResult from "./ModalResult";
 import QuizAudio from "./QuizAudio";
@@ -27,33 +29,38 @@ const MainTest = () => {
   const [isShowModalResult, setIsShowModalResult] = useState(false);
   const [dataModalResult, setDataModalResult] = useState({});
   const [audio, setAudio] = useState(null); // Lưu trữ audio hiện tại
+  const [isQuizAudioVisible, setIsQuizAudioVisible] = useState(true);
+  const location = useLocation();
+  const { parts } = location.state || {};
+  // Thêm sự kiện khi tải lại hoặc thoát trang
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      console.log("beforeunload event triggered"); // Kiểm tra xem sự kiện có được gọi
+      const message = "Bạn có chắc chắn muốn rời khỏi trang này?";
+      e.returnValue = message; // Để hiển thị cảnh báo của trình duyệt
+      return message;
+    };
 
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  /*   useEffect(() => {
+    console.log("Location State: ", location.state);
+    if (parts) {
+      console.log("Parts Data: ", parts);
+    } else {
+      console.log("No parts data available.");
+    }
+  }, [location.state]); // Theo dõi sự thay đổi của location.state
+ */
   useEffect(() => {
     fetchTestData();
     fetchAllPartsData();
   }, [testId]);
-  useEffect(() => {
-    // Dừng audio trước đó nếu tồn tại
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0; // Reset lại thời gian phát về đầu
-    }
-
-    if (quizData && quizData[index]?.question?.AudioPath) {
-      const newAudio = new Audio(quizData[index].question.AudioPath);
-      setAudio(newAudio);
-
-      // Phát audio của câu hỏi hiện tại
-      newAudio.play();
-
-      // Cleanup function để dừng audio khi useEffect chạy lại
-      return () => {
-        newAudio.pause();
-        newAudio.currentTime = 0; // Reset lại thời gian phát về đầu
-      };
-    }
-  }, [index, quizData]);
-
   const fetchTestData = async () => {
     try {
       const response = await getTestById(testId);
@@ -71,19 +78,80 @@ const MainTest = () => {
   const fetchAllPartsData = async () => {
     try {
       const response = await getAllPartByTestID(testId);
+
       if (response.EC === 0 && Array.isArray(response.DT.parts)) {
+        // Sắp xếp các phần theo Number
         const sortedParts = response.DT.parts.sort(
           (a, b) => a.Number - b.Number
         );
-        setPartsData(sortedParts);
-        await fetchQuizData(sortedParts);
-        console.log(partsData);
+
+        // Lấy `parts` từ `location.state`, nếu không có thì để undefined
+        const { parts } = location.state || {};
+
+        // Nếu `parts` tồn tại, lọc các phần được chọn; nếu không thì lấy tất cả
+        const partsToShow = parts
+          ? sortedParts.filter((part) => {
+              const partNumber = part.Number;
+              return parts[`part${partNumber}`] === true;
+            })
+          : sortedParts;
+
+        // Cập nhật dữ liệu với các phần đã chọn hoặc tất cả các phần
+        setPartsData(partsToShow);
+        await fetchQuizData(partsToShow);
+        console.log(partsToShow);
       } else {
         setError("Không thể lấy dữ liệu phần do EC khác 0.");
       }
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu phần:", error);
     }
+  };
+
+  const fetchQuizData = async (parts) => {
+    const quizDataArray = [];
+
+    // Lặp qua từng phần (part) và lấy dữ liệu câu hỏi
+    for (const part of parts) {
+      const questionResponse = await getAllQuestionsByPartID(part.Id); // Lấy câu hỏi và đáp án cho phần
+
+      console.log("=>>>>>>>QuestionResponse: ", questionResponse);
+
+      // Kiểm tra nếu dữ liệu trả về hợp lệ
+      if (
+        questionResponse.EC === 0 &&
+        questionResponse.DT &&
+        questionResponse.DT.part &&
+        questionResponse.DT.part.questions
+      ) {
+        // Lặp qua từng câu hỏi trong phần và lấy dữ liệu
+        for (const questionData of questionResponse.DT.part.questions) {
+          const question = questionData.question; // Lấy thông tin câu hỏi
+
+          // Lấy danh sách các đáp án từ `questionData.answers`
+          const answersWithSelection = questionData.answers.map((answer) => ({
+            ...answer,
+            isSelected: false, // Thêm thuộc tính 'isSelected' để lưu trạng thái đáp án
+          }));
+
+          // Thêm câu hỏi và các đáp án vào mảng quizDataArray
+          quizDataArray.push({
+            question,
+            answers: answersWithSelection,
+          });
+        }
+      } else {
+        // Nếu không lấy được dữ liệu hợp lệ, ghi lại lỗi
+        console.error(
+          `Không thể lấy câu hỏi cho phần ${part.Id}:`,
+          questionResponse
+        );
+      }
+    }
+
+    // Lưu dữ liệu vào quizData state
+    setQuizData(quizDataArray);
+    console.log("=>>>>>>>QuizData: ", quizDataArray); // In ra dữ liệu quizData
   };
   /* const fetchQuizData = async (parts) => {
     const quizDataArray = [];
@@ -132,54 +200,34 @@ const MainTest = () => {
     setQuizData(quizDataArray); // Lưu dữ liệu vào quizData
     console.log("=>>>>>>>QuizData: ", quizData);
   }; */
-  const fetchQuizData = async (parts) => {
-    const quizDataArray = [];
 
-    // Lặp qua từng phần (part) và lấy dữ liệu câu hỏi
-    for (const part of parts) {
-      const questionResponse = await getAllQuestionsByPartID(part.Id); // Lấy câu hỏi và đáp án cho phần
-
-      console.log("=>>>>>>>QuestionResponse: ", questionResponse);
-
-      // Kiểm tra nếu dữ liệu trả về hợp lệ
-      if (
-        questionResponse.EC === 0 &&
-        questionResponse.DT &&
-        questionResponse.DT.part &&
-        questionResponse.DT.part.questions
-      ) {
-        // Lặp qua từng câu hỏi trong phần và lấy dữ liệu
-        for (const questionData of questionResponse.DT.part.questions) {
-          const question = questionData.question; // Lấy thông tin câu hỏi
-
-          // Lấy danh sách các đáp án từ `questionData.answers`
-          const answersWithSelection = questionData.answers.map((answer) => ({
-            ...answer,
-            isSelected: false, // Thêm thuộc tính 'isSelected' để lưu trạng thái đáp án
-          }));
-
-          // Thêm câu hỏi và các đáp án vào mảng quizDataArray
-          quizDataArray.push({
-            question,
-            answers: answersWithSelection,
-          });
-        }
-      } else {
-        // Nếu không lấy được dữ liệu hợp lệ, ghi lại lỗi
-        console.error(
-          `Không thể lấy câu hỏi cho phần ${part.Id}:`,
-          questionResponse
-        );
-      }
+  useEffect(() => {
+    // Dừng audio trước đó nếu tồn tại
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0; // Reset lại thời gian phát về đầu
     }
 
-    // Lưu dữ liệu vào quizData state
-    setQuizData(quizDataArray);
-    console.log("=>>>>>>>QuizData: ", quizDataArray); // In ra dữ liệu quizData
-  };
+    if (quizData && quizData[index]?.question?.AudioPath) {
+      const newAudio = new Audio(quizData[index].question.AudioPath);
+      setAudio(newAudio);
+
+      // Phát audio của câu hỏi hiện tại
+      newAudio.play();
+
+      // Cleanup function để dừng audio khi useEffect chạy lại
+      return () => {
+        newAudio.pause();
+        newAudio.currentTime = 0; // Reset lại thời gian phát về đầu
+      };
+    }
+  }, [index, quizData]);
 
   /*   console.log("List Quiz: ", quizData);
    */
+  const handleAudioEnd = () => {
+    setIsQuizAudioVisible(false); // Hủy component QuizAudio
+  };
   const handelPrevious = () => {
     if (index - 1 < 0) return;
     setIndex(index - 1);
@@ -272,6 +320,7 @@ const MainTest = () => {
 
     // Sau khi hoàn thành tất cả các phần, cập nhật dữ liệu kết quả
     setDataModalResult({
+      HistoryId: history.DT.Id,
       TotalQuestions: quizData.length, // Tổng số câu hỏi
       CorrectAnswers: correctAnswers, // Tổng số câu trả lời đúng
       Score: totalScore, // Tổng điểm
@@ -379,7 +428,13 @@ const MainTest = () => {
           {quizData &&
             quizData.length > 0 &&
             quizData[index]?.question?.AudioPath && (
-              <QuizAudio audioPath={quizData[index].question.AudioPath} />
+              <QuizAudio
+                handelNext={handelNext}
+                questionID={quizData[index].question.Id}
+                audioPath={quizData[index].question.AudioPath}
+                isHidden={false}
+                onAudioEnd={handleAudioEnd}
+              />
             )}
 
           {/* Render component Question */}

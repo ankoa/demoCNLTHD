@@ -26,8 +26,8 @@ const getQuestionOfPart = (id) => {
 
 //đường dẫn ở trên là "/question2/${id}
 const getQuestionByPartID = (partId) => {
-    return axios.get(`/api/Part/question/${partId}`);
-  };
+  return axios.get(`/api/Part/question/${partId}`);
+};
 
 const getAnswerOfQuestion = (id) => {
   return axios.get(`api/Question/answer/${id}`);
@@ -46,7 +46,15 @@ const SubmitPart = async (data) => {
     throw error; // Ném lỗi ra để xử lý tiếp ở hàm gọi
   }
 };
-
+const getPartById = async (id) => {
+  try {
+    const response = await axios.get(`api/Part/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching part by ID:", error);
+    throw error;
+  }
+};
 // Export các hàm để sử dụng trong các thành phần khác
 export {
   getParts,
@@ -56,6 +64,6 @@ export {
   getQuestionOfPart,
   getAnswerOfQuestion,
   SubmitPart,
-  getQuestionByPartID
-
+  getQuestionByPartID,
+  getPartById,
 };

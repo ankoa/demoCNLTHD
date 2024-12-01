@@ -4,7 +4,7 @@ import CountDown from "./CountDown"; // Import file CSS
 
 const RightTestContent = (props) => {
   const { quizData } = props;
-
+  console.log("quizData->>>>>>>>>>>>>: ", quizData);
   const onTimeUp = () => {
     props.handelFinishQuiz();
   };
@@ -17,12 +17,13 @@ const RightTestContent = (props) => {
   // Hàm xác định lớp cho câu hỏi
   const getClassQuestion = (index, quizData) => {
     if (quizData.answers && quizData.answers.length > 0) {
-      let isUnAnswered = answers.some((a) => a.isSelected === false); // Kiểm tra xem có câu nào chưa được chọn không
+      let isUnAnswered = answers.some((a) => a.isSelected === false);
       if (!isUnAnswered) {
-        return "question-number selected"; // Nếu tất cả các câu hỏi đều đã được trả lời
+        return "question-number selected";
       }
     }
-    return "question-number"; // Lớp mặc định khi chưa có câu trả lời
+    return "question-number";
+    console.log(quizData);
   };
 
   return (

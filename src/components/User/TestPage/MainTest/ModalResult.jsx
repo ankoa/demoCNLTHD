@@ -1,21 +1,25 @@
-import React from "react"; // Nếu bạn chưa import React
-import PropTypes from "prop-types"; // Import PropTypes để sử dụng
-
+import React from "react"; // Import React
+import PropTypes from "prop-types"; // Import PropTypes for type checking
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { toast } from "react-toastify";
-import { propTypes } from "react-bootstrap/esm/Image";
+import { useNavigate } from "react-router-dom";
 
 const ModalResult = (props) => {
   const { show, setShow, dataModalResult } = props;
-  console.log(">>>> dataModalResult: ", dataModalResult);
+  const navigate = useNavigate();
+
   // Hàm đóng modal
   const handelClose = () => setShow(false);
+
+  // Hàm điều hướng đến trang kết quả chi tiết
+  const handleNavigate = (historyID) => {
+    navigate(`/testResults/${historyID}`);
+  };
 
   return (
     <Modal
       show={show} // Sử dụng giá trị show từ props
-      onHide={handelClose} // Sử dụng handelClose đã khai báo
+      onHide={handelClose} // Hàm đóng modal
       size="xl"
       className="modal-add-user"
     >
@@ -37,15 +41,16 @@ const ModalResult = (props) => {
         }}
       >
         <Button
-          variant="secondary"
-          onClick={handelClose} // Đảm bảo rằng bạn sử dụng handelClose đúng
+          variant="danger" // Nút mang tính tiêu cực
+          onClick={() => handleNavigate(dataModalResult.HistoryId)} // Sử dụng ID từ dataModalResult
           style={{ marginRight: "1rem", padding: "0.5rem 1.5rem" }}
         >
           Show Answer
         </Button>
+
         <Button
           variant="danger"
-          onClick={handelClose} // Đảm bảo rằng bạn sử dụng handelClose đúng
+          onClick={handelClose} // Đóng modal
           style={{ padding: "0.5rem 1.5rem" }}
         >
           Close
@@ -58,6 +63,7 @@ const ModalResult = (props) => {
 // Định nghĩa kiểu dữ liệu cho props
 ModalResult.propTypes = {
   dataModalResult: PropTypes.shape({
+    HistoryId: PropTypes.number.isRequired,
     TotalQuestions: PropTypes.number.isRequired,
     CorrectAnswers: PropTypes.number.isRequired,
     Score: PropTypes.number.isRequired,
