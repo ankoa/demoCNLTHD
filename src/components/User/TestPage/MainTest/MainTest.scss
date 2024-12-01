@@ -42,6 +42,9 @@
         font-weight: 600;
         margin-bottom: 15px;
       }
+      .hidden {
+        display: none; /* Hoặc dùng visibility: hidden; nếu muốn giữ không gian của thành phần */
+      }
 
       .q-image {
         width: 100%; // Chiều rộng cố định cho q-image
@@ -83,10 +86,44 @@
     background-color: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
-    .countdown {
-      font-size: 24px;
+    .main-timer {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-top: 10px;
+      padding-bottom: 20px;
       text-align: center;
-      color: #ff0000;
+      border-bottom: 1 dashed;
+    }
+    .main-question {
+      display: flex;
+      justify-content: left;
+      flex-wrap: wrap;
+      gap: 12px;
+      .question-number {
+        display: inline-flex;
+        border-radius: 3px;
+        border-color: #f7faff;
+        border: 1px solid;
+        font-weight: 600;
+        margin-right: 4px;
+        margin-bottom: 8px;
+        width: 28px;
+        height: 25px;
+        font-size: 11px;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        &:hover {
+          color: rgb(43, 133, 251);
+        }
+        &.selected {
+          background-color: rgb(6, 71, 155);
+        }
+        &.clicked {
+          color: rgb(43, 133, 251);
+        }
+      }
     }
   }
 }
