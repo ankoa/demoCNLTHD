@@ -20,5 +20,6 @@ export const ROUTERS = {
     USER: "user",
     PART: "part",
     QUESTION: "question",
+    COURSE: "course",
   },
 };

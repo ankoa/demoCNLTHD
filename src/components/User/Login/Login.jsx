@@ -52,14 +52,16 @@ const Login = () => {
         dispatch(doLogIn(response));
         // let res = await getUsers();
         // console.log(res)
-        // navigate('/');
+        navigate("/");
       } else if (response && response.EC !== 0) {
         toast.error(response.EM);
         console.log(response);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      toast.error("Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại sau.");
+      toast.error(
+        "Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại sau."
+      );
     }
   };
 
@@ -94,7 +96,7 @@ const Login = () => {
 
             {/* Password Input with form-floating */}
             <div className="d-flex align-items-center pass-container">
-              <div className="form-floating d-flex" style={{ flex: '9' }}>
+              <div className="form-floating d-flex" style={{ flex: "9" }}>
                 <input
                   type={showPassword ? "text" : "password"}
                   className="form-control"
@@ -128,7 +130,6 @@ const Login = () => {
             </div>
           </div>
         </div>
-
       </div>
     </>
   );

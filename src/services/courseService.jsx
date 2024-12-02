@@ -1,12 +1,15 @@
 import createAxiosInstance from "../util/axiosCustomize";
-const axios = createAxiosInstance("http://courseservice.somee.co/");
+
+// Khởi tạo axios với giao thức HTTP thay vì HTTPS
+const axios = createAxiosInstance("https://courseservice.somee.com"); // Chuyển từ "https" sang "http"
 
 // Hàm lấy danh sách khóa học
 const getCourses = async () => {
   try {
     const response = await axios.get("/api/Course");
+    console.log("Courses data:", response);
     if (response.data.ec === 1) {
-      console.log("Courses data:", response.data.dt);
+      console.log("Courses data:", response);
       return response.data.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
       console.error("Error:", response.data.em);
@@ -21,7 +24,7 @@ const getCourses = async () => {
 // Hàm thêm khóa học mới
 const addCourse = async (courseData) => {
   try {
-    const response = await axios.post("/api/Course", courseData, {
+    const response = await axios.post("api/Course", courseData, {
       headers: { "Content-Type": "application/json" },
     });
     if (response.data.ec === 1) {
@@ -40,7 +43,7 @@ const addCourse = async (courseData) => {
 // Hàm xóa khóa học theo ID
 const deleteCourse = async (courseID) => {
   try {
-    const response = await axios.delete(`/api/Course/${courseID}`);
+    const response = await axios.delete(`api/Course/${courseID}`);
     if (response.data.ec === 1) {
       console.log("Course deleted:", response.data.dt);
       return response.data.dt; // Trả về dữ liệu trong phần 'dt'
@@ -57,7 +60,7 @@ const deleteCourse = async (courseID) => {
 // Hàm cập nhật thông tin khóa học theo ID
 const updateCourse = async (courseID, courseData) => {
   try {
-    const response = await axios.put(`/api/Course/${courseID}`, courseData, {
+    const response = await axios.put(`api/Course/${courseID}`, courseData, {
       headers: { "Content-Type": "application/json" },
     });
     if (response.data.ec === 1) {

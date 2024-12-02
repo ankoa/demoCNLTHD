@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { createHistory } from "../../../../services/historyService";
 import { SubmitPart } from "../../../../services/partService";
 import RightTestContent from "../RightTestContent/RightTestContent";
+import CountdownTimer from "./CountdownTimer";
 const MainTest = () => {
   const { testId } = useParams();
   const [partsData, setPartsData] = useState([]);
@@ -153,78 +154,6 @@ const MainTest = () => {
     setQuizData(quizDataArray);
     console.log("=>>>>>>>QuizData: ", quizDataArray); // In ra dữ liệu quizData
   };
-  /* const fetchQuizData = async (parts) => {
-    const quizDataArray = [];
-    for (const part of parts) {
-      const questionResponse = await getAllQuestionsByPartID(part.Id);
-      console.log(questionResponse);
-      if (
-        questionResponse.EC === 0 &&
-        Array.isArray(questionResponse.DT.questions)
-      ) {
-        for (const question of questionResponse.DT.questions) {
-          const answerResponse = await getAnswersOfQuestion(question.Id);
-          if (
-            answerResponse.EC === 0 &&
-            Array.isArray(answerResponse.DT.answers)
-          ) {
-            const answersWithSelection = answerResponse.DT.answers.map(
-              (answer) => ({
-                ...answer,
-                isSelected: false, // Thêm isSelected cho mỗi câu trả lời
-              })
-            );
-
-            quizDataArray.push({
-              question,
-              answers: answersWithSelection,
-            });
-          } else {
-            console.error(
-              `Không thể lấy câu trả lời cho câu hỏi ${question.Id}:`,
-              answerResponse
-            );
-            quizDataArray.push({
-              question,
-              answers: null,
-            });
-          }
-        }
-      } else {
-        console.error(
-          `Không thể lấy câu hỏi cho phần ${part.Id}:`,
-          questionResponse
-        );
-      }
-    }
-    setQuizData(quizDataArray); // Lưu dữ liệu vào quizData
-    console.log("=>>>>>>>QuizData: ", quizData);
-  }; */
-
-  useEffect(() => {
-    // Dừng audio trước đó nếu tồn tại
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0; // Reset lại thời gian phát về đầu
-    }
-
-    if (quizData && quizData[index]?.question?.AudioPath) {
-      const newAudio = new Audio(quizData[index].question.AudioPath);
-      setAudio(newAudio);
-
-      // Phát audio của câu hỏi hiện tại
-      newAudio.play();
-
-      // Cleanup function để dừng audio khi useEffect chạy lại
-      return () => {
-        newAudio.pause();
-        newAudio.currentTime = 0; // Reset lại thời gian phát về đầu
-      };
-    }
-  }, [index, quizData]);
-
-  /*   console.log("List Quiz: ", quizData);
-   */
   const handleAudioEnd = () => {
     setIsQuizAudioVisible(false); // Hủy component QuizAudio
   };
@@ -347,37 +276,6 @@ const MainTest = () => {
     }
   };
 
-  /* const handelCheckBox = (answerID, questionID) => {
-    console.log("=>>>>>>>>>>> Q and A: ", questionID, answerID);
-    let dataQuizClone = _.cloneDeep(quizData);
-    // Tìm câu hỏi tương ứng với questionID
-    let questions = dataQuizClone.find(
-      (item) => +item.question.Id === questionID // Truy cập đúng thuộc tính question.Id
-    );
-
-    // Kiểm tra nếu câu hỏi và mảng câu trả lời tồn tại
-    if (questions && questions.answers) {
-      // Cập nhật isSelected cho từng câu trả lời
-      let b = (questions.answers = questions.answers.map((item) => {
-        if (+item.Id === +answerID) {
-          item.isSelected = !item.isSelected;
-        }
-        return item;
-      }));
-      questions.answers = b;
-    } else {
-      console.error(
-        `Không tìm thấy câu hỏi hoặc câu trả lời cho questionID: ${questionID}`
-      );
-    }
-    let index = dataQuizClone.findIndex(
-      (item) => +item.question.Id === +questionID
-    );
-    if (index > -1) {
-      dataQuizClone[index] = questions;
-      setQuizData(dataQuizClone);
-    }
-  }; */
   const handelRadioButton = (answerID, questionID) => {
     console.log("=>>>>>>>>>>> Q and A: ", questionID, answerID);
     let dataQuizClone = _.cloneDeep(quizData);
@@ -425,17 +323,24 @@ const MainTest = () => {
         </div>
         <div className="q-content">
           {/* Kiểm tra điều kiện và truyền đúng prop cho QuizAudio */}
-          {quizData &&
-            quizData.length > 0 &&
-            quizData[index]?.question?.AudioPath && (
-              <QuizAudio
-                handelNext={handelNext}
-                questionID={quizData[index].question.Id}
-                audioPath={quizData[index].question.AudioPath}
-                isHidden={false}
-                onAudioEnd={handleAudioEnd}
-              />
-            )}
+          {quizData && quizData.length > 0 && (
+            <>
+              {quizData[index]?.question?.AudioPath ? (
+                <QuizAudio
+                  handelNext={handelNext}
+                  questionID={quizData[index].question.Id}
+                  audioPath={quizData[index].question.AudioPath}
+                  isHidden={true}
+                  onAudioEnd={handleAudioEnd}
+                />
+              ) : (
+                // Nếu không có AudioPath, hiển thị đếm ngược
+                <CountdownTimer
+                  handelNext={() => handelNext(quizData[index]?.question?.Id)}
+                />
+              )}
+            </>
+          )}
 
           {/* Render component Question */}
           <Question
@@ -466,6 +371,9 @@ const MainTest = () => {
       </div>
       <div className="right-content">
         <RightTestContent
+          testData={
+            testData && testData.Duration !== undefined ? testData : null
+          }
           quizData={quizData}
           handelFinishQuiz={handelFinishQuiz}
         />
