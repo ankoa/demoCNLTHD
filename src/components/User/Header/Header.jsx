@@ -1,34 +1,43 @@
 import { useState, useEffect } from "react";
-import { FaPhoneAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import "./Header.scss";
 import _ from "lodash";
+import { postLogOut } from "../../../services/authService"; // Adjust path as necessary
+import { Dropdown } from "react-bootstrap"; // Import Dropdown from Bootstrap
+import "bootstrap/dist/css/bootstrap.min.css";
+import { FaUser, FaPhoneAlt } from "react-icons/fa"; // Import cả FaUser và FaPhoneAlt
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [showUpperHeader, setShowUpperHeader] = useState(true);
   const [addDropShadow, setAddDropShadow] = useState(false);
+  const [account, setAccount] = useState(null);
 
-  const navigate = useNavigate(); // Initialize navigate function
-
-  const handleScroll = _.throttle(() => {
-    const currentScrollPos = window.pageYOffset;
-
-    /* if (currentScrollPos > 450) {
-      setShowUpperHeader(false);
-      setAddDropShadow(true);
-    } else { */
-    setShowUpperHeader(true);
-    setAddDropShadow(false);
-    /* } */
-  }, 200);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(
+    (state) => state.userReducer.isAuthenticated
+  );
+  const accountFromState = useSelector((state) => state.userReducer.account);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    if (isAuthenticated) {
+      setAccount(accountFromState);
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+      setAccount(null);
+    }
+  }, [isAuthenticated, accountFromState]);
+
+  const handleLogout = () => {
+    if (account) {
+      dispatch(postLogOut("accounemail@gmail.com", account.refresh_token));
+      console.log("User logged out.");
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="header-container">
@@ -37,7 +46,7 @@ const Header = () => {
           {/* Logo */}
           <div className="logo" onClick={() => navigate("/")}>
             <img
-              src="src\assets\images\logo-TOEIC.webp" // Thay thế đường dẫn này bằng đường dẫn thực tế của logo
+              src="src/assets/images/logo-TOEIC.webp"
               alt="Logo"
               className="logo-image"
             />
@@ -67,9 +76,27 @@ const Header = () => {
             </button>
           </nav>
 
-          {/* Login Button */}
           <div className="login-option">
-            {!isLogin && (
+            {isLogin ? (
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="light" 
+                  className="btn-user-icon"
+                  id="dropdown-basic"
+                >
+                  <FaUser style={{ color: "black" }} /> 
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={handleLogout}>
+                    Thông tin tài khoản
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={handleLogout}>
+                    Đăng xuất
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            ) : (
               <button
                 className="btn btn-round btn-block btn-primary"
                 onClick={() => navigate("/login")}
