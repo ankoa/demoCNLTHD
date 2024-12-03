@@ -35,7 +35,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.TEST_PAGE, element: <TestDetail /> },
     { path: ROUTERS.USER.MAIN_TEST, element: <MainTest /> },
     { path: ROUTERS.USER.ONLINECOURSE, element: <OnlineCourse /> },
-    { path: ROUTERS.USER.COURSEDETAILS, element: <PurchaseForm/> },
+    { path: ROUTERS.USER.COURSEPURCHASE, element: <PurchaseForm/> },
     { path: ROUTERS.USER.LOGIN, element: <Login /> },
     { path: ROUTERS.USER.REGISTER, element: <Register /> },
     { path: ROUTERS.USER.FINDACCOUNT, element: <FindAccount /> },

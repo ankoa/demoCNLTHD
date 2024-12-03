@@ -1,68 +1,71 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Lesson.scss";
+import { getLessons } from "../../../services/lessonService";
+import { getLessonDetails } from "../../../services/lessonDetailService";
+import VideoPlayer from "./VideoPlayer";
 
 const Lesson = () => {
-
-  // Dữ liệu lesson và lessonDetail
-  const lessons = [
-    {
-      lessonId: 1,
-      courseId: 1,
-      lessonName: "lesson 1",
-      titleLessonId: 0
-    },
-    {
-      lessonId: 2,
-      courseId: 1,
-      lessonName: "lesson 2",
-      titleLessonId: 0
-    }
-  ];
-
-  const lessonDetails = [
-    {
-      lessonDetailId: 2,
-      lessonId: 1,
-      lessonName: "Khóa học 2",
-      lessonDescription: "Toeic",
-      learningpProgress: 13,
-      lessonVideo: "https://www.youtube.com/watch?v=1zO1SKwdnmA"
-    },
-    {
-      lessonDetailId: 1002,
-      lessonId: 1,
-      lessonName: "Bài học 1",
-      lessonDescription: "Toeic",
-      learningpProgress: 12,
-      lessonVideo: "https://www.youtube.com/watch?v=1zO1SKwdnmA"
-    },
-    {
-      lessonDetailId: 1003,
-      lessonId: 1,
-      lessonName: "Bài học 1",
-      lessonDescription: "Toeic",
-      learningpProgress: 12,
-      lessonVideo: "https://www.youtube.com/watch?v=1zO1SKwdnmA"
-    },
-    {
-      lessonDetailId: 1003,
-      lessonId: 2,
-      lessonName: "Bài học 1",
-      lessonDescription: "Toeic",
-      learningpProgress: 12,
-      lessonVideo: "https://www.youtube.com/watch?v=1zO1SKwdnmA"
-    }
-  ];
-
   const navigate = useNavigate();
 
   const [selectedContent, setSelectedContent] = useState(null); // Mặc định là null
   const [selectedIndex, setSelectedIndex] = useState(null); // Chỉ mục của item đang được chọn
+  const [lessons, setLessons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [lessonDetail, setLessonDetail] = useState([]);
+  const { courseId } = useParams();
+
+  useEffect(() => {
+    //hàm lấy lesson của 1 course
+    const fetchLessons = async () => {
+      setLoading(true);
+      try {
+        const data = await getLessons(); // Gọi API
+        const filteredLessons = data.filter((item) => item.courseId == courseId); // Lọc theo điều kiện
+        console.log("Lesson of courseID ", courseId, " is: ", filteredLessons);
+        setLessons(filteredLessons);
+      } catch (err) {
+        console.log("Lỗi khi lấy dữ liệu lesson: ", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLessons();
+  }, [courseId]); // Chỉ chạy 1 lần khi component mount
+
+  useEffect(() => {
+    // Hàm lấy chi tiết bài học
+    const fetchLessonDetail = async () => {
+      setLoading(true);
+      try {
+        const data = await getLessonDetails(); // Gọi API lấy dữ liệu chi tiết
+        const filteredLessonDetails = lessons.map((lesson) => {
+          // Lọc dữ liệu theo từng lessonId
+          return data.filter((item) => item.lessonId === lesson.lessonId);
+        });
+
+        // Gộp tất cả kết quả thành một mảng duy nhất
+        const combinedLessonDetails = filteredLessonDetails.flat();
+
+        console.log("LessonDetail for all lessons:", combinedLessonDetails);
+        setLessonDetail(combinedLessonDetails); // Cập nhật toàn bộ dữ liệu
+      } catch (err) {
+        console.error("Lỗi khi lấy dữ liệu lesson:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (lessons.length > 0) {
+      fetchLessonDetail(); // Chỉ gọi hàm nếu có lessons
+    }
+  }, [lessons]); // Chạy lại khi lessons thay đổi
+
 
   const handleMenuClick = (lessonId) => {
     // Lọc các lessonDetail dựa trên lessonId đã chọn
-    const selectedLessonDetails = lessonDetails.filter(
+    const selectedLessonDetails = lessonDetail.filter(
       (detail) => detail.lessonId === lessonId
     );
     setSelectedContent(selectedLessonDetails);
@@ -74,11 +77,14 @@ const Lesson = () => {
   };
 
   const getYouTubeVideoId = (url) => {
-    const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/([a-zA-Z0-9_-]{11})))|(?:https?:\/\/(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/)([a-zA-Z0-9_-]{11}))/;
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|\S+\?v=|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);
-    return match && (match[1] || match[2]) ? (match[1] || match[2]) : null;
+    return match ? match[1] : null; // Trả về ID video hoặc null nếu không tìm thấy
   };
-  
+
+
+
+
   return (
     <div className="lesson-container">
       <div className="breadcrumb">
@@ -89,15 +95,6 @@ const Lesson = () => {
       </div>
       <div className="lesson-layout">
         <div className="menu">
-          {/* {menuItems.map((item, index) => (
-            <div
-              key={index}
-              className={`menu-item ${selectedIndex === index ? "active" : ""}`} // Thêm lớp 'active' nếu item được chọn
-              onClick={() => handleMenuClick(item.content, index)}
-            >
-              {item.title}
-            </div>
-          ))} */}
           {lessons.map((item, index) => (
             <div
               key={index}
@@ -123,15 +120,19 @@ const Lesson = () => {
 
                   {/* Nhúng video YouTube vào trang */}
                   <div className="video-container">
-                    <iframe
-                      width="100%"
-                      height="315"
-                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(detail.lessonVideo)}`}
-                      title={detail.lessonName}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+                    {detail.lessonVideo ? (
+                      <iframe
+                        width="100%"
+                        height="315"
+                        src={`https://www.youtube.com/embed/${getYouTubeVideoId(detail.lessonVideo)}`}
+                        title={detail.lessonName}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    ) : (
+                      <p>Video not available</p> // Hiển thị thông báo nếu không có video
+                    )}
                   </div>
                 </div>
               ))}
