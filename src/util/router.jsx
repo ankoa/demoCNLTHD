@@ -22,6 +22,10 @@ export const ROUTERS = {
     USER: "user",
     PART: "part",
     QUESTION: "question",
-    COURSE: "course",
+    COURSE: "manage-course",
+    COURSE_DETAIL: "courseDetail",
+    COURSE_EXISTING: "manage-courseExisting",
+    LESSON: "manage-lesson",
+    LESSON_DETAIL: "manage-lessonDetail",
   },
 };

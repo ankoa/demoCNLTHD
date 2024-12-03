@@ -23,6 +23,11 @@ import CourseManagement from "./components/Admin/Content/CourseManagement/Course
 import PurchaseForm from "./components/User/PurchaseForm/PurchaseForm";
 import Lesson from "./components/User/Lesson/Lesson";
 
+import CourseExistingManagement from "./components/Admin/Content/CourseExistingManagement/CourseExistingManagement";
+/* import CourseDetailManagement from "./components/Admin/Content/CourseDetailManagement/CourseDetailManagement";
+ */
+import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
+import LessonDetailManagement from "./components/Admin/Content/LessonDetailManagement/LessonDetailManagement";
 const renderUserRouter = () => {
   const userRouters = [
     { path: ROUTERS.USER.HOMEPAGE, element: <Homepage /> },
@@ -55,6 +60,20 @@ const renderAdminRouter = () => {
     { path: ROUTERS.ADMIN.PART, element: <PartManagement /> },
     { path: ROUTERS.ADMIN.QUESTION, element: <QuestionManagement /> },
     { path: ROUTERS.ADMIN.COURSE, element: <CourseManagement /> },
+    {
+      path: ROUTERS.ADMIN.COURSE_EXISTING,
+      element: <CourseExistingManagement />,
+    },
+    /*     { path: ROUTERS.ADMIN.COURSE, element: <CourseDetailManagement /> },
+     */
+    {
+      path: ROUTERS.ADMIN.LESSON,
+      element: <LessonManagement />,
+    },
+    {
+      path: ROUTERS.ADMIN.LESSON_DETAIL,
+      element: <LessonDetailManagement />,
+    },
   ];
 
   return adminRouters.map((route, key) => (
