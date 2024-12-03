@@ -20,6 +20,7 @@ import UserManagement from "./components/Admin/Content/UserManagement/UserManage
 import PartManagement from "./components/Admin/Content/PartManagement/PartManagement";
 import QuestionManagement from "./components/Admin/Content/QuestionManagement/QuestionManagement";
 import CourseManagement from "./components/Admin/Content/CourseManagement/CourseManagement";
+import PurchaseForm from "./components/User/PurchaseForm/PurchaseForm";
 
 const renderUserRouter = () => {
   const userRouters = [
@@ -28,6 +29,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.TEST_PAGE, element: <TestDetail /> },
     { path: ROUTERS.USER.MAIN_TEST, element: <MainTest /> },
     { path: ROUTERS.USER.ONLINECOURSE, element: <OnlineCourse /> },
+    { path: ROUTERS.USER.COURSEDETAILS, element: <PurchaseForm/> },
     { path: ROUTERS.USER.LOGIN, element: <Login /> },
     { path: ROUTERS.USER.REGISTER, element: <Register /> },
     { path: ROUTERS.USER.FINDACCOUNT, element: <FindAccount /> },

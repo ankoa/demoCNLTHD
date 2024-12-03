@@ -1,0 +1,124 @@
+.purchase-form-container {
+  max-width: 600px;
+  margin: auto;
+  margin-top: 50px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.purchase-form-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.purchase-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.purchase-form-container-info {
+  display: flex;
+  
+  justify-content: space-between;
+  gap: 5px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.purchase-form-container-info label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+  width: 120px;
+  text-align: left;
+}
+
+.purchase-form-container-info span {
+  display: block;
+  line-height: 1.6;
+  color: #333;
+  text-align: left;
+}
+
+.purchase-form-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.purchase-form-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.purchase-form-container button:hover {
+  background-color: darkgreen;
+}
+
+
+/* Breadcrumb */
+/* .breadcrumb {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+  padding-left: 40px;
+  padding-top: 40px;
+}
+
+.breadcrumb-divider {
+  margin: 0 5px;
+  color: #888;
+}
+
+.breadcrumb-current {
+  font-weight: bold;
+  color: #007bff;
+} */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #555;
+  background-color: #fff;
+}
+
+.breadcrumb-button {
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb-button:hover {
+  color: #0056b3;
+}
+
+.breadcrumb-divider {
+  color: #888;
+}
+
+.breadcrumb-current {
+  font-weight: bold;
+  color: #333;
+}

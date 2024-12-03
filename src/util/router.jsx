@@ -5,6 +5,7 @@ export const ROUTERS = {
     TEST_PAGE: "/test/:testId",
     MAIN_TEST: "/test/:testId/:type",
     ONLINECOURSE: "/onlinecouse",
+    COURSEDETAILS: "/onlinecouse/:courseId/details",
     LOGIN: "/login",
     REGISTER: "/register",
     CONFIRMCODE: "/confirmCode",
