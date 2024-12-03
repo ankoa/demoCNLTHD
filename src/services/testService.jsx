@@ -1,29 +1,65 @@
 // Hàm postLogin để gọi API đăng nhập
 import createAxiosInstance from "../util/axiosCustomize";
 
-const axios = createAxiosInstance(5001);
+// Đường dẫn đầy đủ của API
+const API_BASE_URL = "https://localhost:5001/";
+const axios = createAxiosInstance(API_BASE_URL);
+const BASE_URL = "/api/Test";
+
 const getTests = () => {
     return axios.get("api/Test");
 };
 
-const getTestByID = (testID) => {
-    return axios.get(`/api/Test/${testID}`);
+const getTestByID = async (testID) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/${testID}`);
+        return response;
+    } catch (error) {
+        console.error("Error fetching parts:", error);
+        throw error;
+    }
 };
 
 const deleteTestById = async (id) => {
-    return axios.delete(`api/Test/${id}`);
+    try {
+        const response = await axios.delete(`${BASE_URL}/${id}`);
+        return response;
+    } catch (error) {
+        console.error("Error fetching parts:", error);
+        throw error;
+    }
 };
 
-const postNewTest = (newTest) => {
-    return axios.post("api/Test", newTest);
+const postNewTest = async (newTest) => {
+    
+    try {
+        const response = await axios.post(`${BASE_URL}`, newTest);
+        return response;
+    } catch (error) {
+        console.error("Error fetching parts:", error);
+        throw error;
+    }
 };
 
-const putUpdateTest = (updateTest) => {
-    return axios.put(`api/Test/${updateTest.Id}`, updateTest);
+const putUpdateTest = async (updateTest) => {
+    try {
+        const response = await axios.put(`${BASE_URL}/${updateTest.Id}`, updateTest);
+        return response;
+    } catch (error) {
+        console.error("Error fetching parts:", error);
+        throw error;
+    }
 };
 
-const getParfOfTestById = (id) => {
-    return axios.get(`api/Test/part/${id}`);
+const getParfOfTestById = async (id) => {
+    
+    try {
+        const response = await axios.get(`${BASE_URL}/part/${id}`);
+        return response;
+    } catch (error) {
+        console.error("Error fetching parts:", error);
+        throw error;
+    }
 };
 
 

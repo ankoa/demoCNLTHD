@@ -59,7 +59,6 @@ const TestResult = () => {
           setError(partResponse.EM);
           return;
         }
-        console.log(partResponse)
         setPartData(partResponse.DT);
 
 
@@ -81,6 +80,7 @@ const TestResult = () => {
 
       } catch (error) {
         setError("Lỗi khi lấy dữ liệu");
+        console.log("Lỗi khi lấy dữ liệu", error);
       } finally {
         setLoading(false);
       }
@@ -100,7 +100,6 @@ const TestResult = () => {
           // Fetch initial part data (assume it's already set in partData)
           const partsWithQuestionsPromises = partData.map(async (part) => {
             const response = await getQuestionByPartID(part.PardId);
-            console.log(part.PardId)
             if (response.EC === 0) {
               const { questions } = response.DT.part;
               // Add `userAnswer` field to each question based on `userAnswers`
