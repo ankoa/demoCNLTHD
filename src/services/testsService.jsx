@@ -1,90 +1,90 @@
-  import createAxiosInstance from "../util/axiosCustomize";
+import createAxiosInstance from "../util/axiosCustomize";
 
-  const axios = createAxiosInstance("https://localhost:5001"); // Truyền đường dẫn API thay vì cổng
+const axios = createAxiosInstance("https://localhost:5001"); // Truyền đường dẫn API thay vì cổng
 
-  const getAllTests = async () => {
-    try {
-      const response = await axios.get("/api/Test");
-      return response;
-    } catch (error) {
-      console.error("Error fetching tests:", error);
-      throw error;
-    }
-  };
+const getAllTests = async () => {
+  try {
+    const response = await axios.get("/api/Test");
+    return response;
+  } catch (error) {
+    console.error("Error fetching tests:", error);
+    throw error;
+  }
+};
 
-  const getTestById = async (id) => {
-    try {
-      const response = await axios.get(`/api/Test/${id}`);
-      return response;
-    } catch (error) {
-      console.error(`Error fetching test with id=${id}:`, error);
-      throw error;
-    }
-  };
+const getTestById = async (id) => {
+  try {
+    const response = await axios.get(`/api/Test/${id}`);
+    return response;
+  } catch (error) {
+    console.error(`Error fetching test with id=${id}:`, error);
+    throw error;
+  }
+};
 
-  const createTest = async (test) => {
-    try {
-      const response = await axios.post("/api/Test", test);
-      return response.data;
-    } catch (error) {
-      console.error("Error creating test:", error);
-      throw error;
-    }
-  };
+const createTest = async (test) => {
+  try {
+    const response = await axios.post("/api/Test", test);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating test:", error);
+    throw error;
+  }
+};
 
-  const updateTest = async (id, test) => {
-    try {
-      const response = await axios.put(`/api/Test/${id}`, test);
-      return response.data;
-    } catch (error) {
-      console.error(`Error updating test with id=${id}:`, error);
-      throw error;
-    }
-  };
+const updateTest = async (id, test) => {
+  try {
+    const response = await axios.put(`/api/Test/${id}`, test);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating test with id=${id}:`, error);
+    throw error;
+  }
+};
 
-  const deleteTest = async (id) => {
-    try {
-      await axios.delete(`/api/Test/${id}`);
-    } catch (error) {
-      console.error(`Error deleting test with id=${id}:`, error);
-      throw error;
-    }
-  };
+const deleteTest = async (id) => {
+  try {
+    await axios.delete(`/api/Test/${id}`);
+  } catch (error) {
+    console.error(`Error deleting test with id=${id}:`, error);
+    throw error;
+  }
+};
 
-  const getAllPartByTestID = async (id) => {
-    try {
-      const response = await axios.get(`/api/Test/part/${id}`);
-      return response;
-    } catch (error) {
-      console.error(`Error fetching parts of test with id=${id}:`, error);
-      throw error;
-    }
-  };
+const getAllPartByTestID = async (id) => {
+  try {
+    const response = await axios.get(`/api/Test/part/${id}`);
+    return response;
+  } catch (error) {
+    console.error(`Error fetching parts of test with id=${id}:`, error);
+    throw error;
+  }
+};
 
-  const getAllQuestionsByPartID = async (partId) => {
-    try {
-      const response = await axios.get(`/api/Part/question/${partId}`);
-      return response; // Giả sử dữ liệu bạn cần nằm trong trường response
-    } catch (error) {
-      console.error(
-        `Error fetching questions from part with id=${partId}:`,
-        error
-      );
-      throw error;
-    }
-  };
+const getAllQuestionsByPartID = async (partId) => {
+  try {
+    const response = await axios.get(`/api/Part/question/${partId}`);
+    return response; // Giả sử dữ liệu bạn cần nằm trong trường response
+  } catch (error) {
+    console.error(
+      `Error fetching questions from part with id=${partId}:`,
+      error
+    );
+    throw error;
+  }
+};
 
-  // Xuất các hàm bao gồm hàm mới vừa tạo
-  export {
-    getAllTests,
-    getTestById,
-    createTest,
-    updateTest,
-    deleteTest,
-    getAllPartByTestID,
-    getAllQuestionsByPartID,
-  };
-  /* import createAxiosInstance from "../util/axiosCustomize";
+// Xuất các hàm bao gồm hàm mới vừa tạo
+export {
+  getAllTests,
+  getTestById,
+  createTest,
+  updateTest,
+  deleteTest,
+  getAllPartByTestID,
+  getAllQuestionsByPartID,
+};
+/* import createAxiosInstance from "../util/axiosCustomize";
   const axios = createAxiosInstance(5001);
   const getAllTests = async () => {
     try {

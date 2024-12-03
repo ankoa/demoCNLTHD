@@ -1,26 +1,33 @@
 import { useState, useEffect } from "react";
+
 const CountDown = (props) => {
-  const [count, setCount] = useState(300);
-  new Date(10 * 1000).toISOString().substring(11, 16);
+  const [count, setCount] = useState(
+    props.duration ? props.duration * 60 : 300
+  ); // Chuyển đổi phút thành giây
+
+  useEffect(() => {
+    // Reset lại thời gian khi duration thay đổi
+    setCount(props.duration ? props.duration * 60 : 300);
+  }, [props.duration]);
 
   useEffect(() => {
     if (count === 0) {
       props.onTimeUp();
       return;
     }
-    const timer = setInterval(() => setCount(count - 1), 1000);
-    /*     setTimeout(() =>{
-        clearInterval(timer);
 
-    } , 50000) */
+    const timer = setInterval(() => {
+      setCount((prevCount) => prevCount - 1);
+    }, 1000);
+
     return () => clearInterval(timer);
   }, [count]);
 
   const toHHMMSS = (secs) => {
-    var sec_num = parseInt(secs, 10);
-    var hours = Math.floor(sec_num / 3600);
-    var minutes = Math.floor(sec_num / 60) % 60;
-    var seconds = sec_num % 60;
+    const sec_num = parseInt(secs, 10);
+    const hours = Math.floor(sec_num / 3600);
+    const minutes = Math.floor(sec_num / 60) % 60;
+    const seconds = sec_num % 60;
 
     return [hours, minutes, seconds]
       .map((v) => (v < 10 ? "0" + v : v))
@@ -30,4 +37,5 @@ const CountDown = (props) => {
 
   return <div className="countdown-container">{toHHMMSS(count)}</div>;
 };
+
 export default CountDown;

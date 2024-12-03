@@ -1,35 +1,36 @@
 import PropTypes from "prop-types";
 import "./RightTestContent.scss"; // Import file CSS
-import CountDown from "./CountDown"; // Import file CSS
+import CountDown from "./CountDown"; // Import CountDown component
 
 const RightTestContent = (props) => {
-  const { quizData } = props;
+  const { quizData, testData } = props; // Destructure testData from props
   console.log("quizData->>>>>>>>>>>>>: ", quizData);
+
   const onTimeUp = () => {
     props.handelFinishQuiz();
   };
 
-  // Kiểm tra dữ liệu đầu vào có hợp lệ không
+  // Check if the input data is valid
   if (!quizData || !quizData.length) {
     return <div>No questions available.</div>;
   }
 
-  // Hàm xác định lớp cho câu hỏi
+  // Determine the class for each question
   const getClassQuestion = (index, quizData) => {
     if (quizData.answers && quizData.answers.length > 0) {
-      let isUnAnswered = answers.some((a) => a.isSelected === false);
+      let isUnAnswered = quizData.answers.some((a) => a.isSelected === false);
       if (!isUnAnswered) {
         return "question-number selected";
       }
     }
     return "question-number";
-    console.log(quizData);
   };
 
   return (
     <>
       <div className="main-timer">
-        <CountDown onTimeUp={onTimeUp} />
+        {/* Pass the Duration from testData as a prop to CountDown */}
+        <CountDown duration={testData.Duration} onTimeUp={onTimeUp} />
       </div>
       <div className="main-question">
         {quizData.map((item, index) => (
@@ -45,7 +46,7 @@ const RightTestContent = (props) => {
   );
 };
 
-// Định nghĩa kiểu dữ liệu cho props
+// Define prop types for RightTestContent
 RightTestContent.propTypes = {
   quizData: PropTypes.arrayOf(
     PropTypes.shape({
@@ -67,11 +68,15 @@ RightTestContent.propTypes = {
           QuestionID: PropTypes.number.isRequired,
           Text: PropTypes.string.isRequired,
           IsCorrect: PropTypes.bool.isRequired,
-          isSelected: PropTypes.bool.isRequired, // Đảm bảo có thuộc tính 'isSelected'
+          isSelected: PropTypes.bool.isRequired, // Ensure 'isSelected' exists
         })
       ).isRequired,
     })
   ).isRequired,
+  testData: PropTypes.shape({
+    Duration: PropTypes.number.isRequired, // Add the prop type for Duration
+  }).isRequired,
+  handelFinishQuiz: PropTypes.func.isRequired, // Define prop type for the function
 };
 
 export default RightTestContent;

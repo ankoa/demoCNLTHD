@@ -7,61 +7,61 @@ const axios = createAxiosInstance(API_BASE_URL);
 const BASE_URL = "/api/Test";
 
 const getTests = () => {
-    return axios.get("api/Test");
+  return axios.get("api/Test");
 };
 
 const getTestByID = async (testID) => {
-    try {
-        const response = await axios.get(`${BASE_URL}/${testID}`);
-        return response;
-    } catch (error) {
-        console.error("Error fetching parts:", error);
-        throw error;
-    }
+  try {
+    const response = await axios.get(`${BASE_URL}/${testID}`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching parts:", error);
+    throw error;
+  }
 };
 
 const deleteTestById = async (id) => {
-    try {
-        const response = await axios.delete(`${BASE_URL}/${id}`);
-        return response;
-    } catch (error) {
-        console.error("Error fetching parts:", error);
-        throw error;
-    }
+  try {
+    const response = await axios.delete(`${BASE_URL}/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching parts:", error);
+    throw error;
+  }
 };
 
 const postNewTest = async (newTest) => {
-    
-    try {
-        const response = await axios.post(`${BASE_URL}`, newTest);
-        return response;
-    } catch (error) {
-        console.error("Error fetching parts:", error);
-        throw error;
-    }
+  try {
+    const response = await axios.post(`${BASE_URL}`, newTest);
+    return response;
+  } catch (error) {
+    console.error("Error fetching parts:", error);
+    throw error;
+  }
 };
 
 const putUpdateTest = async (updateTest) => {
-    try {
-        const response = await axios.put(`${BASE_URL}/${updateTest.Id}`, updateTest);
-        return response;
-    } catch (error) {
-        console.error("Error fetching parts:", error);
-        throw error;
-    }
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/${updateTest.Id}`,
+      updateTest
+    );
+    return response;
+  } catch (error) {
+    console.error("Error fetching parts:", error);
+    throw error;
+  }
 };
 
 const getParfOfTestById = async (id) => {
-    
-    try {
-        const response = await axios.get(`${BASE_URL}/part/${id}`);
-        return response;
-    } catch (error) {
-        console.error("Error fetching parts:", error);
-        throw error;
-    }
+  try {
+    const response = await axios.get(`${BASE_URL}/part/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching parts:", error);
+    throw error;
+  }
 };
-
 
 // const getUsers = () => {
 //     return axios.get("api/User");
@@ -145,10 +145,10 @@ const getParfOfTestById = async (id) => {
 
 // Export các hàm để sử dụng trong các thành phần khác
 export {
-    getTests,
-    getTestByID,
-    deleteTestById,
-    postNewTest,
-    putUpdateTest,
-    getParfOfTestById
+  getTests,
+  getTestByID,
+  deleteTestById,
+  postNewTest,
+  putUpdateTest,
+  getParfOfTestById,
 };

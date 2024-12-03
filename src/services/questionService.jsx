@@ -39,13 +39,25 @@ const getAnswersOfQuestion = async (id) => {
 // Add a new question
 const addQuestion = async (questionData) => {
   try {
-    const response = await axios.post("api/Question", questionData, {
+    const formData = new FormData();
+
+    // Thêm các trường dữ liệu vào formData
+    formData.append("PartID", questionData.PartID);
+    formData.append("Text", questionData.Text);
+    formData.append("AnswerCounts", questionData.AnswerCounts);
+    formData.append("UpdatedAt", questionData.UpdatedAt);
+    formData.append("CreatedAt", questionData.CreatedAt);
+    formData.append("audio", questionData.AudioFile);
+    formData.append("image", questionData.ImageFile);
+
+
+    // Gửi yêu cầu PUT với formData
+    const response = await axios.post(`/api/Question`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    console.log("Question added:", response.data.DT);
-    return response.data.DT;
+
+    return response; // Trả về response để kiểm tra EC và EM
   } catch (error) {
-    console.error("Error adding question:", error);
     throw error;
   }
 };
@@ -53,16 +65,33 @@ const addQuestion = async (questionData) => {
 // Update an existing question
 const updateQuestion = async (id, questionData) => {
   try {
-    const response = await axios.put(`api/Question/${id}`, questionData, {
+    const formData = new FormData();
+
+    // Thêm các trường dữ liệu vào formData
+    formData.append("PartID", questionData.PartID);
+    formData.append("Text", questionData.Text);
+    formData.append("AnswerCounts", questionData.AnswerCounts);
+    formData.append("UpdatedAt", questionData.UpdatedAt);
+    formData.append("CreatedAt", questionData.CreatedAt);
+    formData.append("audio", questionData.AudioFile);
+    formData.append("image", questionData.ImageFile);
+
+
+    // Gửi yêu cầu PUT với formData
+    const response = await axios.put(`/api/Question/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    console.log("Question updated:", response.data.DT);
-    return response.data.DT;
+
+    console.log("Question updated:", response.DT);
+    return response; // Trả về response để kiểm tra EC và EM
   } catch (error) {
     console.error("Error updating question:", error);
+    console.log("Response data:", error.response.EM); // In chi tiết lỗi từ server
     throw error;
   }
 };
+
+
 
 // Delete a question
 const deleteQuestion = async (id) => {
@@ -76,6 +105,22 @@ const deleteQuestion = async (id) => {
   }
 };
 
+
+const updateAnswersForQuestion = async (questionId, newAnswers) => {
+  try {
+    const response = await axios.put(`/api/Question/UpdateQuestionWithAnswer/${questionId}`, newAnswers, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    return response;
+  } catch (error) {
+    return response;
+  }
+};
+
+
 // Export all functions
 export {
   getAllQuestions,
@@ -84,4 +129,5 @@ export {
   addQuestion,
   updateQuestion,
   deleteQuestion,
+  updateAnswersForQuestion
 };

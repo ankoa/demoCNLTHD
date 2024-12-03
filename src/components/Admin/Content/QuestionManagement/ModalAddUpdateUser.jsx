@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { FaMinusCircle } from 'react-icons/fa';
 import './Modal.scss';
 import { getAnswerOfQuestion } from '../../../../services/partService';
+import { updateAnswersForQuestion } from '../../../../services/questionService';
 
 const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts }, ref) => {
     const [showModal, setShowModal] = useState(false);
@@ -11,8 +12,6 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
     const [previewImage, setPreviewImage] = useState(null);
     const [formData, setFormData] = useState({
         Id: 0,
-        Number: '',
-        Description: '',
         Text: '',
         AudioFile: null,
         ImageFile: null,
@@ -22,7 +21,9 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
         CreatedAt: '',
         UpdatedAt: ''
     });
-    const [listAnswer, setListAnswer] = useState([]); // Make sure it's an array of answers
+    const [temp, setTemp] = useState({});
+    const [listAnswer, setListAnswer] = useState([]);
+    const [listAnswerTemp, setListAnswerTemp] = useState([]);
 
     useImperativeHandle(ref, () => ({
         open
@@ -38,8 +39,8 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
         try {
             const response = await getAnswerOfQuestion(questionId);
             if (response && response.EC === 0) {
-                console.log(response.DT.answers);
                 setListAnswer(response.DT.answers || []);
+                setListAnswerTemp(response.DT.answers || []);
             } else if (response) {
                 toast.error(response.EM);
             }
@@ -47,6 +48,15 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
             toast.error(error.response?.data.EM || 'An error occurred');
         }
     };
+
+    const hasChanges = () => {
+        return JSON.stringify(formData) !== JSON.stringify(temp);
+    };
+
+    const hasChangesAnswer = () => {
+        return JSON.stringify(listAnswer) !== JSON.stringify(listAnswerTemp);
+    };
+
 
     const open = (data, action) => {
         setActionType(action);
@@ -59,11 +69,16 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
                 ImagePath: data.ImagePath || ''
             });
             setPreviewImage(data.ImagePath || null);
+            setTemp({
+                ...data,
+                AudioFile: null,
+                ImageFile: null,
+                AudioPath: data.AudioPath || '',
+                ImagePath: data.ImagePath || ''
+            });
         } else {
             setFormData({
                 Id: 0,
-                Number: '',
-                Description: '',
                 Text: '',
                 AudioFile: null,
                 ImageFile: null,
@@ -73,6 +88,7 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
                 CreatedAt: '',
                 UpdatedAt: ''
             });
+            setListAnswer([]);
             setPreviewImage(null);
         }
         setShowModal(true);
@@ -83,8 +99,6 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
         setActionType('');
         setFormData({
             Id: 0,
-            Number: '',
-            Description: '',
             Text: '',
             AudioFile: null,
             ImageFile: null,
@@ -119,7 +133,7 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
         setListAnswer([
             ...listAnswer,  // Giữ lại các câu trả lời cũ
             {
-                "Id": -1,  // Tạo Id mới
+                "Id": 0,  // Tạo Id mới
                 "QuestionID": formData.Id,
                 "Text": "",
                 "IsCorrect": false
@@ -130,7 +144,7 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
 
     const handleAnswerTextChange = (index, value) => {
         const updatedAnswers = listAnswer.map((answer, idx) =>
-            idx === index ? { ...answer, description: value } : answer
+            idx === index ? { ...answer, Text: value } : answer
         );
         setListAnswer(updatedAnswers); // Update state with the modified answers
     };
@@ -144,25 +158,59 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
     };
 
     const handleRemoveAnswer = (index) => {
+        if (listAnswer.length <= 3) {
+            toast.error("You must have at least 3 answers.");
+            return;
+        }
         const updatedAnswers = listAnswer.filter((_, idx) => idx !== index);
         setListAnswer(updatedAnswers); // Remove the answer at the specified index
     };
 
+    const handleUpdateAnswers = async (questionId, newAnswers) => {
+        try {
+            let response = await updateAnswersForQuestion(questionId, newAnswers);
+            if (response && response.EC === 0) {
+                toast.success(response.EM);
+            } else if (response && response.EC !== 0) {
+                toast.error(response.EM);
+            }
+        } catch (error) {
+            if (error.response) {
+                toast.error(error.response.data.EM || "Đã xảy ra lỗi");
+            } else {
+                console.error("L strugglNotFound xác định:", error);
+            }
+        }
+        // console.log(newAnswers);
+        // console.log(questionId);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!hasChanges() && !hasChangesAnswer()) {
+            toast.success("Nothing need to be updated.");
+            return;
+        }
         const partData = {
             ...formData,
             AudioPath: formData.AudioFile ? URL.createObjectURL(formData.AudioFile) : formData.AudioPath,
             ImagePath: formData.ImageFile ? URL.createObjectURL(formData.ImageFile) : formData.ImagePath
         };
+        console.log(partData);
 
         if (actionType === 'Add') {
             if (window.confirm('Are you sure you want to save this part into the database?')) {
-                handleAddPart(partData);
+                partData.AnswerCounts = listAnswer.length;
+                handleAddPart(partData, listAnswer);
             }
         } else if (actionType === 'Update') {
             if (window.confirm('Are you sure you want to update this part?')) {
-                handleUpdatePart(partData);
+                if (hasChanges()) {
+                    handleUpdatePart(partData);
+                }
+                if (hasChangesAnswer()) {
+                    handleUpdateAnswers(formData.Id, listAnswer);
+                }
             }
         }
         handleCloseModal();
@@ -175,15 +223,16 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
             </Modal.Header>
             <Modal.Body className="p-5 pt-2" style={{ height: '500px', overflowY: 'scroll' }}>
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="Number">
+                    {actionType === 'Add' ? '' : (<Form.Group className="mb-3" controlId="Number">
                         <Form.Label>Question Number</Form.Label>
                         <Form.Control
                             type="text"
                             name="Number"
                             value={formData.Order}
                             onChange={handleChange}
+                            disabled
                         />
-                    </Form.Group>
+                    </Form.Group>)}
                     <Form.Group className="mb-3" controlId="Text">
                         <Form.Label>Question Text</Form.Label>
                         <Form.Control
@@ -202,9 +251,9 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
                             onChange={handleFileChange}
                         />
                         {formData.AudioFile ? (
-                            <audio controls src={URL.createObjectURL(formData.AudioFile)} className="mt-2" />
+                            <audio style={{ width: '100%' }} controls src={URL.createObjectURL(formData.AudioFile)} className="mt-2" />
                         ) : (
-                            formData.AudioPath && <audio controls src={formData.AudioPath} className="mt-2" />
+                            formData.AudioPath && <audio style={{ width: '100%' }} controls src={formData.AudioPath} className="mt-2" />
                         )}
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="ImagePath">
@@ -256,12 +305,13 @@ const ModalAddUpdatePart = forwardRef(({ handleAddPart, handleUpdatePart, parts 
                                     color='red'
                                     className="remove-icon"
                                     onClick={() => handleRemoveAnswer(index)}
+                                    style={{ cursor: 'pointer' }}
                                 />
                             </div>
                         </div>
                     ))}
-                    <Button className="mx-auto" variant="primary" type="submit">
-                        {actionType === 'Add' ? 'Add Part' : 'Update Part'}
+                    <Button className="mx-auto mt-4" variant="primary" type="submit">
+                        {actionType === 'Add' ? 'Add Question' : 'Update Question'}
                     </Button>
                 </Form>
             </Modal.Body>
