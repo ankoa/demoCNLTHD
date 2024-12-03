@@ -119,11 +119,34 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
           <SubMenu
             title="Courses"
             icon={<FiActivity />}
-            onClick={() => navigate("/admin/course")}
+            onClick={() => navigate("/admin/manage-course")}
           />
-          <SubMenu title="Tables" icon={<CiFilter />}></SubMenu>
+          <SubMenu
+            title="Courses Details"
+            icon={<FiActivity />}
+            onClick={() => navigate("/admin/manage-courseDetails")}
+          />
+          <SubMenu
+            title="Courses Existing"
+            icon={<FiActivity />}
+            onClick={() => navigate("/admin/manage-courseExisting")}
+          />
         </Menu>
-
+        <Menu iconShape="course">
+          <MenuItem suffix={<span className="badge red">New</span>}>
+            LESSON
+          </MenuItem>
+          <SubMenu
+            title="Lesson"
+            icon={<FiActivity />}
+            onClick={() => navigate("/admin/manage-lesson")}
+          />
+          <SubMenu
+            title="Lesson Details"
+            icon={<FiActivity />}
+            onClick={() => navigate("/admin/manage-lessonDetail")}
+          />
+        </Menu>
         <Menu iconShape="circle">
           <MenuItem>UI TOOLKIT</MenuItem>
           <SubMenu title="Layout" icon={<FiLayout />}>

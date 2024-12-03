@@ -1,9 +1,11 @@
 import createAxiosInstance from "../util/axiosCustomize";
 
 // Đường dẫn đầy đủ của API
-const API_BASE_URL = "https://localhost:5556/";
+const API_BASE_URL = "http://authservice.somee.com";
+/*  const API_BASE_URL = "http://userservice.somee.com";
+ */
 const axios = createAxiosInstance(API_BASE_URL);
-const BASE_URL = "api/Account";
+const BASE_URL = "/api/Account";
 
 // Hàm postLogin để gọi API đăng nhập
 const postLogin = (Username, Password) => {
@@ -16,12 +18,12 @@ const postLogin = (Username, Password) => {
 
 // Lấy danh sách người dùng
 const getUsers = () => {
-  return axios.get("api/User");
+  return axios.get("/api/User");
 };
 
 // Hàm postLogOut để gọi API đăng xuất
 const postLogOut = (email, refresh_token) => {
-  return axios.post("api/v1/logout", {
+  return axios.post("/api/v1/logout", {
     email,
     refresh_token,
     delay: 1000,
