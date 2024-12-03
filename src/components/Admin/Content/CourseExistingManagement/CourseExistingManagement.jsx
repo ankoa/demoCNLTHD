@@ -5,15 +5,15 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 import {
-  deleteCourse,
-  getCourses,
-  addCourse,
-  updateCourse,
-} from "../../../../services/courseService";
-import AddCourseModal from "./AddCourseModal"; // Import the AddCourseModal
-import "./CourseManagement.scss";
+  deleteCourseExisting,
+  getCourseExistings,
+  addCourseExisting,
+  updateCourseExisting,
+} from "../../../../services/courseExistingService";
+import AddCourseExistingModal from "./AddCourseExistingModal"; // Import the AddCourseExistingModal
+import "./CourseExistingManagement.scss";
 
-const CourseManagement = () => {
+const CourseExistingManagement = () => {
   const refModalCourse = useRef();
   const [showModal, setShowModal] = useState(false); // State for controlling modal visibility
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,28 +21,28 @@ const CourseManagement = () => {
 
   const columns = [
     {
+      name: "Course Existing ID",
+      selector: (row) => row.courseExistingId,
+      sortable: true,
+    },
+    {
+      name: "User ID",
+      selector: (row) => row.userID,
+      sortable: true,
+    },
+    {
       name: "Course ID",
-      selector: (row) => row.courseId,
+      selector: (row) => row.idCourse,
       sortable: true,
     },
     {
-      name: "Name",
-      selector: (row) => row.name,
+      name: "Start Date",
+      selector: (row) => new Date(row.dateTimeStart).toLocaleString("en-US"),
       sortable: true,
     },
     {
-      name: "Title",
-      selector: (row) => row.title,
-      sortable: true,
-    },
-    {
-      name: "Description",
-      selector: (row) => row.description,
-      sortable: true,
-    },
-    {
-      name: "Price",
-      selector: (row) => `$${row.price.toFixed(2)}`,
+      name: "End Date",
+      selector: (row) => new Date(row.dateTimeEnd).toLocaleString("en-US"),
       sortable: true,
     },
     {
@@ -51,42 +51,39 @@ const CourseManagement = () => {
       sortable: true,
     },
     {
-      name: "Created",
-      selector: (row) => new Date(row.created).toLocaleString("en-US"),
-      sortable: true,
-    },
-    {
       name: "Actions",
-      cell: (row) => <ActionButtons id={row.courseId} />,
+      cell: (row) => <ActionButtons id={row.courseExistingId} />,
     },
   ];
 
   useEffect(() => {
-    fetchCourses();
+    fetchCourseExistings();
   }, []);
 
-  const fetchCourses = async () => {
+  const fetchCourseExistings = async () => {
     try {
-      const response = await getCourses();
+      const response = await getCourseExistings();
       setData(response || []);
     } catch (error) {
       console.error(error);
-      toast.error("Error fetching courses.");
+      toast.error("Error fetching course existings.");
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this course?")) {
+    if (
+      window.confirm("Are you sure you want to delete this course existing?")
+    ) {
       try {
-        const response = await deleteCourse(id);
+        const response = await deleteCourseExisting(id);
         if (response && response.EC === 0) {
           toast.success("Deleted successfully!");
-          fetchCourses();
+          fetchCourseExistings();
         } else {
           toast.error(response?.EM || "Error occurred!");
         }
       } catch (error) {
-        toast.error("Error deleting course.");
+        toast.error("Error deleting course existing.");
       }
     }
   };
@@ -97,8 +94,8 @@ const CourseManagement = () => {
 
   const filteredData = data.filter(
     (course) =>
-      course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.title.toLowerCase().includes(searchTerm.toLowerCase())
+      course.courseExistingId.toString().includes(searchTerm) ||
+      course.userID.toString().includes(searchTerm)
   );
 
   const ActionButtons = ({ id }) => (
@@ -113,7 +110,7 @@ const CourseManagement = () => {
   );
 
   const handleEdit = (id) => {
-    const course = data.find((item) => item.courseId === id);
+    const course = data.find((item) => item.courseExistingId === id);
     if (course) refModalCourse.current.open(course, "Update");
   };
 
@@ -121,14 +118,14 @@ const CourseManagement = () => {
     <div className="AdminCourses">
       <Card>
         <Card.Header className="text-white" style={{ color: "#ffffff" }}>
-          Course Management
+          Course Existing Management
         </Card.Header>
         <Card.Body>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <input
               type="text"
               className="form-control w-75"
-              placeholder="Search courses..."
+              placeholder="Search course existings..."
               value={searchTerm}
               onChange={handleSearch}
             />
@@ -136,15 +133,18 @@ const CourseManagement = () => {
               className="btn btn-success ms-2"
               onClick={() => setShowModal(true)} // Open the modal
             >
-              <IoIosAddCircleOutline /> Add Course
+              <IoIosAddCircleOutline /> Add Course Existing
             </button>
           </div>
           <DataTable columns={columns} data={filteredData} pagination />
         </Card.Body>
       </Card>
-      <AddCourseModal show={showModal} onClose={() => setShowModal(false)} />
+      <AddCourseExistingModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };
 
-export default CourseManagement;
+export default CourseExistingManagement;

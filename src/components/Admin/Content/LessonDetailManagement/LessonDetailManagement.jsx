@@ -5,88 +5,83 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 import {
-  deleteCourse,
-  getCourses,
-  addCourse,
-  updateCourse,
-} from "../../../../services/courseService";
-import AddCourseModal from "./AddCourseModal"; // Import the AddCourseModal
-import "./CourseManagement.scss";
+  deleteLessonDetail,
+  getLessonDetails,
+  addLessonDetail,
+  updateLessonDetail,
+} from "../../../../services/lessonDetailService.jsx"; // Assuming lessonService exists for lesson details
+import AddLessonDetailModal from "./AddLessonDetailModal.jsx"; // Import the AddLessonDetailModal
+import "./LessonDetailManagement.scss"; // Adjust CSS file as needed
 
-const CourseManagement = () => {
-  const refModalCourse = useRef();
+const LessonDetailManagement = () => {
+  const refModalLessonDetail = useRef();
   const [showModal, setShowModal] = useState(false); // State for controlling modal visibility
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
 
   const columns = [
     {
-      name: "Course ID",
-      selector: (row) => row.courseId,
+      name: "Lesson Detail ID",
+      selector: (row) => row.lessonDetailId,
       sortable: true,
     },
     {
-      name: "Name",
-      selector: (row) => row.name,
+      name: "Lesson ID",
+      selector: (row) => row.lessonId,
       sortable: true,
     },
     {
-      name: "Title",
-      selector: (row) => row.title,
+      name: "Lesson Name",
+      selector: (row) => row.lessonName,
       sortable: true,
     },
     {
-      name: "Description",
-      selector: (row) => row.description,
+      name: "Lesson Description",
+      selector: (row) => row.lessonDescription,
       sortable: true,
     },
     {
-      name: "Price",
-      selector: (row) => `$${row.price.toFixed(2)}`,
+      name: "Learning Progress",
+      selector: (row) => row.learningProgress,
       sortable: true,
     },
     {
-      name: "Active",
-      selector: (row) => (row.active ? "Yes" : "No"),
-      sortable: true,
-    },
-    {
-      name: "Created",
-      selector: (row) => new Date(row.created).toLocaleString("en-US"),
+      name: "Lesson Video",
+      selector: (row) => row.lessonVideo,
       sortable: true,
     },
     {
       name: "Actions",
-      cell: (row) => <ActionButtons id={row.courseId} />,
+      cell: (row) => <ActionButtons id={row.lessonDetailId} />,
     },
   ];
 
   useEffect(() => {
-    fetchCourses();
+    fetchLessonDetails();
   }, []);
 
-  const fetchCourses = async () => {
+  const fetchLessonDetails = async () => {
     try {
-      const response = await getCourses();
+      const response = await getLessonDetails();
       setData(response || []);
     } catch (error) {
       console.error(error);
-      toast.error("Error fetching courses.");
+      toast.error("Error fetching lesson details.");
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this course?")) {
+    if (window.confirm("Are you sure you want to delete this lesson detail?")) {
       try {
-        const response = await deleteCourse(id);
+        const response = await deleteLessonDetail(id);
         if (response && response.EC === 0) {
           toast.success("Deleted successfully!");
-          fetchCourses();
+          fetchLessonDetails();
         } else {
           toast.error(response?.EM || "Error occurred!");
         }
       } catch (error) {
-        toast.error("Error deleting course.");
+        toast.error("Error deleting lesson detail.");
       }
     }
   };
@@ -96,9 +91,11 @@ const CourseManagement = () => {
   };
 
   const filteredData = data.filter(
-    (course) =>
-      course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.title.toLowerCase().includes(searchTerm.toLowerCase())
+    (lessonDetail) =>
+      lessonDetail.lessonName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      lessonDetail.lessonId.toString().includes(searchTerm.toLowerCase())
   );
 
   const ActionButtons = ({ id }) => (
@@ -113,22 +110,22 @@ const CourseManagement = () => {
   );
 
   const handleEdit = (id) => {
-    const course = data.find((item) => item.courseId === id);
-    if (course) refModalCourse.current.open(course, "Update");
+    const lessonDetail = data.find((item) => item.lessonDetailId === id);
+    if (lessonDetail) refModalLessonDetail.current.open(lessonDetail, "Update");
   };
 
   return (
-    <div className="AdminCourses">
+    <div className="AdminLessonDetails">
       <Card>
         <Card.Header className="text-white" style={{ color: "#ffffff" }}>
-          Course Management
+          Lesson Detail Management
         </Card.Header>
         <Card.Body>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <input
               type="text"
               className="form-control w-75"
-              placeholder="Search courses..."
+              placeholder="Search lesson details..."
               value={searchTerm}
               onChange={handleSearch}
             />
@@ -136,15 +133,18 @@ const CourseManagement = () => {
               className="btn btn-success ms-2"
               onClick={() => setShowModal(true)} // Open the modal
             >
-              <IoIosAddCircleOutline /> Add Course
+              <IoIosAddCircleOutline /> Add Lesson Detail
             </button>
           </div>
           <DataTable columns={columns} data={filteredData} pagination />
         </Card.Body>
       </Card>
-      <AddCourseModal show={showModal} onClose={() => setShowModal(false)} />
+      <AddLessonDetailModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };
 
-export default CourseManagement;
+export default LessonDetailManagement;
