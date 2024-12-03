@@ -14,6 +14,7 @@ export const ROUTERS = {
     RESETPASSWORD: "/resetPassword",
     CHANGEPASSWORD: "/changePassword",
     TESTRESULT: "/testResults/:historyID",
+    LESSON: "/lesson/:courseId",
   },
   ADMIN: {
     DASHBOARD: "dashboard", // Chỉ cần để "dashboard" mà không có /

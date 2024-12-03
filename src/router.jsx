@@ -21,6 +21,7 @@ import PartManagement from "./components/Admin/Content/PartManagement/PartManage
 import QuestionManagement from "./components/Admin/Content/QuestionManagement/QuestionManagement";
 import CourseManagement from "./components/Admin/Content/CourseManagement/CourseManagement";
 import PurchaseForm from "./components/User/PurchaseForm/PurchaseForm";
+import Lesson from "./components/User/Lesson/Lesson";
 
 const renderUserRouter = () => {
   const userRouters = [
@@ -38,6 +39,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.USERCOURSE, element: <UserCourse /> },
     { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
     { path: ROUTERS.USER.TESTRESULT, element: <TestResult /> },
+    { path: ROUTERS.USER.LESSON, element: <Lesson /> },
   ];
 
   return userRouters.map((route, key) => (
