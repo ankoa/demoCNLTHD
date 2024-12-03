@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Lesson.scss";
 
 const Lesson = () => {
@@ -54,6 +55,7 @@ const Lesson = () => {
     }
   ];
 
+  const navigate = useNavigate();
 
   const [selectedContent, setSelectedContent] = useState(null); // Mặc định là null
   const [selectedIndex, setSelectedIndex] = useState(null); // Chỉ mục của item đang được chọn
@@ -68,8 +70,7 @@ const Lesson = () => {
   };
 
   const goToHomePage = () => {
-    setSelectedContent(null);
-    setSelectedIndex(null); // Đặt lại chỉ mục về null khi quay lại trang chủ
+    navigate("/");
   };
 
   const getYouTubeVideoId = (url) => {
