@@ -75,6 +75,9 @@ const Lesson = () => {
   const goToHomePage = () => {
     navigate("/");
   };
+  const goToMyCourse = () => {
+    navigate("/my-course");
+  };
 
   const getYouTubeVideoId = (url) => {
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|\S+\?v=|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
@@ -91,6 +94,10 @@ const Lesson = () => {
         <span className="home-link" onClick={goToHomePage}>
           Trang chủ
         </span>
+
+        <span className="home-link" onClick={goToMyCourse}>
+          / Khóa học của tôi
+        </span>
         <span> / Lesson</span>
       </div>
       <div className="lesson-layout">
@@ -105,7 +112,6 @@ const Lesson = () => {
             </div>
           ))}
         </div>
-        {/* <div className="content">{selectedContent}</div> */}
         <div className="content">
           {selectedContent ? (
             <div>
@@ -114,24 +120,24 @@ const Lesson = () => {
                   <h3>{detail.lessonName}</h3>
                   <p>{detail.lessonDescription}</p>
                   <p>Tiến độ học: {detail.learningpProgress}%</p>
-                  {/* <a href={detail.lessonVideo} target="_blank" rel="noopener noreferrer">
-                    Xem video
-                  </a> */}
 
                   {/* Nhúng video YouTube vào trang */}
                   <div className="video-container">
                     {detail.lessonVideo ? (
-                      <iframe
-                        width="100%"
-                        height="315"
-                        src={`https://www.youtube.com/embed/${getYouTubeVideoId(detail.lessonVideo)}`}
-                        title={detail.lessonName}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
+                      getYouTubeVideoId(detail.lessonVideo) ? (
+                        <iframe
+                          width="560"
+                          height="315"
+                          src={`https://www.youtube-nocookie.com/embed/${getYouTubeVideoId(detail.lessonVideo)}`}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      ) : (
+                        <p>Video ID không hợp lệ</p> // Thông báo khi không có ID video hợp lệ
+                      )
                     ) : (
-                      <p>Video not available</p> // Hiển thị thông báo nếu không có video
+                      <p>Video not available</p> // Thông báo khi không có video
                     )}
                   </div>
                 </div>

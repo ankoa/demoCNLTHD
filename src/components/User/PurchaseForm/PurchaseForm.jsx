@@ -14,6 +14,7 @@ const PurchaseForm = () => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
+  //xử lý mua khóa học
   const handleBuy = () => {
     alert(`Bạn có muốn mua khóa học ${formData.name} với giá $${formData.price}!`);
   };

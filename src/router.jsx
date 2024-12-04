@@ -28,6 +28,7 @@ import CourseExistingManagement from "./components/Admin/Content/CourseExistingM
  */
 import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
 import LessonDetailManagement from "./components/Admin/Content/LessonDetailManagement/LessonDetailManagement";
+import MyCourses from "./components/User/MyCourse/MyCourse";
 const renderUserRouter = () => {
   const userRouters = [
     { path: ROUTERS.USER.HOMEPAGE, element: <Homepage /> },
@@ -45,6 +46,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
     { path: ROUTERS.USER.TESTRESULT, element: <TestResult /> },
     { path: ROUTERS.USER.LESSON, element: <Lesson /> },
+    { path: ROUTERS.USER.MYCOURSE, element: <MyCourses/>},
   ];
 
   return userRouters.map((route, key) => (
