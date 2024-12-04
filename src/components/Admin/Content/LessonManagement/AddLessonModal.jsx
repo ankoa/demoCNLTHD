@@ -31,10 +31,10 @@ const StyledModal = styled(Modal)`
 
 const AddLessonModal = (props) => {
   const [lesson, setLesson] = useState({
-    lessonId: null, // Null because it's auto-generated
-    courseId: 1, // Assuming courseId is fixed or passed as a prop
+    lessonId: 0, // Null because it's auto-generated
+    courseId: "", // Now editable through the form
     lessonName: "",
-    titleLessonId: 0, // Default value, can be adjusted based on requirements
+    titleLessonId: "", // Changed default to empty string for validation
   });
 
   const handleChange = (e) => {
@@ -43,13 +43,33 @@ const AddLessonModal = (props) => {
   };
 
   const handleSubmit = async () => {
+    // Validation: Ensure all fields are filled
+    if (
+      !lesson.lessonName.trim() ||
+      !lesson.courseId ||
+      !lesson.titleLessonId
+    ) {
+      toast.error("All fields are required!");
+      return;
+    }
+
+    const lessonData = {
+      ...lesson,
+      courseId: parseInt(lesson.courseId, 10), // Ensure courseId is a number
+      titleLessonId: parseInt(lesson.titleLessonId, 10), // Ensure titleLessonId is a number
+    };
+
+    // Print the data before calling the API
+    console.log("Data to be sent:", lessonData);
+
     try {
-      const response = await addLesson(lesson);
-      if (response && response.EC === 0) {
+      const response = await addLesson(lessonData);
+
+      if (response && response.ec === 1) {
         toast.success("Lesson added successfully!");
         props.onClose();
       } else {
-        toast.error(response?.EM || "Error occurred!");
+        toast.error(response?.em || "Error occurred!");
       }
     } catch (error) {
       toast.error("Error adding lesson.");
@@ -63,6 +83,16 @@ const AddLessonModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
+          <Form.Group controlId="formCourseId">
+            <Form.Label>Course ID</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Enter course ID"
+              name="courseId"
+              value={lesson.courseId}
+              onChange={handleChange}
+            />
+          </Form.Group>
           <Form.Group controlId="formLessonName">
             <Form.Label>Lesson Name</Form.Label>
             <Form.Control

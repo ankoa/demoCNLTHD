@@ -76,19 +76,7 @@ const CourseManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this course?")) {
-      try {
-        const response = await deleteCourse(id);
-        if (response && response.EC === 0) {
-          toast.success("Deleted successfully!");
-          fetchCourses();
-        } else {
-          toast.error(response?.EM || "Error occurred!");
-        }
-      } catch (error) {
-        toast.error("Error deleting course.");
-      }
-    }
+    <deleteCourse id={id} />;
   };
 
   const handleSearch = (e) => {

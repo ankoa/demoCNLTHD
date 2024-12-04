@@ -12,7 +12,7 @@ const getCourses = async () => {
       console.log("Courses data:", response);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -28,10 +28,10 @@ const addCourse = async (courseData) => {
       headers: { "Content-Type": "application/json" },
     });
     if (response.ec === 1) {
-      console.log("Course added:", response.data.dt);
-      return response.dt; // Trả về dữ liệu trong phần 'dt'
+      console.log("Course added:", response.dt);
+      return response; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
