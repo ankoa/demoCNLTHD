@@ -2,7 +2,7 @@
   max-width: 600px;
   margin: auto;
   margin-top: 50px;
-  padding: 100px;
+  padding: 80px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f9f9f9;
@@ -68,36 +68,26 @@
   background-color: darkgreen;
 }
 
-.breadcrumb {
+.purchase-form-buttons {
   display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 20px;
-  font-size: 14px;
-  color: #555;
-  background-color: #fff;
+  justify-content: space-between;
+  margin-top: 50px;
 }
 
-.breadcrumb-button {
-  background-color: transparent;
-  border: none;
-  color: #007bff;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
+.purchase-form-buttons button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
-  transition: color 0.3s ease;
+  margin-right: 10px;
 }
 
-.breadcrumb-button:hover {
-  color: #0056b3;
+.purchase-form-buttons .back-button {
+  background-color: #b33535;
+  border: 1px solid #ddd;
+  color: #fff;
 }
 
-.breadcrumb-divider {
-  color: #888;
-}
-
-.breadcrumb-current {
-  font-weight: bold;
-  color: #333;
+.purchase-form-buttons .back-button:hover {
+  background-color: #ddd;
 }

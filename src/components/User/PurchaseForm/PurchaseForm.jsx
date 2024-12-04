@@ -1,13 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
-
+import ModalConfirmRedirect from './LoginBack';
 import './PurchaseForm.css'; // Import file CSS
 
 const PurchaseForm = () => {
+  const userID = useSelector((state) => state.userReducer.account.userid);
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { image, title, price, name, description, courseId } = location.state || {};
+
+  // Hàm mở modal
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+  // Hàm đóng modal
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  useEffect(() => {
+    if(!userID){
+      setOpenModal(true);
+    }
+  }, [userID]);
 
   // Định dạng giá tiền
   const formatPrice = (price) => {
@@ -19,31 +37,12 @@ const PurchaseForm = () => {
     alert(`Bạn có muốn mua khóa học ${formData.name} với giá $${formData.price}!`);
   };
 
-  const handleHomeBack = () => {
-    navigate("/");
-  };
-
-  const handleCourseBack = () => {
+  const handleBack = () => {
     navigate("/onlinecourse");
   };
-useEffect(()=>{
-  console.log(title)
-})
 
   return (
     <>
-      <div className="breadcrumb">
-        <button onClick={handleHomeBack}>
-          <span>Trang chủ</span>
-        </button>
-        <span className="breadcrumb-divider">/</span>
-        <button onClick={handleCourseBack}>
-          <span>Khóa học</span>
-        </button>
-        <span className="breadcrumb-divider">/</span>
-        <span className="breadcrumb-current">{courseId}</span>
-      </div>
-
       <div className="purchase-form-container">
         <h2>Thông tin khóa học</h2>
         <form>
@@ -66,11 +65,21 @@ useEffect(()=>{
             <span>{formatPrice(price)}</span>
           </div>
 
-          <button type="button" onClick={handleBuy}>
-            Mua ngay
-          </button>
+          <div className="purchase-form-buttons">
+            <button type="button" onClick={handleBack} className="back-button">
+              Quay lại
+            </button>
+            <button type="button" onClick={handleBuy}>
+              Mua ngay
+            </button>
+          </div>
         </form>
       </div>
+
+      <ModalConfirmRedirect
+        open={openModal}
+        onClose={handleCloseModal} // Hàm đóng modal
+        />
     </>
   );
 };

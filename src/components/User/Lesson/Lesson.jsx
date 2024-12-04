@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./Lesson.scss";
 import { getLessons } from "../../../services/lessonService";
 import { getLessonDetails } from "../../../services/lessonDetailService";
-import VideoPlayer from "./VideoPlayer";
 
 const Lesson = () => {
   const navigate = useNavigate();
