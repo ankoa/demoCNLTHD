@@ -64,7 +64,7 @@ const Header = () => {
             </button>
             <button
               className="nav-item"
-              onClick={() => navigate("/onlinecouse")}
+              onClick={() => navigate("/onlinecourse")}
             >
               Khóa học
             </button>

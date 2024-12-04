@@ -1,0 +1,70 @@
+.user-courses {
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.course-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.course-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.course-image {
+  width: 120px; /* Giới hạn chiều rộng của ảnh */
+  height: auto; /* Giữ tỷ lệ ảnh không bị méo */
+  border-radius: 5px;
+  margin-bottom: 0; /* Xóa khoảng cách dưới ảnh */
+}
+
+.course-info {
+  flex: 1; /* Chiếm hết không gian còn lại */
+  display: flex; /* Thiết lập lại flex để sắp xếp thông tin dọc */
+  flex-direction: column; /* Sắp xếp các phần tử con theo chiều dọc */
+}
+
+.course-item h3 {
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.course-item p {
+  font-size: 16px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.course-info > p:last-child {
+  margin-bottom: 10px; /* Đảm bảo khoảng cách dưới thẻ p cuối cùng */
+}
+
+@media (max-width: 768px) {
+  .course-list {
+    grid-template-columns: 1fr; /* Chuyển thành 1 cột trên các màn hình nhỏ */
+  }
+
+  .course-item {
+    flex-direction: column; /* Khi màn hình nhỏ, ảnh sẽ nằm trên thông tin */
+    align-items: center; /* Căn giữa ảnh và thông tin */
+  }
+
+  .course-image {
+    margin-bottom: 15px; /* Thêm khoảng cách dưới ảnh khi theo chiều dọc */
+  }
+}

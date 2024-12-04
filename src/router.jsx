@@ -20,11 +20,15 @@ import UserManagement from "./components/Admin/Content/UserManagement/UserManage
 import PartManagement from "./components/Admin/Content/PartManagement/PartManagement";
 import QuestionManagement from "./components/Admin/Content/QuestionManagement/QuestionManagement";
 import CourseManagement from "./components/Admin/Content/CourseManagement/CourseManagement";
+import PurchaseForm from "./components/User/PurchaseForm/PurchaseForm";
+import Lesson from "./components/User/Lesson/Lesson";
+
 import CourseExistingManagement from "./components/Admin/Content/CourseExistingManagement/CourseExistingManagement";
 /* import CourseDetailManagement from "./components/Admin/Content/CourseDetailManagement/CourseDetailManagement";
  */
 import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
 import LessonDetailManagement from "./components/Admin/Content/LessonDetailManagement/LessonDetailManagement";
+import MyCourses from "./components/User/MyCourse/MyCourse";
 const renderUserRouter = () => {
   const userRouters = [
     { path: ROUTERS.USER.HOMEPAGE, element: <Homepage /> },
@@ -32,6 +36,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.TEST_PAGE, element: <TestDetail /> },
     { path: ROUTERS.USER.MAIN_TEST, element: <MainTest /> },
     { path: ROUTERS.USER.ONLINECOURSE, element: <OnlineCourse /> },
+    { path: ROUTERS.USER.COURSEPURCHASE, element: <PurchaseForm/> },
     { path: ROUTERS.USER.LOGIN, element: <Login /> },
     { path: ROUTERS.USER.REGISTER, element: <Register /> },
     { path: ROUTERS.USER.FINDACCOUNT, element: <FindAccount /> },
@@ -40,6 +45,8 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.USERCOURSE, element: <UserCourse /> },
     { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
     { path: ROUTERS.USER.TESTRESULT, element: <TestResult /> },
+    { path: ROUTERS.USER.LESSON, element: <Lesson /> },
+    { path: ROUTERS.USER.MYCOURSE, element: <MyCourses/>},
   ];
 
   return userRouters.map((route, key) => (

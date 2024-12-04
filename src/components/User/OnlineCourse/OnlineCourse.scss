@@ -1,8 +1,7 @@
+
 .online-course-container{
-  padding: 5vh 10vh 10vh 10vh;
+  padding: 5vh 10vh;
   background-color: rgb(248, 248, 248);
-  max-height: calc(100vh - 90px);
-  overflow-y: auto;
 
   @media (max-width: 1200px) {
     padding-left: 15vh;
@@ -43,10 +42,19 @@
       width: 100%;
     }
   }
+  
+  .content-header h1 {
+    padding-top: 30px;
+  }
+
+  .content-header p {
+    padding-top: 20px;
+  }
 
   .site-content-wrapper{
     display: flex;
     position: relative;
+    padding: 10px;
   }
 
   .content-wrapper{
