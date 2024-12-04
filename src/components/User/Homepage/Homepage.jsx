@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import "./Homepage.scss";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { getCourses } from "../../../services/courseService";
 
 const Homepage = () => {
     const settings = {
@@ -16,6 +18,46 @@ const Homepage = () => {
         autoplay: true, // Thêm autoplay để slider tự động cuộn
         autoplaySpeed: 3000, // Thay đổi tốc độ tự động cuộn
         arrows: false, // Ẩn các nút điều hướng
+    };
+
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        //hàm lấy lesson của 1 course
+        const fetchCourses = async () => {
+            setLoading(true);
+            try {
+                const data = await getCourses(); // Gọi API
+                const first10Courses = data.slice(0, 10); // Lấy 10 khóa học đầu tiên
+                setCourses(first10Courses);
+                console.log("Course: ", first10Courses);
+            } catch (err) {
+                console.log("Lỗi khi lấy dữ liệu course: ", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCourses();
+    }, []); // Chỉ chạy 1 lần khi component mount
+
+    const handleCourseClick = (course) => {
+        navigate(`/onlinecourse/purchase/${course.courseId}`, {
+            state: {
+                title: course.title,
+                price: course.price,
+                name: course.name,
+                description: course.description,
+                courseId: course.courseId
+            }, // Pass entire course info as state
+        });
+    };
+
+    // Định dạng giá tiền
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
     };
 
     return (
@@ -50,66 +92,24 @@ const Homepage = () => {
             </div>
 
             <div className='new-test-container'>
-                <Card style={{ width: '18rem' }}>
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem' }}>
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem' }}>
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem' }}>
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem' }}>
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem' }}>
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
-                    </Card.Body>
-                </Card>
+                {courses.map((course, index) => (
+                    <Card key={index} style={{ width: '23rem', marginBottom: '20px' }} >
+                        <Card.Img variant="top" src={course.image || "default-image.jpg"} alt={course.title} />
+                        <Card.Body>
+                            <Card.Title>{course.title}</Card.Title>
+                            <Card.Text>{course.description}</Card.Text>
+                            <div className='card-bottom'>
+                                <Card.Text className="card-price">{formatPrice(course.price)}</Card.Text>
+                                <Button
+                                    onClick={() => handleCourseClick(course)}
+                                    variant="primary"
+                                >
+                                    Mua
+                                </Button>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                ))}
             </div>
         </div>
     );

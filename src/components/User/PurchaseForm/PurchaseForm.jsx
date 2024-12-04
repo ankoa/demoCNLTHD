@@ -62,7 +62,7 @@ const PurchaseForm = () => {
 
           <div className="purchase-form-container-info">
             <label>Giá: </label>
-            <span>{formatPrice(price)}</span>
+            <span className="course-price">{formatPrice(price)}</span>
           </div>
 
           <div className="purchase-form-buttons">

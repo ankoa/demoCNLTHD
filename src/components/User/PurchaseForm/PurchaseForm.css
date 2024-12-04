@@ -2,7 +2,7 @@
   max-width: 600px;
   margin: auto;
   margin-top: 50px;
-  padding: 80px;
+  padding: 40px 50px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f9f9f9;
@@ -18,24 +18,22 @@
 .purchase-form-container form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 
 .purchase-form-container-info {
   display: flex;
-  
+  align-items: center; /* Căn giữa label và span */
   justify-content: space-between;
-  gap: 5px;
-  /* padding-left: 30px;
-  padding-right: 30px; */
+  gap: 15px; /* Khoảng cách giữa label và giá trị */
 }
 
 .purchase-form-container-info label {
   font-weight: bold;
-  margin-bottom: 5px;
   color: #555;
-  width: 120px;
+  width: 100px; /* Chiều rộng cố định cho label */
   text-align: left;
+  flex-shrink: 0; /* Ngăn chặn label co lại */
 }
 
 .purchase-form-container-info span {
@@ -43,15 +41,14 @@
   line-height: 1.6;
   color: #333;
   text-align: left;
+  flex-grow: 1; /* Cho phép phần span chiếm không gian còn lại */
 }
 
-.purchase-form-container img {
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-  margin-top: 10px;
+.purchase-form-container-info .course-price{
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #e74c3c; /* Màu đỏ tươi để nổi bật */
 }
-
 .purchase-form-container button {
   width: 100%;
   padding: 10px;
@@ -71,7 +68,7 @@
 .purchase-form-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 50px;
+  gap: 10px;
 }
 
 .purchase-form-buttons button {
@@ -79,7 +76,6 @@
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  margin-right: 10px;
 }
 
 .purchase-form-buttons .back-button {
