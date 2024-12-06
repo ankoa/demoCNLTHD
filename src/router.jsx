@@ -24,6 +24,7 @@ import PurchaseForm from "./components/User/PurchaseForm/PurchaseForm";
 import Lesson from "./components/User/Lesson/Lesson";
 
 import CourseExistingManagement from "./components/Admin/Content/CourseExistingManagement/CourseExistingManagement";
+import UserProfile from "./components/User/UserProfile/UserProfile";
 /* import CourseDetailManagement from "./components/Admin/Content/CourseDetailManagement/CourseDetailManagement";
  */
 import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
@@ -36,7 +37,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.TEST_PAGE, element: <TestDetail /> },
     { path: ROUTERS.USER.MAIN_TEST, element: <MainTest /> },
     { path: ROUTERS.USER.ONLINECOURSE, element: <OnlineCourse /> },
-    { path: ROUTERS.USER.COURSEPURCHASE, element: <PurchaseForm/> },
+    { path: ROUTERS.USER.COURSEPURCHASE, element: <PurchaseForm /> },
     { path: ROUTERS.USER.LOGIN, element: <Login /> },
     { path: ROUTERS.USER.REGISTER, element: <Register /> },
     { path: ROUTERS.USER.FINDACCOUNT, element: <FindAccount /> },
@@ -46,7 +47,8 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
     { path: ROUTERS.USER.TESTRESULT, element: <TestResult /> },
     { path: ROUTERS.USER.LESSON, element: <Lesson /> },
-    { path: ROUTERS.USER.MYCOURSE, element: <MyCourses/>},
+    { path: ROUTERS.USER.MYCOURSE, element: <MyCourses /> },
+    { path: ROUTERS.USER.USERPROFILE, element: <UserProfile /> },
   ];
 
   return userRouters.map((route, key) => (
