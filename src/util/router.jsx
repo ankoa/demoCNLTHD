@@ -13,6 +13,7 @@ export const ROUTERS = {
     RESETPASSWORD: "/resetPassword",
     CHANGEPASSWORD: "/changePassword",
     TESTRESULT: "/testResults/:historyID",
+    USERPROFILE:"/userprofile",
   },
   ADMIN: {
     DASHBOARD: "dashboard", // Chỉ cần để "dashboard" mà không có /

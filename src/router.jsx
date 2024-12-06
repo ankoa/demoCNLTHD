@@ -21,6 +21,7 @@ import PartManagement from "./components/Admin/Content/PartManagement/PartManage
 import QuestionManagement from "./components/Admin/Content/QuestionManagement/QuestionManagement";
 import CourseManagement from "./components/Admin/Content/CourseManagement/CourseManagement";
 import CourseExistingManagement from "./components/Admin/Content/CourseExistingManagement/CourseExistingManagement";
+import UserProfile from "./components/User/UserProfile/UserProfile";
 /* import CourseDetailManagement from "./components/Admin/Content/CourseDetailManagement/CourseDetailManagement";
  */
 import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
@@ -40,6 +41,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.USERCOURSE, element: <UserCourse /> },
     { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
     { path: ROUTERS.USER.TESTRESULT, element: <TestResult /> },
+    { path: ROUTERS.USER.USERPROFILE, element: <UserProfile /> },
   ];
 
   return userRouters.map((route, key) => (
