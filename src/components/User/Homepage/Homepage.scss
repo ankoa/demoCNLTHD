@@ -62,32 +62,96 @@
 
     .new-test-container {
         display: grid;
-        grid-template-columns: repeat(4, 1fr); // 4 cột
-        gap: 10px; // Khoảng cách giữa các ảnh
+        grid-template-columns: repeat(4, 1fr); /* 4 cột */
+        gap: 20px; /* Khoảng cách giữa các card */
         padding-left: 10vh;
         padding-right: 10vh;
         padding-bottom: 5vh;
         margin: auto;
         justify-items: center;
         background-color: rgb(235, 230, 230);
-
-        // Media queries để responsive
+      
+        /* Media queries để responsive */
         @media (max-width: 1200px) {
-            grid-template-columns: repeat(3, 1fr); // 3 cột
+          grid-template-columns: repeat(3, 1fr); /* 3 cột */
         }
-
+      
         @media (max-width: 992px) {
-            grid-template-columns: repeat(2, 1fr); // 2 cột
+          grid-template-columns: repeat(2, 1fr); /* 2 cột */
         }
-
+      
         @media (max-width: 768px) {
-            grid-template-columns: 1fr; // 1 cột
+          grid-template-columns: 1fr; /* 1 cột */
         }
+      }
+      
+      .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Đảm bảo chiều cao card đồng đều */
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .card-img-top {
+        object-fit: cover; /* Điều chỉnh ảnh không bị méo */
+        height: 200px; /* Chiều cao của ảnh */
+        width: 100%;
+      }
+      
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; /* Làm cho phần body của card chiếm hết không gian còn lại */
+        padding: 1rem;
+      }
+      
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      
+      .card-text {
+        font-size: 1rem;
+        color: #555;
+        
+        /* Cắt bớt mô tả khi quá dài */
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Số dòng tối đa */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+        /* Nút Mua */
+       .card-bottom {
+            display: flex;
+            flex-direction: column;
+            margin-top: auto; /* Đảm bảo giá và nút "Mua" luôn ở dưới cùng */
+       }
+      .card-price {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #e74c3c; /* Màu đỏ tươi để nổi bật */
+        margin-bottom: 20px; /* Khoảng cách giữa giá và nút "Mua" */
+      }
 
-        .card {
-            margin-top: 50px;
-        }
-    }
+      .card button {
+        width: 100%;
+        padding: 10px;
+        background-color: #3323a0;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      
+      .card button:hover {
+        background-color: #1f1a7f;
+      }
+      
 }
 
 .slick-next,

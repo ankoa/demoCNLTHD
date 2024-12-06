@@ -43,6 +43,10 @@
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky; /* Làm cho menu cố định khi cuộn */
+  top: 100px; /* Khoảng cách từ phía trên của viewport */
+  height: calc(100vh - 40px); /* Chiều cao của menu (100% chiều cao của viewport trừ đi padding) */
+  overflow-y: auto; /* Thêm thanh cuộn dọc nếu menu có nhiều nội dung */
 }
 
 .lesson-container .lesson-layout .menu .menu-item {

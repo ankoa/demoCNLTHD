@@ -54,6 +54,7 @@ const CourseList = ({ courseData }) => {
           {courseData
             .map((course) => (
               <CourseItem
+                key={course.courseId}
                 courseId={course.courseId}
                 image={course.image}
                 name={course.name}
