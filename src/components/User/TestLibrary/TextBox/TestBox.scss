@@ -50,7 +50,7 @@
       margin-top: 0.75rem;
 
       .tag {
-        background-color: #1a73e8;
+        background-color: #000000;
         color: #ffffff;
         font-size: 0.8rem;
         padding: 0.3rem 0.6rem;
@@ -86,7 +86,7 @@
   margin-top: 2rem;
 
   button {
-    background-color: #1a73e8;
+    background-color: #000000;
     color: #ffffff;
     border: none;
     padding: 0.5rem 1rem;
@@ -96,12 +96,12 @@
     transition: background-color 0.3s, transform 0.2s;
 
     &:hover {
-      background-color: #155ab3;
+      background-color: #848b94;
       transform: scale(1.05);
     }
 
     &.active {
-      background-color: #155ab3;
+      background-color: #848b94;
       font-weight: 700;
     }
 

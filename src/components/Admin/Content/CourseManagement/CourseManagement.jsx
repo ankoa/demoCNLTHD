@@ -91,7 +91,7 @@ const CourseManagement = () => {
 
   useEffect(() => {
     fetchCourses();
-  }, [data]);
+  }, []);
 
   const fetchCourses = async () => {
     try {
