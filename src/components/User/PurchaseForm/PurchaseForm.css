@@ -87,3 +87,45 @@
 .purchase-form-buttons .back-button:hover {
   background-color: #ddd;
 }
+
+
+
+.payment-buttons {
+  display: flex; /* Sử dụng flexbox cho các nút */
+  justify-content: space-between; /* Căn giữa các nút */
+  width: 80%; /* Chiếm toàn bộ chiều rộng của phần chứa */
+}
+
+.payment-buttons button {
+  flex: 1; /* Chiếm không gian đều nhau giữa các nút */
+  padding: 5px 20px; /* Padding trong nút */
+  margin: 0 10px;
+  border: 1px solid black; /* Không có đường viền */
+  border-radius: 5px; /* Bo góc */
+  cursor: pointer; /* Con trỏ khi hover */
+  font-size: 16px; /* Kích thước chữ */
+  display: flex; /* Căn giữa logo và chữ */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  transition: all 0.3s ease; /* Hiệu ứng khi thay đổi */
+  background-color: #fff;
+  color: #000;
+}
+
+/* Thêm hiệu ứng hover */
+.payment-buttons button:hover {
+  background-color: #343cca; /* Màu nền khi hover */
+  color: #fff;
+}
+
+/* Thêm hiệu ứng active khi click */
+.payment-buttons button.active {
+  background-color: #343cca; /* Màu nền khi button được chọn */
+  color: white; /* Màu chữ khi chọn */
+}
+
+.payment-buttons img {
+  margin-right: 5px; /* Khoảng cách giữa logo và chữ */
+  width: 20px; /* Kích thước logo */
+  height: 20px; /* Kích thước logo */
+}

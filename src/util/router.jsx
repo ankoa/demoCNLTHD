@@ -15,7 +15,8 @@ export const ROUTERS = {
     CHANGEPASSWORD: "/changePassword",
     TESTRESULT: "/testResults/:historyID",
     LESSON: "/lesson/:courseId",
-    MYCOURSE: "/my-course"
+    MYCOURSE: "/my-course",
+    PAYMENTSUCCESS: "/payment-success",
   },
   ADMIN: {
     DASHBOARD: "dashboard", // Chỉ cần để "dashboard" mà không có /

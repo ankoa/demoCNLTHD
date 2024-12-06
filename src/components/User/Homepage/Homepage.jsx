@@ -93,7 +93,7 @@ const Homepage = () => {
 
             <div className='new-test-container'>
                 {courses.map((course, index) => (
-                    <Card key={index} style={{ width: '23rem', marginBottom: '20px' }} >
+                    <Card key={index} style={{ width: '20rem', marginBottom: '20px' }} >
                         <Card.Img variant="top" src={course.image || "default-image.jpg"} alt={course.title} />
                         <Card.Body>
                             <Card.Title>{course.title}</Card.Title>

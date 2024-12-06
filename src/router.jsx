@@ -29,6 +29,7 @@ import CourseExistingManagement from "./components/Admin/Content/CourseExistingM
 import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
 import LessonDetailManagement from "./components/Admin/Content/LessonDetailManagement/LessonDetailManagement";
 import MyCourses from "./components/User/MyCourse/MyCourse";
+import PaymentSuccess from "./components/User/PurchaseForm/PaymentSuccess";
 const renderUserRouter = () => {
   const userRouters = [
     { path: ROUTERS.USER.HOMEPAGE, element: <Homepage /> },
@@ -47,6 +48,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.TESTRESULT, element: <TestResult /> },
     { path: ROUTERS.USER.LESSON, element: <Lesson /> },
     { path: ROUTERS.USER.MYCOURSE, element: <MyCourses/>},
+    { path: ROUTERS.USER.PAYMENTSUCCESS, element: <PaymentSuccess/>},
   ];
 
   return userRouters.map((route, key) => (

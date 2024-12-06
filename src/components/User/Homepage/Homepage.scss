@@ -62,7 +62,7 @@
 
     .new-test-container {
         display: grid;
-        grid-template-columns: repeat(4, 1fr); /* 4 cột */
+        grid-template-columns: repeat(4, 1fr); /* 3 cột */
         gap: 20px; /* Khoảng cách giữa các card */
         padding-left: 10vh;
         padding-right: 10vh;
@@ -96,7 +96,7 @@
       
       .card-img-top {
         object-fit: cover; /* Điều chỉnh ảnh không bị méo */
-        height: 200px; /* Chiều cao của ảnh */
+        height: 150px; /* Chiều cao của ảnh */
         width: 100%;
       }
       
