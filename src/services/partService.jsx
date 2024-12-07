@@ -1,8 +1,7 @@
 import createAxiosInstance from "../util/axiosCustomize";
 
-// Initialize axios instance with the base URL
-const axios = createAxiosInstance("https://localhost:5001"); // Specify your base URL
-
+const API_BASE_URL = "http://examservice.somee.com/";
+const axios = createAxiosInstance(API_BASE_URL);
 // Fetch all parts
 const getParts = async () => {
   try {

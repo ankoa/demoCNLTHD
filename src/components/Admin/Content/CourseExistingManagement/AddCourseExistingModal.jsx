@@ -31,12 +31,11 @@ const StyledModal = styled(Modal)`
 
 const AddCourseExistingModal = (props) => {
   const [courseExisting, setCourseExisting] = useState({
-    courseExistingId: "",
     userID: "",
     idCourse: "",
     dateTimeStart: "",
     dateTimeEnd: "",
-    active: true,
+    active: 1, // Set to 1 (active) by default
   });
 
   const handleChange = (e) => {
@@ -45,13 +44,31 @@ const AddCourseExistingModal = (props) => {
   };
 
   const handleSubmit = async () => {
+    // Kiểm tra từng trường một và hiển thị thông báo lỗi cụ thể
+    if (!courseExisting.userID) {
+      toast.error("Please enter the User ID!");
+      return;
+    }
+    if (!courseExisting.idCourse) {
+      toast.error("Please enter the Course ID!");
+      return;
+    }
+    if (!courseExisting.dateTimeStart) {
+      toast.error("Please select the Start Date and Time!");
+      return;
+    }
+    if (!courseExisting.dateTimeEnd) {
+      toast.error("Please select the End Date and Time!");
+      return;
+    }
+
     try {
       const response = await addCourseExisting(courseExisting);
-      if (response && response.EC === 0) {
+      if (response && response.ec === 1) {
         toast.success("Course existing added successfully!");
         props.onClose();
       } else {
-        toast.error(response?.EM || "Error occurred!");
+        toast.error(response?.em || "Error occurred!");
       }
     } catch (error) {
       toast.error("Error adding course existing.");
@@ -65,16 +82,6 @@ const AddCourseExistingModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group controlId="formCourseExistingId">
-            <Form.Label>Course Existing ID</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter course existing ID"
-              name="courseExistingId"
-              value={courseExisting.courseExistingId}
-              onChange={handleChange}
-            />
-          </Form.Group>
           <Form.Group controlId="formUserID">
             <Form.Label>User ID</Form.Label>
             <Form.Control
@@ -117,11 +124,11 @@ const AddCourseExistingModal = (props) => {
             <Form.Check
               type="checkbox"
               label="Active"
-              checked={courseExisting.active}
+              checked={courseExisting.active === 1}
               onChange={() =>
                 setCourseExisting({
                   ...courseExisting,
-                  active: !courseExisting.active,
+                  active: courseExisting.active === 1 ? 0 : 1,
                 })
               }
             />

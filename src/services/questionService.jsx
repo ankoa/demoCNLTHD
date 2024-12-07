@@ -1,5 +1,6 @@
 import createAxiosInstance from "../util/axiosCustomize";
-const axios = createAxiosInstance("https://localhost:5001/"); // Specify your base URL
+const API_BASE_URL = "http://examservice.somee.com/";
+const axios = createAxiosInstance(API_BASE_URL); // Specify your base URL
 // Get all questions
 const getAllQuestions = async () => {
   try {
@@ -50,7 +51,6 @@ const addQuestion = async (questionData) => {
     formData.append("audio", questionData.AudioFile);
     formData.append("image", questionData.ImageFile);
 
-
     // Gửi yêu cầu PUT với formData
     const response = await axios.post(`/api/Question`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -76,7 +76,6 @@ const updateQuestion = async (id, questionData) => {
     formData.append("audio", questionData.AudioFile);
     formData.append("image", questionData.ImageFile);
 
-
     // Gửi yêu cầu PUT với formData
     const response = await axios.put(`/api/Question/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -91,8 +90,6 @@ const updateQuestion = async (id, questionData) => {
   }
 };
 
-
-
 // Delete a question
 const deleteQuestion = async (id) => {
   try {
@@ -105,21 +102,23 @@ const deleteQuestion = async (id) => {
   }
 };
 
-
 const updateAnswersForQuestion = async (questionId, newAnswers) => {
   try {
-    const response = await axios.put(`/api/Question/UpdateQuestionWithAnswer/${questionId}`, newAnswers, {
-      headers: {
-        "Content-Type": "application/json"
+    const response = await axios.put(
+      `/api/Question/UpdateQuestionWithAnswer/${questionId}`,
+      newAnswers,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
 
     return response;
   } catch (error) {
     return response;
   }
 };
-
 
 // Export all functions
 export {
@@ -129,5 +128,5 @@ export {
   addQuestion,
   updateQuestion,
   deleteQuestion,
-  updateAnswersForQuestion
+  updateAnswersForQuestion,
 };

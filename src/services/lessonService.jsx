@@ -12,7 +12,7 @@ const getLessons = async () => {
       console.log("Lessons data:", response);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -28,10 +28,10 @@ const addLesson = async (lessonData) => {
       headers: { "Content-Type": "application/json" },
     });
     if (response.ec === 1) {
-      console.log("Lesson added:", response.data.dt);
-      return response.dt; // Trả về dữ liệu trong phần 'dt'
+      console.log("Lesson added:", response.dt);
+      return response; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -45,10 +45,10 @@ const deleteLesson = async (lessonID) => {
   try {
     const response = await axios.delete(`api/Lesson/${lessonID}`);
     if (response.ec === 1) {
-      console.log("Lesson deleted:", response.data.dt);
+      console.log("Lesson deleted:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -64,10 +64,10 @@ const updateLesson = async (lessonID, lessonData) => {
       headers: { "Content-Type": "application/json" },
     });
     if (response.ec === 1) {
-      console.log("Lesson updated:", response.data.dt);
+      console.log("Lesson updated:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {

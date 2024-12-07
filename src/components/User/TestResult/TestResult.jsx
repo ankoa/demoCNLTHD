@@ -63,7 +63,6 @@ const TestResult = () => {
           setError(partResponse.EM);
           return;
         }
-        console.log(partResponse);
         setPartData(partResponse.DT);
 
         // Lấy testData sau khi có historyData
@@ -83,6 +82,7 @@ const TestResult = () => {
         setUserAnswers(userAnswersResponse.DT);
       } catch (error) {
         setError("Lỗi khi lấy dữ liệu");
+        console.log("Lỗi khi lấy dữ liệu", error);
       } finally {
         setLoading(false);
       }
@@ -101,7 +101,6 @@ const TestResult = () => {
           // Fetch initial part data (assume it's already set in partData)
           const partsWithQuestionsPromises = partData.map(async (part) => {
             const response = await getQuestionByPartID(part.PardId);
-            console.log(part.PardId);
             if (response.EC === 0) {
               const { questions } = response.DT.part;
               // Add `userAnswer` field to each question based on `userAnswers`
@@ -213,7 +212,10 @@ const TestResult = () => {
       });
     }
   };
-
+  const handleBackClick = () => {
+    // Điều hướng về trang đề thi (giả sử đường dẫn là '/exam')
+    navigate("/library-test");
+  };
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   return (
@@ -233,7 +235,9 @@ const TestResult = () => {
             ))}
         </div>
       </div>
-      <button className="result-display__back">Quay về trang đề thi</button>{" "}
+      <button className="result-display__back" onClick={handleBackClick}>
+        Quay về trang đề thi
+      </button>
       {/* Điều hướng */}
       <div className="result-display__content">
         <div className="result-display__summary">

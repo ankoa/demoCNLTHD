@@ -4,7 +4,8 @@ export const ROUTERS = {
     LIBRARY_TEST: "/library-test",
     TEST_PAGE: "/test/:testId",
     MAIN_TEST: "/test/:testId/:type",
-    ONLINECOURSE: "/onlinecouse",
+    ONLINECOURSE: "/onlinecourse",
+    COURSEPURCHASE: "/onlinecourse/purchase/:courseId",
     LOGIN: "/login",
     REGISTER: "/register",
     CONFIRMCODE: "/confirmCode",
@@ -13,8 +14,13 @@ export const ROUTERS = {
     RESETPASSWORD: "/resetPassword",
     CHANGEPASSWORD: "/changePassword",
     TESTRESULT: "/testResults/:historyID",
-    USERPROFILE:"/userprofile",
-    PRACTICERESULTS:"/practiceresults"
+    LESSON: "/lesson/:courseId",
+    MYCOURSE: "/my-course",
+    USERPROFILE: "/userprofile",
+    PRACTICERESULTS:"/practiceresults",
+    PAYMENTSUCCESS: "/payment-success",
+    // COMMENT:"/comment",
+
   },
   ADMIN: {
     DASHBOARD: "dashboard", // Chỉ cần để "dashboard" mà không có /

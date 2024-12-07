@@ -53,26 +53,69 @@ const AddCourseModal = (props) => {
 
   const handleSubmit = async () => {
     try {
-      const formData = new FormData();
-      formData.append("name", course.name);
-      formData.append("title", course.title);
-      formData.append("description", course.description);
-      formData.append("price", course.price);
-      formData.append("active", course.active);
-      if (course.image) {
-        formData.append("image", course.image);
+      // Gọi hàm kiểm tra dữ liệu
+      const validationError = validateInput(course);
+      if (validationError) {
+        toast.error(validationError); // Hiển thị lỗi
+        return; // Dừng hàm nếu có lỗi
       }
 
-      const response = await addCourse(formData);
-      if (response && response.EC === 0) {
+      // Xử lý dữ liệu nếu hợp lệ
+      const payload = {
+        courseId: 0,
+        name: course.name,
+        description: course.description,
+        title: course.title,
+        price: parseFloat(course.price) || 0,
+        image: course.image ? await convertImageToBase64(course.image) : "",
+        active: course.active ? 1 : 0,
+        created: new Date().toISOString(),
+      };
+
+      console.log("Payload:", payload); // Debug dữ liệu gửi đi
+
+      const response = await addCourse(payload); // Gọi API
+      if (response && response.ec === 1) {
         toast.success("Course added successfully!");
         props.onClose();
       } else {
-        toast.error(response?.EM || "Error occurred!");
+        toast.error(response?.em || "Error occurred!");
       }
     } catch (error) {
+      console.error("Error adding course:", error);
       toast.error("Error adding course.");
     }
+  };
+
+  const convertImageToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
+  const validateInput = (course) => {
+    if (!course.name || course.name.trim() === "") {
+      return "Course name is required.";
+    }
+    if (!course.title || course.title.trim() === "") {
+      return "Course title is required.";
+    }
+    if (!course.description || course.description.trim() === "") {
+      return "Course description is required.";
+    }
+    if (
+      !course.price ||
+      isNaN(parseFloat(course.price)) ||
+      parseFloat(course.price) <= 0
+    ) {
+      return "Course price must be a positive number.";
+    }
+    if (!course.image) {
+      return "Course image is required.";
+    }
+    return null; // Không có lỗi
   };
 
   return (

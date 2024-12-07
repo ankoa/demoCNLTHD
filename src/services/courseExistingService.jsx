@@ -12,7 +12,7 @@ const getCourseExistings = async () => {
       console.log("Course existing data:", response);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -32,10 +32,10 @@ const addCourseExisting = async (courseExistingData) => {
       }
     );
     if (response.ec === 1) {
-      console.log("Course existing added:", response.data.dt);
-      return response.dt; // Trả về dữ liệu trong phần 'dt'
+      console.log("Course existing added:", response.dt);
+      return response; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -51,10 +51,10 @@ const deleteCourseExisting = async (courseExistingID) => {
       `api/CourseExisting/${courseExistingID}`
     );
     if (response.ec === 1) {
-      console.log("Course existing deleted:", response.data.dt);
+      console.log("Course existing deleted:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -74,10 +74,10 @@ const updateCourseExisting = async (courseExistingID, courseExistingData) => {
       }
     );
     if (response.ec === 1) {
-      console.log("Course existing updated:", response.data.dt);
+      console.log("Course existing updated:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
