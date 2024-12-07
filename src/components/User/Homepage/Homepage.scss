@@ -1,164 +1,179 @@
 .homepage-container {
-    padding-bottom: 5vh;
-
-    .slider-container {
-        padding-top: 50px;
-        padding-bottom: 50px;
-        padding-left: 20vh;
-        padding-right: 20vh;
-        display: flex;
-
-        // Media query cho các màn hình nhỏ hơn
-        @media (max-width: 1200px) {
-            padding-left: 15vh;
-            padding-right: 15vh;
-        }
-
-        @media (max-width: 992px) {
-            padding-left: 10vh;
-            padding-right: 10vh;
-        }
-
-        @media (max-width: 768px) {
-            padding-top: 30px;
-            padding-left: 5vh;
-            padding-right: 5vh;
-            flex-direction: column;
-            align-items: center;
-            gap: 5vh;
-        }
-
-        @media (max-width: 576px) {
-            padding-top: 20px;
-            padding-left: 2vh;
-            padding-right: 2vh;
-            flex-direction: column;
-            align-items: center;
-            gap: 5vh;
-        }
-
-        .ads-slider {
-            width: 30%;
-            display: flex;
-            flex-direction: column; // Đặt các phần tử theo chiều dọc
-            align-items: center; // Căn giữa theo chiều ngang
-            justify-content: center; // Căn giữa theo chiều dọc
-            text-align: center;
-        }
-
-        .slider {
-            width: 60%; // Tùy chỉnh kích thước theo kích thước màn hình
-            height: 70%;
-
-            @media (max-width: 768px) {
-                width: 90%;
-            }
-
-            @media (max-width: 576px) {
-                width: 90%;
-            }
-        }
+  padding-bottom: 5vh;
+  background-color: white;
+  .slider-container {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 20vh;
+    padding-right: 20vh;
+    display: flex;
+    background-color: #e8f2ff !important; // Media query cho các màn hình nhỏ hơn
+    @media (max-width: 1200px) {
+      padding-left: 15vh;
+      padding-right: 15vh;
     }
 
-    .new-test-container {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr); /* 4 cột */
-        gap: 20px; /* Khoảng cách giữa các card */
-        padding-left: 10vh;
-        padding-right: 10vh;
-        padding-bottom: 5vh;
-        margin: auto;
-        justify-items: center;
-        background-color: rgb(235, 230, 230);
-      
-        /* Media queries để responsive */
-        @media (max-width: 1200px) {
-          grid-template-columns: repeat(3, 1fr); /* 3 cột */
-        }
-      
-        @media (max-width: 992px) {
-          grid-template-columns: repeat(2, 1fr); /* 2 cột */
-        }
-      
-        @media (max-width: 768px) {
-          grid-template-columns: 1fr; /* 1 cột */
-        }
-      }
-      
-      .card {
-        display: flex;
-        flex-direction: column;
-        height: 100%; /* Đảm bảo chiều cao card đồng đều */
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      }
-      
-      .card-img-top {
-        object-fit: cover; /* Điều chỉnh ảnh không bị méo */
-        height: 200px; /* Chiều cao của ảnh */
-        width: 100%;
-      }
-      
-      .card-body {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1; /* Làm cho phần body của card chiếm hết không gian còn lại */
-        padding: 1rem;
-      }
-      
-      .card-title {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 10px;
-      }
-      
-      .card-text {
-        font-size: 1rem;
-        color: #555;
-        
-        /* Cắt bớt mô tả khi quá dài */
-        display: -webkit-box;
-        -webkit-line-clamp: 2; /* Số dòng tối đa */
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-        /* Nút Mua */
-       .card-bottom {
-            display: flex;
-            flex-direction: column;
-            margin-top: auto; /* Đảm bảo giá và nút "Mua" luôn ở dưới cùng */
-       }
-      .card-price {
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #e74c3c; /* Màu đỏ tươi để nổi bật */
-        margin-bottom: 20px; /* Khoảng cách giữa giá và nút "Mua" */
+    @media (max-width: 992px) {
+      padding-left: 10vh;
+      padding-right: 10vh;
+    }
+
+    @media (max-width: 768px) {
+      padding-top: 30px;
+      padding-left: 5vh;
+      padding-right: 5vh;
+      flex-direction: column;
+      align-items: center;
+      gap: 5vh;
+    }
+
+    @media (max-width: 576px) {
+      padding-top: 20px;
+      padding-left: 2vh;
+      padding-right: 2vh;
+      flex-direction: column;
+      align-items: center;
+      gap: 5vh;
+    }
+
+    .ads-slider {
+      width: 30%;
+      display: flex;
+      flex-direction: column; // Đặt các phần tử theo chiều dọc
+      align-items: center; // Căn giữa theo chiều ngang
+      justify-content: center; // Căn giữa theo chiều dọc
+      text-align: center;
+    }
+
+    .slider {
+      width: 60%; // Tùy chỉnh kích thước theo kích thước màn hình
+      height: 70%;
+
+      @media (max-width: 768px) {
+        width: 90%;
       }
 
-      .card button {
-        width: 100%;
-        padding: 10px;
-        background-color: #3323a0;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+      @media (max-width: 576px) {
+        width: 90%;
       }
-      
-      .card button:hover {
-        background-color: #1f1a7f;
-      }
-      
+    }
+  }
+  .highlighted-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+    padding: 10px;
+    border: 2px solid #ccc; /* Viền cơ bản */
+    border-radius: 8px; /* Tạo góc bo tròn */
+    box-shadow: inset -3px -3px 5px #f1f1f1, inset 3px 3px 5px #d1d1d1; /* Tạo hiệu ứng chìm */
+    background: linear-gradient(
+      145deg,
+      #e6e6e6,
+      #ffffff
+    ); /* Hiệu ứng sáng 3D */
+    text-shadow: 2px 2px 4px #aaa; /* Hiệu ứng bóng chữ */
+  }
+
+  .new-test-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 3 cột */
+    gap: 20px; /* Khoảng cách giữa các card */
+    padding-left: 10vh;
+    padding-right: 10vh;
+    padding-bottom: 5vh;
+    margin: auto;
+    margin-top: 20px;
+    justify-items: center;
+    //background-color: rgb(235, 230, 230);
+
+    /* Media queries để responsive */
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr); /* 3 cột */
+    }
+
+    @media (max-width: 992px) {
+      grid-template-columns: repeat(2, 1fr); /* 2 cột */
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr; /* 1 cột */
+    }
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Đảm bảo chiều cao card đồng đều */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-img-top {
+    object-fit: cover; /* Điều chỉnh ảnh không bị méo */
+    height: 150px; /* Chiều cao của ảnh */
+    width: 100%;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Làm cho phần body của card chiếm hết không gian còn lại */
+    padding: 1rem;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .card-text {
+    font-size: 1rem;
+    color: #555;
+
+    /* Cắt bớt mô tả khi quá dài */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Số dòng tối đa */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* Nút Mua */
+  .card-bottom {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto; /* Đảm bảo giá và nút "Mua" luôn ở dưới cùng */
+  }
+  .card-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #e74c3c; /* Màu đỏ tươi để nổi bật */
+    margin-bottom: 20px; /* Khoảng cách giữa giá và nút "Mua" */
+  }
+
+  .card button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3323a0;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .card button:hover {
+    background-color: #1f1a7f;
+  }
 }
 
 .slick-next,
 .slick-prev {
-    display: none !important;
+  display: none !important;
 }
 
 .bg-body-tertiary {
-    height: 10vh;
+  height: 10vh;
 }
