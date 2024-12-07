@@ -2,9 +2,14 @@ $highlight-color: #dee2ec;
 
 .admin-container {
     //display: flex;
+    overflow: hidden;
+    height: 100vh;
 
     .admin-header {
         width: 100%;
+        position: sticky;
+        top: 0;
+        right: 0;
 
         .toggle-menu-btn {
             cursor: pointer;
