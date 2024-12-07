@@ -22,6 +22,7 @@ import QuestionManagement from "./components/Admin/Content/QuestionManagement/Qu
 import CourseManagement from "./components/Admin/Content/CourseManagement/CourseManagement";
 import CourseExistingManagement from "./components/Admin/Content/CourseExistingManagement/CourseExistingManagement";
 import UserProfile from "./components/User/UserProfile/UserProfile";
+import PracticeResults from "./components/User/UserProfile/PracticeResults";
 /* import CourseDetailManagement from "./components/Admin/Content/CourseDetailManagement/CourseDetailManagement";
  */
 import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
@@ -42,6 +43,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
     { path: ROUTERS.USER.TESTRESULT, element: <TestResult /> },
     { path: ROUTERS.USER.USERPROFILE, element: <UserProfile /> },
+    { path: ROUTERS.USER.PRACTICERESULTS, element: <PracticeResults /> },
   ];
 
   return userRouters.map((route, key) => (
