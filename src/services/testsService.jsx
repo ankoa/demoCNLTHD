@@ -1,6 +1,6 @@
 import createAxiosInstance from "../util/axiosCustomize";
 
-const API_BASE_URL = "http://examservice.somee.com/";
+const API_BASE_URL = "http://examservice.somee.com";
 const axios = createAxiosInstance(API_BASE_URL);
 const BASE_URL = "/api/Test";
 const getAllTests = async () => {

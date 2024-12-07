@@ -212,7 +212,10 @@ const TestResult = () => {
       });
     }
   };
-
+  const handleBackClick = () => {
+    // Điều hướng về trang đề thi (giả sử đường dẫn là '/exam')
+    navigate("/library-test");
+  };
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   return (
@@ -232,7 +235,9 @@ const TestResult = () => {
             ))}
         </div>
       </div>
-      <button className="result-display__back">Quay về trang đề thi</button>{" "}
+      <button className="result-display__back" onClick={handleBackClick}>
+        Quay về trang đề thi
+      </button>
       {/* Điều hướng */}
       <div className="result-display__content">
         <div className="result-display__summary">

@@ -116,8 +116,8 @@ const MainTest = () => {
     for (const part of parts) {
       const questionResponse = await getAllQuestionsByPartID(part.Id); // Lấy câu hỏi và đáp án cho phần
 
-      console.log("=>>>>>>>QuestionResponse: ", questionResponse);
-
+      /*       console.log("=>>>>>>>QuestionResponse: ", questionResponse);
+       */
       // Kiểm tra nếu dữ liệu trả về hợp lệ
       if (
         questionResponse.EC === 0 &&
@@ -125,11 +125,9 @@ const MainTest = () => {
         questionResponse.DT.part &&
         questionResponse.DT.part.questions
       ) {
-        // Lặp qua từng câu hỏi trong phần và lấy dữ liệu
         for (const questionData of questionResponse.DT.part.questions) {
           const question = questionData.question; // Lấy thông tin câu hỏi
 
-          // Lấy danh sách các đáp án từ `questionData.answers`
           const answersWithSelection = questionData.answers.map((answer) => ({
             ...answer,
             isSelected: false, // Thêm thuộc tính 'isSelected' để lưu trạng thái đáp án
@@ -139,6 +137,7 @@ const MainTest = () => {
           quizDataArray.push({
             question,
             answers: answersWithSelection,
+            partID: part.Id,
           });
         }
       } else {
@@ -152,7 +151,8 @@ const MainTest = () => {
 
     // Lưu dữ liệu vào quizData state
     setQuizData(quizDataArray);
-    console.log("=>>>>>>>QuizData: ", quizDataArray); // In ra dữ liệu quizData
+    /*     console.log("=>>>>>>>QuizData: ", quizDataArray); // In ra dữ liệu quizData
+     */
   };
   const handleAudioEnd = () => {
     setIsQuizAudioVisible(false); // Hủy component QuizAudio

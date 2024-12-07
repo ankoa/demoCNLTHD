@@ -1,10 +1,8 @@
 import createAxiosInstance from "../util/axiosCustomize";
 
 // Định nghĩa URL cơ sở
-const BASE_URL = "https://localhost:5001/";
-
-// Tạo instance axios với BASE_URL
-const axios = createAxiosInstance(BASE_URL);
+const API_BASE_URL = "http://examservice.somee.com/";
+const axios = createAxiosInstance(API_BASE_URL);
 
 // Lấy danh sách tất cả lịch sử
 const getAllHistories = async () => {
