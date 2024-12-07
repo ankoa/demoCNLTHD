@@ -1,107 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./OnlineCourse.scss";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import CourseItem from "./CourseItem";
+import { getCourses } from "../../../services/courseService";
 
 const OnlineCourse = () => {
-  const courseType = [
-    { id: 1, name: "Danh sách chương trình học" },
-    { id: 2, name: "Combo đặc biệt" },
-    { id: 3, name: "Ưu đãi hấp dẫn" },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [courses, setCourses] = useState([]);
 
-  const courseData = [
-    {
-      image: "./src/assets/online_course/online_course.png",
-      title: "Combo 4 kỹ năng IELTS Intensive",
-      numberOfReview: "1,681",
-      numberOfStudent: "100,000",
-      price: "1.500.000đ",
-      listingPrice: "3.596.000đ",
-      reduce: "57",
-      courseTypeID: 1
-    },
-    {
-      image: "./src/assets/online_course/online_course.png",
-      title: "Combo 4 kỹ năng IELTS Intensive",
-      numberOfReview: "1,681",
-      numberOfStudent: "100,000",
-      price: "1.500.000đ",
-      listingPrice: "3.596.000đ",
-      reduce: "57",
-      courseTypeID: 1
-    },
-    {
-      image: "./src/assets/online_course/online_course.png",
-      title: "Combo 4 kỹ năng IELTS Intensive",
-      numberOfReview: "1,681",
-      numberOfStudent: "100,000",
-      price: "1.500.000đ",
-      listingPrice: "3.596.000đ",
-      reduce: "57",
-      courseTypeID: 2
-    },
-    {
-      image: "./src/assets/online_course/online_course.png",
-      title: "Combo 4 kỹ năng IELTS Intensive",
-      numberOfReview: "1,681",
-      numberOfStudent: "100,000",
-      price: "1.500.000đ",
-      listingPrice: "3.596.000đ",
-      reduce: "57",
-      courseTypeID: 2
-    },
-    {
-      image: "./src/assets/online_course/online_course.png",
-      title: "Combo 4 kỹ năng IELTS Intensive",
-      numberOfReview: "1,681",
-      numberOfStudent: "100,000",
-      price: "1.500.000đ",
-      listingPrice: "3.596.000đ",
-      reduce: "57",
-      courseTypeID: 2
-    },
-    {
-      image: "./src/assets/online_course/online_course.png",
-      title: "Combo 4 kỹ năng IELTS Intensive",
-      numberOfReview: "1,681",
-      numberOfStudent: "100,000",
-      price: "1.500.000đ",
-      listingPrice: "3.596.000đ",
-      reduce: "57",
-      courseTypeID: 2
-    },
-    {
-      image: "./src/assets/online_course/online_course.png",
-      title: "Combo 4 kỹ năng IELTS Intensive",
-      numberOfReview: "1,681",
-      numberOfStudent: "100,000",
-      price: "1.500.000đ",
-      listingPrice: "3.596.000đ",
-      reduce: "57",
-      courseTypeID: 2
-    },
-    {
-      image: "./src/assets/online_course/online_course.png",
-      title: "Combo 4 kỹ năng IELTS Intensive",
-      numberOfReview: "1,681",
-      numberOfStudent: "100,000",
-      price: "1.500.000đ",
-      listingPrice: "3.596.000đ",
-      reduce: "57",
-      courseTypeID: 3
-    },
-  ];
+  useEffect(() => {
+    //hàm lấy lesson của 1 course
+    const fetchCourses = async () => {
+      setLoading(true);
+      try {
+        const data = await getCourses(); // Gọi API
+        setCourses(data);
+        console.log("Course: ", data);
+      } catch (err) {
+        console.log("Lỗi khi lấy dữ liệu course: ", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []); // Chỉ chạy 1 lần khi component mount
 
   return (
     <div className='online-course-container'>
       <div className="site-content-wrapper">
         <div className="content-header">
           <div className="image-wrapper">
-            <a href="#">
               <img src='./src/assets/online_course/online_course_banner.png' alt='banner'></img>
-            </a>
           </div>
           <br />
           <h1>Chương trình học online</h1>
@@ -109,37 +40,30 @@ const OnlineCourse = () => {
           </p>
         </div>
       </div>
-      <CourseList courseData={courseData} courseType={courseType} />
+      <CourseList courseData={courses}/>
     </div>
   )
 }
 
 
-const CourseList = ({ courseData, courseType }) => {
+const CourseList = ({ courseData }) => {
   return (
     <div className="content-wrapper">
       <div className="container">
-        {courseType.map((type) => (
-          <div key={type.id} className="course-type">
-            <h3>{type.name}</h3>
-            <div className="courses-grid-wrapper">
-              {courseData
-                .filter((course) => course.courseTypeID === type.id)
-                .map((course, index) => (
-                  <CourseItem
-                    key={index}
-                    image={course.image}
-                    title={course.title}
-                    numberOfReview={course.numberOfReview}
-                    numberOfStudent={course.numberOfStudent}
-                    price={course.price}
-                    listingPrice={course.listingPrice}
-                    reduce={course.reduce}
-                  />
-                ))}
-            </div>
-          </div>
-        ))}
+        <div className="courses-grid-wrapper">
+          {courseData
+            .map((course) => (
+              <CourseItem
+                key={course.courseId}
+                courseId={course.courseId}
+                image={course.image}
+                name={course.name}
+                title={course.title}
+                price={course.price}
+                description={course.description}
+              />
+            ))}
+        </div>
       </div>
     </div>
   );

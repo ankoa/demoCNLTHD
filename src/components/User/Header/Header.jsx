@@ -59,12 +59,12 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="navigation">
-            <button className="nav-item" onClick={() => navigate("/test")}>
+            <button className="nav-item" onClick={() => navigate("/my-course")}>
               Khóa học của tôi
             </button>
             <button
               className="nav-item"
-              onClick={() => navigate("/onlinecouse")}
+              onClick={() => navigate("/onlinecourse")}
             >
               Khóa học
             </button>

@@ -1,10 +1,11 @@
 import createAxiosInstance from "../util/axiosCustomize";
 
-const axios = createAxiosInstance("https://localhost:5001"); // Truyền đường dẫn API thay vì cổng
-
+const API_BASE_URL = "http://examservice.somee.com";
+const axios = createAxiosInstance(API_BASE_URL);
+const BASE_URL = "/api/Test";
 const getAllTests = async () => {
   try {
-    const response = await axios.get("/api/Test");
+    const response = await axios.get(`${BASE_URL}`);
     return response;
   } catch (error) {
     console.error("Error fetching tests:", error);
