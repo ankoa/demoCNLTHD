@@ -1,0 +1,172 @@
+/* Container chính */
+.lesson-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 30px;
+  background-color: #f1f1f1; /* Màu nền sáng và dễ nhìn */
+  line-height: 1.8; /* Khoảng cách dòng rộng hơn */
+  color: #333;
+  border-radius: 12px; /* Bo góc cho toàn bộ container */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng nhẹ */
+}
+
+/* Breadcrumb */
+.lesson-container .breadcrumb {
+  margin-bottom: 25px;
+  font-size: 16px;
+  color: #666;
+}
+
+.lesson-container .breadcrumb .home-link {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.lesson-container .breadcrumb .home-link:hover {
+  text-decoration: underline;
+}
+
+/* Layout chính */
+.lesson-container .lesson-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+/* Menu bên trái */
+.lesson-container .lesson-layout .menu {
+  flex: 1;
+  max-width: 220px;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky; /* Làm cho menu cố định khi cuộn */
+  top: 100px; /* Khoảng cách từ phía trên của viewport */
+  height: calc(100vh - 40px); /* Chiều cao của menu (100% chiều cao của viewport trừ đi padding) */
+  overflow-y: auto; /* Thêm thanh cuộn dọc nếu menu có nhiều nội dung */
+}
+
+.lesson-container .lesson-layout .menu .menu-item {
+  padding: 12px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  color: #333;
+  background-color: #f8f9fa;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.lesson-container .lesson-layout .menu .menu-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Khi item được chọn, thêm màu nền xanh và thay đổi màu chữ */
+.lesson-container .lesson-layout .menu .menu-item.active {
+  background-color: #3323a0;
+  color: #fff;
+  font-weight: bold;
+  transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi chọn */
+}
+
+.lesson-container .lesson-layout  .menu .menu-item:hover {
+  background-color: #7bb7f0;
+  color: #151414;
+  transform: scale(1.03); /* Hiệu ứng phóng to nhẹ khi hover */
+}
+
+/* Phần nội dung bên phải */
+.lesson-container .lesson-layout .content {
+  flex: 3;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  line-height: 1.7;
+  border-left: 5px solid #007bff; /* Đường viền bên trái nổi bật */
+}
+
+// .lesson-container .lesson-layout .content {
+//   flex-grow: 1;
+//   padding: 20px;
+// }
+
+.lesson-container .lesson-layout .content  .lesson-detail {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9; /* Màu nền nhẹ cho mỗi bài học */
+  border: 1px solid #ddd; /* Đường viền mỏng để phân tách các bài học */
+  border-radius: 8px; /* Bo tròn các góc */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho các bài học */
+}
+
+.lesson-container .lesson-layout .content .lesson-detail h3 {
+  margin-top: 0;
+  font-size: 1.2em;
+  color: #333; /* Màu tiêu đề bài học */
+}
+
+.lesson-container .lesson-layout .content .lesson-detail p {
+  margin: 8px 0;
+  font-size: 1em;
+  color: #666; /* Màu chữ mô tả bài học */
+}
+
+.lesson-container .lesson-layout .content .lesson-detail a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 15px;
+  background-color: #0077cc;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.lesson-container .lesson-layout .content .lesson-detail a:hover {
+  background-color: #005fa3;
+}
+
+.lesson-container .lesson-layout .content .lesson-detail p:last-child {
+  margin-bottom: 0;
+}
+
+.lesson-container .lesson-layout .content .lesson-detail .video-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* Tạo tỷ lệ 16:9 */
+  height: 0;
+  display: flex;
+  justify-content: center; /* Căn giữa iframe theo chiều ngang */
+  align-items: center; /* Căn giữa iframe theo chiều dọc */
+}
+
+.lesson-container .lesson-layout .content .lesson-detail iframe {
+  position: absolute;
+  top: 10%;
+  width: 80%; /* Điều chỉnh kích thước video */
+  height: 80%; /* Đảm bảo iframe sẽ chiếm hết không gian */
+  border-radius: 8px; /* Bo tròn các góc của video */
+}
+
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lesson-container .lesson-layout {
+    flex-direction: column; /* Đổi layout thành dọc trên màn hình nhỏ */
+  }
+
+  .lesson-container .lesson-layout .menu {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .lesson-container .lesson-layout .content {
+    padding: 20px;
+  }
+}

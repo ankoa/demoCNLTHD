@@ -9,8 +9,10 @@ import {
   getCourses,
   addCourse,
   updateCourse,
+  getCoursesByID,
 } from "../../../../services/courseService";
-import AddCourseModal from "./AddCourseModal"; // Import the AddCourseModal
+import AddCourseModal from "./AddCourseModal";
+import EditCourseModal from "./EditCourseModal";
 import "./CourseManagement.scss";
 
 const CourseManagement = () => {
@@ -18,46 +20,72 @@ const CourseManagement = () => {
   const [showModal, setShowModal] = useState(false); // State for controlling modal visibility
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
+  const [editModalData, setEditModalData] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const columns = [
     {
       name: "Course ID",
       selector: (row) => row.courseId,
       sortable: true,
+      style: {
+        width: "150px", // Chiều rộng cụ thể
+      },
     },
     {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
+      style: {
+        width: "150px", // Chiều rộng cụ thể
+      },
     },
     {
       name: "Title",
       selector: (row) => row.title,
       sortable: true,
+      style: {
+        width: "150px", // Chiều rộng cụ thể
+      },
     },
     {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
+      style: {
+        width: "150px", // Chiều rộng cụ thể
+      },
     },
     {
       name: "Price",
       selector: (row) => `$${row.price.toFixed(2)}`,
       sortable: true,
+      style: {
+        width: "150px", // Chiều rộng cụ thể
+      },
     },
     {
       name: "Active",
       selector: (row) => (row.active ? "Yes" : "No"),
       sortable: true,
+      style: {
+        width: "150px", // Chiều rộng cụ thể
+      },
     },
     {
       name: "Created",
       selector: (row) => new Date(row.created).toLocaleString("en-US"),
       sortable: true,
+      style: {
+        width: "150px", // Chiều rộng cụ thể
+      },
     },
     {
       name: "Actions",
       cell: (row) => <ActionButtons id={row.courseId} />,
+      style: {
+        width: "150px", // Chiều rộng cụ thể
+      },
     },
   ];
 
@@ -74,21 +102,8 @@ const CourseManagement = () => {
       toast.error("Error fetching courses.");
     }
   };
-
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this course?")) {
-      try {
-        const response = await deleteCourse(id);
-        if (response && response.EC === 0) {
-          toast.success("Deleted successfully!");
-          fetchCourses();
-        } else {
-          toast.error(response?.EM || "Error occurred!");
-        }
-      } catch (error) {
-        toast.error("Error deleting course.");
-      }
-    }
+    <deleteCourse id={id} />;
   };
 
   const handleSearch = (e) => {
@@ -101,6 +116,20 @@ const CourseManagement = () => {
       course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleEdit = async (id) => {
+    try {
+      const course = await getCoursesByID(id);
+      if (course) {
+        setEditModalData(course); // Pass course to modal
+        setShowEditModal(true); // Open modal
+      } else {
+        toast.error("Error fetching course.");
+      }
+    } catch (error) {
+      toast.error("Error fetching course.");
+    }
+  };
+
   const ActionButtons = ({ id }) => (
     <div className="action-buttons">
       <button className="btn-icon" onClick={() => handleEdit(id)}>
@@ -112,37 +141,43 @@ const CourseManagement = () => {
     </div>
   );
 
-  const handleEdit = (id) => {
-    const course = data.find((item) => item.courseId === id);
-    if (course) refModalCourse.current.open(course, "Update");
-  };
-
   return (
-    <div className="AdminCourses">
-      <Card>
-        <Card.Header className="text-white" style={{ color: "#ffffff" }}>
-          Course Management
-        </Card.Header>
-        <Card.Body>
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <input
-              type="text"
-              className="form-control w-75"
-              placeholder="Search courses..."
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-            <button
-              className="btn btn-success ms-2"
-              onClick={() => setShowModal(true)} // Open the modal
-            >
-              <IoIosAddCircleOutline /> Add Course
-            </button>
-          </div>
-          <DataTable columns={columns} data={filteredData} pagination />
-        </Card.Body>
-      </Card>
-      <AddCourseModal show={showModal} onClose={() => setShowModal(false)} />
+    <div>
+      <div className="AdminCourses">
+        <Card>
+          <Card.Header className="text-white" style={{ color: "#ffffff" }}>
+            Course Management
+          </Card.Header>
+          <Card.Body>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <input
+                type="text"
+                className="form-control w-75"
+                placeholder="Search courses..."
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+              <button
+                className="btn btn-success ms-2"
+                onClick={() => setShowModal(true)} // Open the modal
+              >
+                <IoIosAddCircleOutline /> Add Course
+              </button>
+            </div>
+            <DataTable columns={columns} data={filteredData} pagination />
+          </Card.Body>
+        </Card>
+        <AddCourseModal show={showModal} onClose={() => setShowModal(false)} />
+      </div>
+      <div>
+        {showEditModal && (
+          <EditCourseModal
+            show={showEditModal}
+            onClose={() => setShowEditModal(false)}
+            data={editModalData}
+          />
+        )}
+      </div>
     </div>
   );
 };

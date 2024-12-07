@@ -18,7 +18,10 @@ const DeleteCourseModal = (props) => {
         <Modal.Title>Delete Course</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Are you sure you want to delete this course?</p>
+        <p>
+          Are you sure you want to delete this course? haved courseID $
+          {props.courseId}
+        </p>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={props.onClose}>

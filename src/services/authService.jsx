@@ -12,7 +12,7 @@ const postLogin = (Username, Password) => {
   return axios.post(`${BASE_URL}/Login`, {
     Username,
     Password,
-    delay: 2000,
+    delay: 5000,
   });
 };
 
