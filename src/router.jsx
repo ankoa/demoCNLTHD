@@ -32,6 +32,7 @@ import LessonDetailManagement from "./components/Admin/Content/LessonDetailManag
 // import CommentsContainer from "./components/User/Feedback/Comment"
 import MyCourses from "./components/User/MyCourse/MyCourse";
 import PaymentSuccess from "./components/User/PurchaseForm/PaymentSuccess";
+import ProtectedRoute from "./ProtectedRoute";
 const renderUserRouter = () => {
   const userRouters = [
     { path: ROUTERS.USER.HOMEPAGE, element: <Homepage /> },
@@ -92,11 +93,27 @@ const renderAdminRouter = () => {
 const RouterCustom = () => {
   return (
     <Routes>
-      {/* User Routes */}
+      {/* Public Routes (Login, Register, etc.) */}
+      <Route element={<MasterLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/confirm-code" element={<ConfirmCode />} />
+        <Route path="/find-account" element={<FindAccount />} />
+      </Route>
+
+      {/* User Routes (No authentication required) */}
       <Route element={<MasterLayout />}>{renderUserRouter()}</Route>
 
-      {/* Admin Routes */}
-      <Route path="/admin/*" element={<AdminLayout />}>
+      {/* Admin Routes (Authentication required) */}
+      <Route
+        path="/admin/*"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
         {renderAdminRouter()}
       </Route>
     </Routes>

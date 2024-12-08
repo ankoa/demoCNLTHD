@@ -171,7 +171,8 @@ const QuestionManagement = () => {
         try {
             let response = await getTests();
             if (response && response.EC === 0) {
-                setTests(response.DT);
+                const filteredData = response.DT.filter(test => test.Id !== -1);
+                setTests(filteredData);
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
             }

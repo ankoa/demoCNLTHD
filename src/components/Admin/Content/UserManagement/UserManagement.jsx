@@ -11,9 +11,9 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { Card } from 'react-bootstrap';
 import { deleteTestById, getTests, postNewTest, putUpdateTest } from '../../../../services/testService';
 import { toast } from 'react-toastify';
-import { getUsers } from '../../../../services/authService';
+import { getUsers, postRegister, postRegisterWithRole } from '../../../../services/authService';
 import { MdModeEditOutline, MdOutlineLockReset } from "react-icons/md";
-import { getUserWithRoleById } from '../../../../services/userService';
+import { deleteUserById, getUserWithRoleById, putUpdateUser, putUpdateUserRoles } from '../../../../services/userService';
 
 const UserManagement = () => {
     //--------------Khai báo ref
@@ -88,7 +88,7 @@ const UserManagement = () => {
             let response = await getUsers();
             if (response && response.EC === 0) {
                 setData(response.DT);
-                console.log(data);
+                setDataToShow(response.DT);
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
             }
@@ -103,7 +103,7 @@ const UserManagement = () => {
 
     const delUserById = async (id) => {
         try {
-            let response = await deleteTestById(id);
+            let response = await deleteUserById(id);
             if (response && response.EC === 0) {
                 toast.success(response.EM);
             } else if (response && response.EC !== 0) {
@@ -139,17 +139,20 @@ const UserManagement = () => {
 
     const ActionButtons = ({ id }) => {
         const handleDelete = async () => {
-            if (window.confirm("Bạn có thực sự muốn xóa Test có id=" + id)) {
+            if (window.confirm("Bạn có thực sự muốn xóa User có id=" + id)) {
                 await delUserById(id);
                 await fetchListUsers();
             }
         };
 
         const handleEdit = () => {
-            if (findTestById(id)) {
+            try {
                 handleShowModalUpdate(id);
+            } catch (error) {
+                toast.error("Error while handling edit:", error);
             }
         };
+
 
         return (
             <div
@@ -163,13 +166,6 @@ const UserManagement = () => {
             >
                 <button className='btn-action' onClick={handleEdit}>
                     <MdModeEditOutline
-                        style={{ color: "#A5A6B1", cursor: "pointer" }}
-
-                    />
-                </button>
-
-                <button className='btn-action' onClick={handleDelete}>
-                    <MdOutlineLockReset size={'18px'}
                         style={{ color: "#A5A6B1", cursor: "pointer" }}
 
                     />
@@ -227,45 +223,65 @@ const UserManagement = () => {
         refModalUser.current.open(await findTestById(id), "Update");
     }
 
-    //Hàm thêm user
+    // Hàm thêm user
     const handleAdd = async (newUser) => {
-        newUser.UpdatedAt = new Date().toISOString();
-        newUser.CreatedAt = new Date().toISOString();
-        let response = await postNewTest(newUser);
-        if (response.EC === 0 && response) {
-            toast.success(response.EM)
-            fetchListUsers();
-        } else {
-            toast.error(response.EM)
+        try {
+            // Gọi API đăng ký user
+            let response = await postRegisterWithRole(
+                newUser.Email,
+                newUser.Username,
+                newUser.NewPass,
+                newUser.FirstName,
+                newUser.LastName,
+                newUser.RoleID
+            );
+
+            // Kiểm tra kết quả phản hồi
+            if (response.EC === 0) {
+                toast.success(response.EM);  // Hiển thị thông báo thành công
+                fetchListUsers();  // Lấy danh sách người dùng mới
+            } else {
+                toast.error(response.EM);  // Hiển thị thông báo lỗi
+            }
+        } catch (error) {
+            toast.error("Error: " + error.message);  // Xử lý lỗi nếu có
         }
     }
 
-    //Hàm update user
+
     const handleUpdate = async (updatedUser) => {
-        updatedUser.UpdatedAt = new Date().toISOString();
         console.log(updatedUser);
-        let response = await putUpdateTest(updatedUser);
+        const dataToSend = {
+            UserID: updatedUser.UserID,
+            FirstName: updatedUser.FirstName,
+            LastName: updatedUser.LastName,
+        };
+
+        let response = await putUpdateUser(dataToSend);
+        let response2 = await putUpdateUserRoles(updatedUser.UserID, [updatedUser.RoleID]);
+
         if (response.EC === 0 && response) {
-            toast.success(response.EM)
+            toast.success(response.EM);
             fetchListUsers();
         } else {
-            toast.error(response.EM)
+            toast.error(response.EM);
         }
     };
+
 
     useDebounce(() => {
         const filteredData = data.filter((item) => {
             return (
-                item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.Difficulty.toLowerCase().includes(searchTerm.toLowerCase())
+                item.Username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.Email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.FirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.LastName.toLowerCase().includes(searchTerm.toLowerCase())
             );
         });
-        console.log(filteredData);
         if (filteredData.length === 0) {
             return;
         }
-        setData([...filteredData])
+        setDataToShow([...filteredData])
     }, [searchTerm], 500
     );
 
@@ -278,7 +294,7 @@ const UserManagement = () => {
                 <div className='AdminPersonnel-item'>
                     <Card>
                         <Card.Header>
-                            Test Management
+                            User Management
                         </Card.Header>
                         <Card.Body>
                             <div className='AdminPersonnel-item-wrapper'>
@@ -301,7 +317,7 @@ const UserManagement = () => {
                                     <DataTable
                                         className='rdt_Table_Home'
                                         columns={columns}
-                                        data={data}
+                                        data={dataToShow}
                                         pagination
                                         paginationComponentOptions={paginationOptions}
                                     />

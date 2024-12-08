@@ -81,8 +81,9 @@ const TestManagement = () => {
         try {
             let response = await getTests();
             if (response && response.EC === 0) {
-                setData(response.DT);
-                console.log(data);
+                const filteredData = response.DT.filter(test => test.Id !== -1);
+                setData(filteredData);
+                setDataToShow(filteredData);
             } else if (response && response.EC !== 0) {
                 toast.error(response.EM);
             }
@@ -94,6 +95,7 @@ const TestManagement = () => {
             }
         }
     }
+
 
     const delTestById = async (id) => {
         try {
@@ -244,11 +246,10 @@ const TestManagement = () => {
                 item.Difficulty.toLowerCase().includes(searchTerm.toLowerCase())
             );
         });
-        console.log(filteredData);
         if (filteredData.length === 0) {
             return;
         }
-        setData([...filteredData])
+        setDataToShow([...filteredData])
     }, [searchTerm], 500
     );
 
@@ -284,7 +285,7 @@ const TestManagement = () => {
                                     <DataTable
                                         className='rdt_Table_Home'
                                         columns={columns}
-                                        data={data}
+                                        data={dataToShow}
                                         pagination
                                         paginationComponentOptions={paginationOptions}
                                     />
