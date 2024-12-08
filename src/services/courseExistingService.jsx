@@ -6,10 +6,17 @@ const axios = createAxiosInstance("http://courseservice.somee.com");
 // Hàm lấy danh sách các khóa học hiện có
 const getCourseExistings = async () => {
   try {
-    const response = await axios.get("/api/CourseExisting");
-    console.log("Course existing data:", response);
+    return await axios.get("/api/CourseExisting");
+  } catch (error) {
+    console.error("Error fetching course existings:", error);
+    throw error;
+  }
+};
+
+const getCourseExistingsNam = async (nam) => {
+  try {
+    const response = await axios.get("/api/CourseExisting/Nam?Nam=" + nam);
     if (response.ec === 1) {
-      console.log("Course existing data:", response);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
       console.error("Error:", response.em);
@@ -92,4 +99,5 @@ export {
   addCourseExisting,
   deleteCourseExisting,
   updateCourseExisting,
+  getCourseExistingsNam,
 };

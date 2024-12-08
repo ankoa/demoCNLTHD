@@ -13,6 +13,37 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Tùy chỉnh thanh cuộn cho toàn bộ trang web */
+html {
+  scrollbar-width: thin;
+  /* Thu nhỏ thanh cuộn (cho Firefox) */
+  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+  /* Màu thanh cuộn và track (cho Firefox) */
+}
+
+html::-webkit-scrollbar {
+  width: 0.5rem;
+  /* Độ rộng của thanh cuộn */
+}
+
+html::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  /* Màu nền của track */
+}
+
+html::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  /* Màu thanh cuộn */
+  border-radius: 10px;
+  /* Bo góc thanh cuộn */
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+  /* Màu thanh cuộn khi hover */
+}
+
+
 a {
   font-weight: 500;
   color: #646cff;

@@ -6,8 +6,28 @@ const API_BASE_URL = "http://examservice.somee.com/";
 const axios = createAxiosInstance(API_BASE_URL);
 const BASE_URL = "/api/Test";
 
-const getTests = () => {
-  return axios.get("api/Test");
+const getTests = async () => {
+  return await axios.get("api/Test");
+};
+
+const getStatOverview = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}api/History/score-statistics`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching stats:", error);
+    throw error;
+  }
+};
+
+const getStatAverage = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}api/History/score-statistics-average`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching stats:", error);
+    throw error;
+  }
 };
 
 const getTestByID = async (testID) => {
@@ -151,4 +171,6 @@ export {
   postNewTest,
   putUpdateTest,
   getParfOfTestById,
+  getStatAverage,
+  getStatOverview
 };
