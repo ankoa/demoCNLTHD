@@ -67,6 +67,8 @@ const Lesson = () => {
     const selectedLessonDetails = lessonDetail.filter(
       (detail) => detail.lessonId === lessonId
     );
+
+    console.log(lessonId, selectedLessonDetails);
     setSelectedContent(selectedLessonDetails);
     setSelectedIndex(lessonId); // Cập nhật chỉ mục của mục menu được chọn
   };
@@ -90,14 +92,15 @@ const Lesson = () => {
   return (
     <div className="lesson-container">
       <div className="breadcrumb">
-        <span className="home-link" onClick={goToHomePage}>
+        <span className="breadcrumb-link" onClick={goToHomePage}>
           Trang chủ
         </span>
-
-        <span className="home-link" onClick={goToMyCourse}>
-          / Khóa học của tôi
+        <span className="breadcrumb-divider">/</span>
+        <span className="breadcrumb-link" onClick={goToMyCourse}>
+          Khóa học của tôi
         </span>
-        <span> / Lesson</span>
+        <span className="breadcrumb-divider">/</span>
+        <span className="breadcrumb-current">Lesson</span>
       </div>
       <div className="lesson-layout">
         <div className="menu">
@@ -113,38 +116,43 @@ const Lesson = () => {
         </div>
         <div className="content">
           {selectedContent ? (
-            <div>
-              {selectedContent.map((detail, index) => (
-                <div key={index} className="lesson-detail">
-                  <h3>{detail.lessonName}</h3>
-                  <p>{detail.lessonDescription}</p>
-                  <p>Tiến độ học: {detail.learningpProgress}%</p>
+            selectedContent.length > 0 ? ( // Kiểm tra nếu mảng không rỗng
+              <div>
+                {selectedContent.map((detail, index) => (
+                  <div key={index} className="lesson-detail">
+                    <h3>{detail.lessonName}</h3>
+                    <p>{detail.lessonDescription}</p>
+                    <p>Tiến độ học: {detail.learningpProgress}%</p>
 
-                  {/* Nhúng video YouTube vào trang */}
-                  <div className="video-container">
-                    {detail.lessonVideo ? (
-                      getYouTubeVideoId(detail.lessonVideo) ? (
-                        <iframe
-                          width="560"
-                          height="315"
-                          src={`https://www.youtube-nocookie.com/embed/${getYouTubeVideoId(detail.lessonVideo)}`}
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
+                    {/* Nhúng video YouTube vào trang */}
+                    <div className="video-container">
+                      {detail.lessonVideo ? (
+                        getYouTubeVideoId(detail.lessonVideo) ? (
+                          <iframe
+                            width="560"
+                            height="315"
+                            src={`https://www.youtube-nocookie.com/embed/${getYouTubeVideoId(detail.lessonVideo)}`}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        ) : (
+                          <p>Video ID không hợp lệ</p> // Thông báo khi không có ID video hợp lệ
+                        )
                       ) : (
-                        <p>Video ID không hợp lệ</p> // Thông báo khi không có ID video hợp lệ
-                      )
-                    ) : (
-                      <p>Video not available</p> // Thông báo khi không có video
-                    )}
+                        <p>Video not available</p> // Thông báo khi không có video
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <p>Sẽ được cập nhật sớm hơn</p> // Nếu mảng rỗng
+            )
           ) : (
-            <p>Chọn bài học để xem chi tiết</p>
+            <p>Chọn bài học để xem chi tiết</p> // Nếu selectedContent là null hoặc undefined
           )}
+
         </div>
       </div>
     </div>

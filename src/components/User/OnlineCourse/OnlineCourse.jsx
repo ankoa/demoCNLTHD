@@ -64,8 +64,8 @@ const CourseList = ({ courseData }) => {
               />
             ))}
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
