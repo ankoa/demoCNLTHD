@@ -11,14 +11,15 @@ import { FaEllipsisV, FaTrashAlt, FaEdit } from "react-icons/fa"; // Added edit 
 import { IoIosAddCircleOutline } from "react-icons/io";
 import AddLessonDetailModal from "./AddLessonDetailModal.jsx"; // Import the AddLessonDetailModal
 import EditLessonDetailModal from "./EditLessonDetailModal.jsx"; // Import the AddLessonDetailModal
-
+import DeleteLessonDetailModal from "./DeleteLessonDetailModal.jsx";
 import "./LessonDetailModal.scss";
+import { set } from "lodash";
 
 // ActionButtons component for better modularity
 const ActionButtons = ({ id, onEdit, onDelete }) => (
   <div className="action-buttons">
     <button className="btn-icon" onClick={() => onEdit(id)}>
-      <FaEdit /> {/* Edit icon */}
+      <FaEdit />
     </button>
     <button className="btn-icon" onClick={() => onDelete(id)}>
       <FaTrashAlt />
@@ -36,6 +37,10 @@ const LessonDetailModal = ({ show, lessonId, onClose }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
+  const [deleteLessonDetailmodal, setdeleteLessonDetailmodal] = useState(false);
+  const [deletelessondetailID, setdeletelessondetailID] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editessondetailID, seteditlessondetailID] = useState(null);
 
   useEffect(() => {
     fetchLessonDetails();
@@ -44,10 +49,13 @@ const LessonDetailModal = ({ show, lessonId, onClose }) => {
   const fetchLessonDetails = async () => {
     try {
       const response = await getLessonDetails();
+      console.log("Lesson details response:", response);
       if (response && Array.isArray(response)) {
         const filteredData = response.filter(
           (item) => item.lessonId === lessonId
         );
+        console.log("Lesson details filteredData:", response);
+
         setData(filteredData);
       } else {
         setData([]);
@@ -58,28 +66,17 @@ const LessonDetailModal = ({ show, lessonId, onClose }) => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this lesson detail?")) {
-      try {
-        const response = await deleteLessonDetail(id);
-        if (response && response.EC === 0) {
-          toast.success("Deleted successfully!");
-          fetchLessonDetails();
-        } else {
-          toast.error(response?.EM || "Error occurred!");
-        }
-      } catch (error) {
-        toast.error("Error deleting lesson detail.");
-      }
-    }
+  const handleDelete = (id) => {
+    setdeleteLessonDetailmodal(true);
+    setdeletelessondetailID(id);
   };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
   const handleEdit = (id) => {
-    const lesson = data.find((item) => item.lessonId === id);
-    if (lesson) refModalLesson.current.open(lesson, "Update");
+    setShowEditModal(true);
+    seteditlessondetailID(id);
   };
 
   const filteredData = data.filter(
@@ -89,7 +86,9 @@ const LessonDetailModal = ({ show, lessonId, onClose }) => {
         .includes(searchTerm.toLowerCase()) ||
       lessonDetail.lessonId.toString().includes(searchTerm.toLowerCase())
   );
-
+  const resettable = () => {
+    fetchLessonDetails();
+  };
   const columns = [
     {
       name: "Lesson Detail ID",
@@ -113,7 +112,7 @@ const LessonDetailModal = ({ show, lessonId, onClose }) => {
     },
     {
       name: "Learning Progress",
-      selector: (row) => row.learningProgress,
+      selector: (row) => row.learningpProgress || "N/A",
       sortable: true,
     },
     {
@@ -126,7 +125,7 @@ const LessonDetailModal = ({ show, lessonId, onClose }) => {
       cell: (row) => (
         <ActionButtons
           id={row.lessonDetailId}
-          onEdit={(id) => console.log("Edit", id)} // Placeholder for editing logic
+          onEdit={handleEdit} // Placeholder for editing logic
           onDelete={handleDelete}
         />
       ),
@@ -194,7 +193,35 @@ const LessonDetailModal = ({ show, lessonId, onClose }) => {
         show={showModal}
         onClose={() => setShowModal(false)}
         fetchLessonDetails={fetchLessonDetails}
+        lessonId={lessonId}
+        resettable={resettable}
       />
+      <EditLessonDetailModal
+        show={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        resetTable={resettable}
+        editlessondetailID={editessondetailID}
+      />
+      {deleteLessonDetailmodal && (
+        <DeleteLessonDetailModal
+          show={deleteLessonDetailmodal}
+          lessonDetailID={deletelessondetailID}
+          onClose={() => setdeleteLessonDetailmodal(false)}
+          resettable={resettable}
+          /* onDelete={async (id) => {
+              try {
+                await deleteCourse(id);
+                toast.success("Course deleted successfully.");
+                fetchCourses();
+                setShowDeleteModal(false);
+                fetchCourses();
+              } catch (error) {
+                console.error("Error deleting course:", error);
+                toast.error("Error deleting course.");
+              }
+            } }*/
+        />
+      )}
     </Modal>
   );
 };

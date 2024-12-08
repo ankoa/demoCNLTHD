@@ -113,6 +113,7 @@ const AddCourseModal = (props) => {
       const response = await addCourse(payload);
       if (response && response.ec === 1) {
         toast.success("Course added successfully!");
+        props.resetTable();
         props.onClose();
       } else {
         toast.error(response?.em || "Error occurred while adding the course.");

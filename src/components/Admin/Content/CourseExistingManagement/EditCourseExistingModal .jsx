@@ -45,12 +45,15 @@ const EditCourseExistingModal = (props) => {
     active: 1,
     username: "",
   });
+  const [userID, setUserID] = useState(null);
+  const [idCourse, setIdCourse] = useState(null);
 
   useEffect(() => {
     const fetchInitialData = async () => {
       if (props.course) {
         setCourseExisting(props.course);
-
+        setUserID(props.course.userID);
+        setIdCourse(props.course.idCourse);
         // Fetch user data if userID is available
         if (props.course.userID) {
           try {
@@ -58,7 +61,7 @@ const EditCourseExistingModal = (props) => {
             if (response) {
               setCourseExisting((prev) => ({
                 ...prev,
-                username: response.Username,
+                username: response.DT.Username,
               }));
             }
           } catch (error) {
@@ -96,10 +99,10 @@ const EditCourseExistingModal = (props) => {
       if (value) {
         try {
           const response = await getUserById(value);
-          if (response && response.Username) {
+          if (response && response.DT.Username) {
             setCourseExisting((prev) => ({
               ...prev,
-              username: response.Username,
+              username: response.DT.Username,
             }));
           } else {
             setCourseExisting((prev) => ({
@@ -185,23 +188,28 @@ const EditCourseExistingModal = (props) => {
       return;
     }
 
-    try {
-      const responseExistingCourse = await getCourseExistings();
-      const existingCourse = responseExistingCourse.find(
-        (item) =>
-          item.userID == courseExisting.userID &&
-          item.idCourse == courseExisting.idCourse &&
-          item.courseExistingId !== courseExisting.courseExistingId // Ensure it is not the current one being updated
-      );
+    if (
+      userID !== courseExisting.userID ||
+      idCourse !== courseExisting.idCourse
+    ) {
+      try {
+        const responseExistingCourse = await getCourseExistings();
+        const existingCourse = responseExistingCourse.find(
+          (item) =>
+            item.userID == courseExisting.userID &&
+            item.idCourse == courseExisting.idCourse &&
+            item.courseExistingId !== courseExisting.courseExistingId // Ensure it is not the current one being updated
+        );
 
-      if (existingCourse && existingCourse.courseExistingId) {
-        toast.error("This course already exists.");
+        if (existingCourse && existingCourse.courseExistingId) {
+          toast.error("This Existing course already exists.");
+          return;
+        }
+      } catch (error) {
+        console.error("Error checking existing course:", error);
+        toast.error("Error checking existing course.");
         return;
       }
-    } catch (error) {
-      console.error("Error checking existing course:", error);
-      toast.error("Error checking existing course.");
-      return;
     }
 
     try {
@@ -209,11 +217,13 @@ const EditCourseExistingModal = (props) => {
         courseExisting.courseExistingId,
         courseExisting
       );
-      if (response && response.EC === 1) {
+      console.log("Course existing updated:", response);
+      if (response == true) {
         toast.success("Updated successfully!");
+        props.resetTable();
         props.onClose(); // Close modal after success
       } else {
-        toast.error(response?.EM || "Error occurred!");
+        toast.error("Error occurred!");
       }
     } catch (error) {
       console.error("Error updating course existing:", error);

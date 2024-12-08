@@ -12,7 +12,7 @@ import {
 import Question from "../Question/Question";
 import ModalResult from "./ModalResult";
 import QuizAudio from "./QuizAudio";
-
+import { useNavigate } from "react-router-dom";
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { createHistory } from "../../../../services/historyService";

@@ -22,11 +22,9 @@ const getUsers = () => {
 };
 
 // Hàm postLogOut để gọi API đăng xuất
-const postLogOut = (email, refresh_token) => {
-  return axios.post("/api/v1/logout", {
-    email,
-    refresh_token,
-    delay: 1000,
+const postLogOut = (RefreshToken) => {
+  return axios.post("/api/Account/Logout", {
+    RefreshToken
   });
 };
 

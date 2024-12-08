@@ -12,6 +12,7 @@ import {
 import AddCourseExistingModal from "./AddCourseExistingModal"; // Import the AddCourseExistingModal
 import EditCourseExistingModal from "./EditCourseExistingModal "; // Import the EditCourseExistingModal
 import "./CourseExistingManagement.scss";
+import DeleteCourseExistingModal from "./DeleteCourseExistingModal"; // Import the EditCourseExistingModal
 
 const CourseExistingManagement = () => {
   const refModalCourse = useRef();
@@ -20,6 +21,8 @@ const CourseExistingManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteCourseExistingId, setdeleteCourseExistingId] = useState(null);
 
   const columns = [
     {
@@ -54,7 +57,12 @@ const CourseExistingManagement = () => {
     },
     {
       name: "Actions",
-      cell: (row) => <ActionButtons id={row.courseExistingId} />,
+      cell: (row) => (
+        <ActionButtons
+          id={row.courseExistingId}
+          active={row.active ? "Yes" : "No"}
+        />
+      ),
     },
   ];
 
@@ -72,7 +80,7 @@ const CourseExistingManagement = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  /*   const handleDelete = async (id) => {
     if (
       window.confirm("Are you sure you want to delete this course existing?")
     ) {
@@ -88,8 +96,11 @@ const CourseExistingManagement = () => {
         toast.error("Error deleting course existing.");
       }
     }
+  }; */
+  const handleDelete = (id) => {
+    setdeleteCourseExistingId(id);
+    setShowDeleteModal(true);
   };
-
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -100,16 +111,23 @@ const CourseExistingManagement = () => {
       course.userID.toString().includes(searchTerm)
   );
 
-  const ActionButtons = ({ id }) => (
-    <div className="action-buttons">
-      <button className="btn-icon" onClick={() => handleEdit(id)}>
-        <FaEllipsisV />
-      </button>
-      <button className="btn-icon" onClick={() => handleDelete(id)}>
-        <FaTrashAlt />
-      </button>
-    </div>
-  );
+  const ActionButtons = ({ id, active }) => {
+    return (
+      <div className="action-buttons">
+        <button className="btn-icon" onClick={() => handleEdit(id)}>
+          <FaEllipsisV />
+        </button>
+        {/* Hiển thị nút xóa chỉ khi không có khóa học nào thỏa mãn điều kiện */}
+        <button
+          className="btn-icon"
+          onClick={() => handleDelete(id)}
+          disabled={active === "No"} // Vô hiệu hóa nếu active là "No" hoặc courseExists là true
+        >
+          <FaTrashAlt />
+        </button>
+      </div>
+    );
+  };
 
   // New function to fetch data by ID
   const fetchCourseByID = async (id) => {
@@ -135,7 +153,9 @@ const CourseExistingManagement = () => {
       setShowEditModal(true); // Open the edit modal
     }
   };
-
+  const resetTable = () => {
+    fetchCourseExistings(); // Re-fetch data to refresh the table
+  };
   return (
     <div className="AdminCourses">
       <Card>
@@ -171,12 +191,35 @@ const CourseExistingManagement = () => {
       <AddCourseExistingModal
         show={showModal}
         onClose={() => setShowModal(false)}
+        resetTable={resetTable}
       />
       <EditCourseExistingModal
         show={showEditModal}
         onClose={() => setShowEditModal(false)}
-        course={selectedCourse} // Pass the selected course data to the modal
+        course={selectedCourse}
+        resetTable={resetTable}
       />
+
+      {showDeleteModal && (
+        <DeleteCourseExistingModal
+          show={showDeleteModal}
+          courseExistingId={deleteCourseExistingId}
+          onClose={() => setShowDeleteModal(false)}
+          resetTable={resetTable}
+          /* onDelete={async (id) => {
+              try {
+                await deleteCourse(id);
+                toast.success("Course deleted successfully.");
+                fetchCourses();
+                setShowDeleteModal(false);
+                fetchCourses();
+              } catch (error) {
+                console.error("Error deleting course:", error);
+                toast.error("Error deleting course.");
+              }
+            } }*/
+        />
+      )}
     </div>
   );
 };

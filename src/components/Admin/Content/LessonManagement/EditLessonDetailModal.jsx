@@ -5,11 +5,12 @@ import styled from "styled-components";
 import {
   getLessonDetailByID,
   updateLessonDetail,
-} from "../../../../services/lessonDetailService"; // Adjust the path as needed
+} from "../../../../services/lessonDetailService"; // Điều chỉnh đường dẫn nếu cần
 
 // Styled-components
 const StyledModal = styled(Modal)`
   .modal-content {
+    height: 600px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
@@ -32,33 +33,37 @@ const StyledModal = styled(Modal)`
   }
 `;
 
-const EditLessonModal = (props) => {
+const EditLessonDetailModal = (props) => {
+  console.log("props", props);
   const [lesson, setLesson] = useState({
+    lessonDetailId: props.editlessondetailID,
     lessonId: null,
     lessonName: "",
     lessonDescription: "",
-    learningProgress: 0,
+    learningpProgress: 0,
     lessonVideo: "",
-    courseId: 1,
-    titleLessonId: 0,
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (props.lessonId) {
-      fetchLessonDetails(props.lessonId);
+    if (props.editlessondetailID) {
+      fetchLessonDetails(props.editlessondetailID);
     }
-  }, [props.lessonId]);
+  }, [props]);
 
   const fetchLessonDetails = async (lessonId) => {
+    setLoading(true);
     try {
       const response = await getLessonDetailByID(lessonId);
-      if (response && response.EC === 0) {
-        setLesson(response.DT);
+      if (response) {
+        setLesson(response);
       } else {
-        toast.error(response?.EM || "Failed to fetch lesson details!");
+        toast.error("Failed to fetch lesson details!");
       }
     } catch (error) {
       toast.error("Error fetching lesson details.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,16 +73,30 @@ const EditLessonModal = (props) => {
   };
 
   const handleSubmit = async () => {
+    console.log("lessonDetailEdit", lesson);
+    if (
+      !lesson.lessonName ||
+      !lesson.lessonDescription ||
+      lesson.learningpProgress < 0 ||
+      lesson.learningpProgress > 100
+    ) {
+      toast.error("Please fill out all fields correctly.");
+      return;
+    }
+    setLoading(true);
     try {
-      const response = await updateLessonDetail(lesson);
-      if (response && response.EC === 0) {
+      const response = await updateLessonDetail(lesson.lessonDetailId, lesson);
+      if (response) {
         toast.success("Lesson updated successfully!");
+        props.resetTable();
         props.onClose();
       } else {
-        toast.error(response?.EM || "Error occurred!");
+        toast.error("Error occurred!");
       }
     } catch (error) {
-      toast.error("Error updating lesson.");
+      toast.error("Error updating lesson.", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,69 +106,65 @@ const EditLessonModal = (props) => {
         <Modal.Title>Edit Lesson</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
-          <Form.Group controlId="formLessonName">
-            <Form.Label>Lesson Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter lesson name"
-              name="lessonName"
-              value={lesson.lessonName}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formLessonDescription">
-            <Form.Label>Lesson Description</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter lesson description"
-              name="lessonDescription"
-              value={lesson.lessonDescription}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formLearningProgress">
-            <Form.Label>Learning Progress</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter learning progress"
-              name="learningProgress"
-              value={lesson.learningProgress}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formLessonVideo">
-            <Form.Label>Lesson Video URL</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter video URL"
-              name="lessonVideo"
-              value={lesson.lessonVideo}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formTitleLessonId">
-            <Form.Label>Title Lesson ID</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter title lesson ID"
-              name="titleLessonId"
-              value={lesson.titleLessonId}
-              onChange={handleChange}
-            />
-          </Form.Group>
-        </Form>
+        {loading ? (
+          <div className="text-center">
+            <h5>Loading...</h5>
+          </div>
+        ) : (
+          <Form>
+            <Form.Group controlId="formLessonName">
+              <Form.Label>Lesson Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter lesson name"
+                name="lessonName"
+                value={lesson.lessonName}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formLessonDescription">
+              <Form.Label>Lesson Description</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter lesson description"
+                name="lessonDescription"
+                value={lesson.lessonDescription}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formlearningpProgress">
+              <Form.Label>Learning Progress</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter learning progress"
+                name="learningpProgress"
+                value={lesson.learningpProgress}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formLessonVideo">
+              <Form.Label>Lesson Video URL</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter video URL"
+                name="lessonVideo"
+                value={lesson.lessonVideo}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Form>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={props.onClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          Save Changes
+        <Button variant="primary" onClick={handleSubmit} disabled={loading}>
+          {loading ? "Saving..." : "Save Changes"}
         </Button>
       </Modal.Footer>
     </StyledModal>
   );
 };
 
-export default EditLessonModal;
+export default EditLessonDetailModal;

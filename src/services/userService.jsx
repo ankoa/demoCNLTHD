@@ -1,17 +1,12 @@
 // Hàm postLogin để gọi API đăng nhập
 
 import createAxiosInstance from "../util/axiosCustomize";
-const API_BASE_URL = "http://authservice.somee.com/";
-/*  const API_BASE_URL = "http://userservice.somee.com";
- */
+const API_BASE_URL = "http://authservice.somee.com";
+
 const axios = createAxiosInstance(API_BASE_URL);
 const getUsers = async () => {
   try {
-    const response = await axios.get("api/User");
-    if (response && response.EC === 0) {
-      return response.DT; // Trả về dữ liệu nếu EC === 0
-    }
-    throw new Error(response.EM || "Unknown error occurred");
+    return await axios.get("api/User");
   } catch (error) {
     console.error("Error fetching users:", error.message);
     return null; // Hoặc giá trị xử lý khác nếu cần
@@ -20,11 +15,7 @@ const getUsers = async () => {
 
 const getUserWithRoleById = async (id) => {
   try {
-    const response = await axios.get(`api/User/usernrole/${id}`);
-    if (response && response.EC === 0) {
-      return response.DT;
-    }
-    throw new Error(response.EM || "Unknown error occurred");
+    return await axios.get(`api/User/usernrole/${id}`);
   } catch (error) {
     console.error(`Error fetching user with role for ID ${id}:`, error.message);
     return null;
@@ -34,10 +25,10 @@ const getUserWithRoleById = async (id) => {
 const postNewUser = async (newUser) => {
   try {
     const response = await axios.post("api/User", newUser);
-    if (response && response.EC === 0) {
-      return response.DT;
+    if (response.data && response.data.EC === 0) {
+      return response.data.DT;
     }
-    throw new Error(response.EM || "Unknown error occurred");
+    throw new Error(response.data.EM || "Unknown error occurred");
   } catch (error) {
     console.error("Error creating new user:", error.message);
     return null;
@@ -47,10 +38,10 @@ const postNewUser = async (newUser) => {
 const putUpdateUser = async (updateUser) => {
   try {
     const response = await axios.put("api/User", updateUser);
-    if (response && response.EC === 0) {
-      return response.DT;
+    if (response.data && response.data.EC === 0) {
+      return response.data.DT;
     }
-    throw new Error(response.EM || "Unknown error occurred");
+    throw new Error(response.data.EM || "Unknown error occurred");
   } catch (error) {
     console.error("Error updating user:", error.message);
     return null;
@@ -58,12 +49,9 @@ const putUpdateUser = async (updateUser) => {
 };
 
 const getUserById = async (id) => {
+  console.log(id);
   try {
-    const response = await axios.get(`api/User/${id}`);
-    if (response && response.EC === 0) {
-      return response.DT;
-    }
-    throw new Error(response.EM || "Unknown error occurred");
+    return axios.get(`api/User/${id}`);
   } catch (error) {
     console.error(`Error fetching user with ID ${id}:`, error.message);
     return null;

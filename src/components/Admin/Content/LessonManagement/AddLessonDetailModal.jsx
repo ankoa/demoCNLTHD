@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import styled from "styled-components";
-import { addLesson } from "../../../../services/lessonService"; // Adjust the path as needed
+import { addLessonDetail } from "../../../../services/lessonDetailService"; // Adjust the path as needed
 
 // Styled-components
 const StyledModal = styled(Modal)`
@@ -30,15 +30,31 @@ const StyledModal = styled(Modal)`
 `;
 
 const AddLessonModal = (props) => {
+  console.log(props);
   const [lesson, setLesson] = useState({
-    lessonId: null, // Auto-generated
-    lessonName: "",
-    lessonDescription: "", // Added description
-    learningProgress: 0, // Default value
-    lessonVideo: "", // URL or path
-    courseId: 1, // Assuming a fixed or passed value
-    titleLessonId: 0, // Default value
+    lessonDetailId: 0, // Auto-generated or handled by backend
+    lessonId: props.lessonId, // Auto-generated or passed in
+    lessonName: "", // Can be null
+    lessonDescription: "", // Can be null
+    learningpProgress: 0, // Default value
+    lessonVideo: "", // Can be null
+    titleLessonId: 0, // Default value or passed in
   });
+
+  // Clear form when the modal is opened
+  useEffect(() => {
+    if (props.show) {
+      setLesson({
+        lessonDetailId: 0,
+        lessonId: props.lessonId,
+        lessonName: "",
+        lessonDescription: "",
+        learningpProgress: 0,
+        lessonVideo: "",
+        titleLessonId: 0,
+      });
+    }
+  }, [props.show]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,12 +63,13 @@ const AddLessonModal = (props) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await addLesson(lesson);
-      if (response && response.EC === 0) {
-        toast.success("Lesson added successfully!");
+      const response = await addLessonDetail(lesson);
+      if (response) {
+        toast.success("Lesson Detail added successfully!");
+        props.resettable();
         props.onClose();
       } else {
-        toast.error(response?.EM || "Error occurred!");
+        toast.error("Error occurred!");
       }
     } catch (error) {
       toast.error("Error adding lesson.");
@@ -91,8 +108,8 @@ const AddLessonModal = (props) => {
             <Form.Control
               type="number"
               placeholder="Enter learning progress"
-              name="learningProgress"
-              value={lesson.learningProgress}
+              name="learningpProgress"
+              value={lesson.learningpProgress}
               onChange={handleChange}
             />
           </Form.Group>

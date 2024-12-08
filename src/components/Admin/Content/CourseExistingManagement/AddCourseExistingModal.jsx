@@ -52,10 +52,10 @@ const AddCourseExistingModal = (props) => {
       if (value) {
         try {
           const response = await getUserById(value);
-          if (response && response.Username) {
+          if (response && response.DT.Username) {
             setCourseExisting((prev) => ({
               ...prev,
-              username: response.Username,
+              username: response.DT.Username,
             }));
           } else {
             setCourseExisting((prev) => ({
@@ -66,7 +66,7 @@ const AddCourseExistingModal = (props) => {
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
-          toast.error("Error fetching user data.");
+          toast.error("User not found. Please check the User ID.");
           setCourseExisting((prev) => ({
             ...prev,
             username: "",
@@ -162,6 +162,7 @@ const AddCourseExistingModal = (props) => {
       const response = await addCourseExisting(courseExisting);
       if (response && response.ec === 1) {
         toast.success("Course existing added successfully!");
+        props.resetTable();
         clearModal(); // Clear the form after successful submission
         props.onClose();
       } else {

@@ -11,6 +11,7 @@ import { deleteLesson, getLessons } from "../../../../services/lessonService";
 import AddLessonModal from "./AddLessonModal.jsx";
 import EditLessonModal from "./EditLessonModal.jsx";
 import LessonDetailModal from "./LessonDetailModal.jsx";
+import DeletelessonModal from "./DeleteLessonModal.jsx";
 import "./LessonManagement.scss";
 
 const LessonManagement = () => {
@@ -22,7 +23,8 @@ const LessonManagement = () => {
   const [data, setData] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-
+  const [showdeleteModal, setshowdeleteModal] = useState(false);
+  const [deleteLessonId, setDeleteLessonId] = useState(null);
   const columns = [
     {
       name: "Lesson ID",
@@ -64,7 +66,7 @@ const LessonManagement = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  /*   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this lesson?")) {
       try {
         const response = await deleteLesson(id);
@@ -78,7 +80,7 @@ const LessonManagement = () => {
         toast.error("Error deleting lesson.");
       }
     }
-  };
+  }; */
   const handleEdit = (id) => {
     setSelectedLesson(id);
     setShowEditModal(true);
@@ -94,6 +96,10 @@ const LessonManagement = () => {
   };
   const resetTable = () => {
     fetchLessons(); // Re-fetch data to refresh the table
+  };
+  const handleDelete = (id) => {
+    setDeleteLessonId(id);
+    setshowdeleteModal(true);
   };
 
   const filteredData = data.filter(
@@ -171,6 +177,26 @@ const LessonManagement = () => {
         lessonId={selectedLesson}
         onClose={() => setShowDetailModal(false)}
       />
+      {showdeleteModal && (
+        <DeletelessonModal
+          show={showdeleteModal}
+          lessonID={deleteLessonId}
+          onClose={() => setshowdeleteModal(false)}
+          resetTable={resetTable}
+          /* onDelete={async (id) => {
+              try {
+                await deleteCourse(id);
+                toast.success("Course deleted successfully.");
+                fetchCourses();
+                setShowDeleteModal(false);
+                fetchCourses();
+              } catch (error) {
+                console.error("Error deleting course:", error);
+                toast.error("Error deleting course.");
+              }
+            } }*/
+        />
+      )}
     </div>
   );
 };

@@ -7,6 +7,8 @@ import { postLogOut } from "../../../services/authService"; // Adjust path as ne
 import { Dropdown } from "react-bootstrap"; // Import Dropdown from Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaUser, FaPhoneAlt } from "react-icons/fa"; // Import cả FaUser và FaPhoneAlt
+import { toast } from "react-toastify";
+import { doLogOut } from "../../../redux/action/userAction";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -31,11 +33,24 @@ const Header = () => {
     }
   }, [isAuthenticated, accountFromState]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (account) {
-      dispatch(postLogOut("accounemail@gmail.com", account.refresh_token));
-      console.log("User logged out.");
-      navigate("/login");
+      try {
+        let response = await postLogOut(accountFromState.refresh_token);
+        if (response && response.EC === 0) {
+          dispatch(doLogOut());
+          toast.success(response.EM);
+          navigate("/");
+        } else if (response && response.EC !== 0) {
+          toast.error(response.EM);
+          console.log(response);
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+        toast.error(
+          "Có lỗi xảy ra trong quá trình đăng xuất. Vui lòng thử lại sau."
+        );
+      }
     }
   };
   const handleUserinformation = () => {
@@ -48,7 +63,7 @@ const Header = () => {
           {/* Logo */}
           <div className="logo" onClick={() => navigate("/")}>
             <img
-              src="src/assets/images/logo-TOEIC.webp"
+              src="src/assets/images/logo-toeic-transparent1.png"
               alt="Logo"
               className="logo-image"
             />

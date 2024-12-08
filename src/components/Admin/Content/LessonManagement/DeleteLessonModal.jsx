@@ -1,27 +1,25 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import {
-  updateCourse, // Ensure this function updates a course's active status
-  getCoursesByID, // Optionally, use this if you need to fetch course details
-} from "../../../../services/courseService";
+  deleteLesson,
+  updateLesson, // Ensure this function updates a course's active status
+  getLessonByID, // Optionally, use this if you need to fetch course details
+} from "../../../../services/lessonService";
 import { toast } from "react-toastify";
-const DeleteCourseModal = (props) => {
+const DeletelessonModal = (props) => {
   console.log("props", props);
 
   const handleDelete = async () => {
     try {
       // Fetch the course by ID to update its 'active' status to 0
-      const course = await getCoursesByID(props.courseId);
-      if (course) {
-        course.dt.active = 0; // Set active status to 0 (inactive)
-
-        // Call the service to update the course in the database
-        await updateCourse(course.dt);
+      const response = await deleteLesson(props.lessonID);
+      if (response) {
         props.resetTable();
+
+        toast.success("Lesson has been deactivated successfully.");
         props.onClose();
-        toast.success("Course has been deactivated successfully.");
       } else {
-        console.error("Course not found.");
+        console.error("Error deactivating course.");
       }
     } catch (error) {
       console.error("Error deactivating course:", error);
@@ -35,8 +33,8 @@ const DeleteCourseModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         <p>
-          Are you sure you want to deactivate this course? Course ID:{" "}
-          {props.courseId}
+          Are you sure you want to deactivate this lesson? Lesson ID:{" "}
+          {props.lessonID}
         </p>
       </Modal.Body>
       <Modal.Footer>
@@ -51,4 +49,4 @@ const DeleteCourseModal = (props) => {
   );
 };
 
-export default DeleteCourseModal;
+export default DeletelessonModal;

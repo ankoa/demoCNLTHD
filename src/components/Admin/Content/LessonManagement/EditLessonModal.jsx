@@ -34,6 +34,7 @@ const StyledModal = styled(Modal)`
 `;
 
 const EditLessonModal = (props) => {
+  console.log("propsedit", props);
   const [lesson, setLesson] = useState({
     lessonId: props.lessonID,
     courseId: "",
@@ -44,14 +45,15 @@ const EditLessonModal = (props) => {
 
   useEffect(() => {
     if (props.lessonID) {
+      console.log("Fetching lesson details for ID:", props.lessonID);
       fetchLessonDetails(props.lessonID);
     }
-  }, [props.lessonID]);
+  }, [props]);
 
   const fetchLessonDetails = async (lessonId) => {
     try {
       const response = await getLessonByID(lessonId);
-      console.log(response);
+      console.log("Lesson:", response);
       if (response) {
         setLesson({
           lessonId: response.lessonId,
@@ -145,6 +147,7 @@ const EditLessonModal = (props) => {
     };
 
     try {
+      console.log("Lesson data:", lessonData);
       const response = await updateLesson(lessonData.lessonId, lessonData);
       if (response) {
         toast.success("Lesson updated successfully!");

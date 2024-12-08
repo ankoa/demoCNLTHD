@@ -78,3 +78,9 @@
     }
   }
 }
+.btn-icon:disabled {
+  background-color: #ddd; /* Màu nền nhạt */
+  color: #aaa; /* Màu chữ nhạt */
+  cursor: not-allowed; /* Con trỏ chuột sẽ là hình dấu chéo */
+  opacity: 0.5; /* Độ mờ của nút */
+}

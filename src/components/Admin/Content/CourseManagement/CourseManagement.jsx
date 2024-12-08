@@ -13,14 +13,17 @@ import {
 } from "../../../../services/courseService";
 import AddCourseModal from "./AddCourseModal";
 import EditCourseModal from "./EditCourseModal";
+import DeleteCourseModal from "./DeleteCourseModal";
 import "./CourseManagement.scss";
 
 const CourseManagement = () => {
   const refModalCourse = useRef();
-  const [showModal, setShowModal] = useState(false); // State for controlling modal visibility
+  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [editModalData, setEditModalData] = useState(null);
+  const [deleteCourseId, setDeleteCourseId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
   const columns = [
@@ -29,7 +32,7 @@ const CourseManagement = () => {
       selector: (row) => row.courseId,
       sortable: true,
       style: {
-        width: "150px", // Chiều rộng cụ thể
+        width: "150px",
       },
     },
     {
@@ -37,7 +40,7 @@ const CourseManagement = () => {
       selector: (row) => row.name,
       sortable: true,
       style: {
-        width: "150px", // Chiều rộng cụ thể
+        width: "150px",
       },
     },
     {
@@ -45,7 +48,7 @@ const CourseManagement = () => {
       selector: (row) => row.title,
       sortable: true,
       style: {
-        width: "150px", // Chiều rộng cụ thể
+        width: "150px",
       },
     },
     {
@@ -53,7 +56,7 @@ const CourseManagement = () => {
       selector: (row) => row.description,
       sortable: true,
       style: {
-        width: "150px", // Chiều rộng cụ thể
+        width: "150px",
       },
     },
     {
@@ -61,7 +64,7 @@ const CourseManagement = () => {
       selector: (row) => `$${row.price.toFixed(2)}`,
       sortable: true,
       style: {
-        width: "150px", // Chiều rộng cụ thể
+        width: "150px",
       },
     },
     {
@@ -69,7 +72,7 @@ const CourseManagement = () => {
       selector: (row) => (row.active ? "Yes" : "No"),
       sortable: true,
       style: {
-        width: "150px", // Chiều rộng cụ thể
+        width: "150px",
       },
     },
     {
@@ -77,14 +80,16 @@ const CourseManagement = () => {
       selector: (row) => new Date(row.created).toLocaleString("en-US"),
       sortable: true,
       style: {
-        width: "150px", // Chiều rộng cụ thể
+        width: "150px",
       },
     },
     {
       name: "Actions",
-      cell: (row) => <ActionButtons id={row.courseId} />,
+      cell: (row) => (
+        <ActionButtons id={row.courseId} active={row.active ? "Yes" : "No"} />
+      ),
       style: {
-        width: "150px", // Chiều rộng cụ thể
+        width: "150px",
       },
     },
   ];
@@ -102,8 +107,10 @@ const CourseManagement = () => {
       toast.error("Error fetching courses.");
     }
   };
-  const handleDelete = async (id) => {
-    <deleteCourse id={id} />;
+
+  const handleDelete = (id) => {
+    setDeleteCourseId(id);
+    setShowDeleteModal(true);
   };
 
   const handleSearch = (e) => {
@@ -121,8 +128,8 @@ const CourseManagement = () => {
       const course = await getCoursesByID(id);
       if (course) {
         console.log("Editing course:", course);
-        setEditModalData(course.dt); // Pass course to modal
-        setShowEditModal(true); // Open modal
+        setEditModalData(course.dt);
+        setShowEditModal(true);
       } else {
         toast.error("Error fetching course.");
       }
@@ -130,17 +137,33 @@ const CourseManagement = () => {
       toast.error("Error fetching course.");
     }
   };
+  const resetTable = () => {
+    fetchCourses(); // Re-fetch data to refresh the table
+  };
 
-  const ActionButtons = ({ id }) => (
-    <div className="action-buttons">
-      <button className="btn-icon" onClick={() => handleEdit(id)}>
-        <FaEllipsisV />
-      </button>
-      <button className="btn-icon" onClick={() => handleDelete(id)}>
-        <FaTrashAlt />
-      </button>
-    </div>
-  );
+  const ActionButtons = ({ id, active }) => {
+    // Log để kiểm tra giá trị của props
+    /*     console.log("active->>>>>", active);
+    console.log("id->>>>>", id); */
+
+    // Kiểm tra nếu có phần tử nào trong data có courseId và active = 0
+
+    return (
+      <div className="action-buttons">
+        <button className="btn-icon" onClick={() => handleEdit(id)}>
+          <FaEllipsisV />
+        </button>
+        {/* Hiển thị nút xóa chỉ khi không có khóa học nào thỏa mãn điều kiện */}
+        <button
+          className="btn-icon"
+          onClick={() => handleDelete(id)}
+          disabled={active === "No"} // Vô hiệu hóa nếu active là "No" hoặc courseExists là true
+        >
+          <FaTrashAlt />
+        </button>
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -160,13 +183,12 @@ const CourseManagement = () => {
               />
               <button
                 className="btn btn-success ms-2"
-                onClick={() => setShowModal(true)} // Open the modal
+                onClick={() => setShowModal(true)}
               >
                 <IoIosAddCircleOutline /> Add Course
               </button>
             </div>
             <div className="table-container">
-              {" "}
               <DataTable
                 columns={columns}
                 data={filteredData}
@@ -176,7 +198,11 @@ const CourseManagement = () => {
             </div>
           </Card.Body>
         </Card>
-        <AddCourseModal show={showModal} onClose={() => setShowModal(false)} />
+        <AddCourseModal
+          show={showModal}
+          onClose={() => setShowModal(false)}
+          resetTable={resetTable}
+        />
       </div>
       <div>
         {showEditModal && (
@@ -184,6 +210,29 @@ const CourseManagement = () => {
             show={showEditModal}
             onClose={() => setShowEditModal(false)}
             data={editModalData}
+            resetTable={resetTable}
+          />
+        )}
+      </div>
+      <div>
+        {showDeleteModal && (
+          <DeleteCourseModal
+            show={showDeleteModal}
+            courseId={deleteCourseId}
+            onClose={() => setShowDeleteModal(false)}
+            resetTable={resetTable}
+            /* onDelete={async (id) => {
+              try {
+                await deleteCourse(id);
+                toast.success("Course deleted successfully.");
+                fetchCourses();
+                setShowDeleteModal(false);
+                fetchCourses();
+              } catch (error) {
+                console.error("Error deleting course:", error);
+                toast.error("Error deleting course.");
+              }
+            } }*/
           />
         )}
       </div>

@@ -117,7 +117,7 @@ const EditCourseModal = (props) => {
       const payload = {
         ...course,
         price: parseFloat(course.price),
-        image: "/online_course.png",
+        image: imageUrl,
         active: course.active ? 1 : 0,
         updated: new Date().toISOString(),
       };
@@ -125,6 +125,7 @@ const EditCourseModal = (props) => {
       const response = await updateCourse(payload);
       if (response && response.ec === 1) {
         toast.success("Course updated successfully!");
+        props.resetTable();
         props.onClose();
       } else {
         toast.error(response?.em || "Error updating the course.");

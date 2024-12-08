@@ -1,9 +1,9 @@
 import createAxiosInstance from "../util/axiosCustomize";
+
 // Đường dẫn đầy đủ của API
 const API_BASE_URL = "http://feedback.somee.com";
 
 const axios = createAxiosInstance(API_BASE_URL);
-const userId = useSelector((state) => state.userReducer.account.userid);
 
 // Hàm hiển thị comment theo testID
 const loadComment = async (testID) => {
@@ -41,7 +41,7 @@ const loadComment = async (testID) => {
 //   }
 // };
 
-const createComment = async (commentText) => {
+const createComment = async (commentText, userId) => {
   // Chuẩn bị dữ liệu
   const data = {
     UserID: userId,
@@ -103,9 +103,4 @@ const deleteComment = async (commentID) => {
   }
 };
 
-export{
-    loadComment,
-    createComment,
-    updateComment,
-    deleteComment
-};
+export { loadComment, createComment, updateComment, deleteComment };

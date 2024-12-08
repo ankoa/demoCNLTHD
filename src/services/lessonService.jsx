@@ -21,6 +21,7 @@ const getLessons = async () => {
   }
 };
 const getLessonByID = async (id) => {
+  console.log("getLessonByID: ", id);
   try {
     const response = await axios.get(`/api/Lesson/ID?ID=${id}`);
     console.log("Lesson by ID:", response);
@@ -57,8 +58,11 @@ const addLesson = async (lessonData) => {
 
 // Hàm xóa bài học theo ID
 const deleteLesson = async (lessonID) => {
+  console.log("Deleting lesson with ID:", lessonID);
   try {
-    const response = await axios.delete(`api/Lesson/${lessonID}`);
+    const response = await axios.delete(
+      `api/Lesson/LessonID?LessonID=${lessonID}`
+    );
     if (response.ec === 1) {
       console.log("Lesson deleted:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'

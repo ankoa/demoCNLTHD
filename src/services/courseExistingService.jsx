@@ -23,6 +23,7 @@ const getCourseExistings = async () => {
 
 // Hàm tìm khóa học hiện có theo ID
 const findByID = async (id) => {
+  console.log("Finding course existing by ID:", id);
   try {
     const response = await axios.get(`/api/CourseExisting/ID?ID=${id}`);
     console.log("Course existing by ID:", response);

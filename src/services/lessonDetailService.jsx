@@ -39,6 +39,7 @@ const getLessonDetailByID = async (id) => {
 };
 // Hàm thêm chi tiết bài học mới
 const addLessonDetail = async (lessonDetailData) => {
+  console.log("lessondetail", lessonDetailData);
   try {
     const response = await axios.post("api/LessonDetail", lessonDetailData, {
       headers: { "Content-Type": "application/json" },
@@ -58,8 +59,11 @@ const addLessonDetail = async (lessonDetailData) => {
 
 // Hàm xóa chi tiết bài học theo ID
 const deleteLessonDetail = async (lessonDetailID) => {
+  console.log("Deleting lesson detail with ID:", lessonDetailID);
   try {
-    const response = await axios.delete(`api/LessonDetail/${lessonDetailID}`);
+    const response = await axios.delete(
+      `api/LessonDetail/LessonDetaiID?LessonDetaiID=${lessonDetailID}`
+    );
     if (response.ec === 1) {
       console.log("Lesson detail deleted:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
@@ -77,7 +81,7 @@ const deleteLessonDetail = async (lessonDetailID) => {
 const updateLessonDetail = async (lessonDetailID, lessonDetailData) => {
   try {
     const response = await axios.put(
-      `api/LessonDetail/${lessonDetailID}`,
+      `api/LessonDetail/LessonDetaiID?LessonDetaiID=${lessonDetailID}`,
       lessonDetailData,
       {
         headers: { "Content-Type": "application/json" },

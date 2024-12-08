@@ -121,11 +121,11 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             icon={<FiActivity />}
             onClick={() => navigate("/admin/manage-course")}
           />
-          <SubMenu
-            title="Courses Details"
-            icon={<FiActivity />}
-            onClick={() => navigate("/admin/manage-courseDetails")}
-          />
+            {/* <SubMenu
+              title="Courses Details"
+              icon={<FiActivity />}
+              onClick={() => navigate("/admin/manage-courseDetails")}
+            /> */}
           <SubMenu
             title="Courses Existing"
             icon={<FiActivity />}
