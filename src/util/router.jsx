@@ -19,6 +19,7 @@ export const ROUTERS = {
     USERPROFILE: "/userprofile",
     PRACTICERESULTS:"/practiceresults",
     PAYMENTSUCCESS: "/payment-success",
+    
     // COMMENT:"/comment",
 
   },
@@ -33,5 +34,7 @@ export const ROUTERS = {
     COURSE_EXISTING: "manage-courseExisting",
     LESSON: "manage-lesson",
     LESSON_DETAIL: "manage-lessonDetail",
+    SCORECHART: "scorechart",
+    REVENUECHART: "revenuechart",
   },
 };
