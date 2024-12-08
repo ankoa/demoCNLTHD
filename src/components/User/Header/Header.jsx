@@ -38,7 +38,9 @@ const Header = () => {
       navigate("/login");
     }
   };
-
+  const handleUserinformation = () => {
+    navigate("/userprofile");
+  };
   return (
     <div className="header-container">
       {showUpperHeader && (
@@ -80,15 +82,15 @@ const Header = () => {
             {isLogin ? (
               <Dropdown>
                 <Dropdown.Toggle
-                  variant="light" 
+                  variant="light"
                   className="btn-user-icon"
                   id="dropdown-basic"
                 >
-                  <FaUser style={{ color: "black" }} /> 
+                  <FaUser style={{ color: "black" }} />
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={handleLogout}>
+                  <Dropdown.Item onClick={handleUserinformation}>
                     Thông tin tài khoản
                   </Dropdown.Item>
                   <Dropdown.Item onClick={handleLogout}>
