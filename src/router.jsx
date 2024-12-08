@@ -19,7 +19,19 @@ import TestResult from "./components/User/TestResult/TestResult";
 import UserManagement from "./components/Admin/Content/UserManagement/UserManagement";
 import PartManagement from "./components/Admin/Content/PartManagement/PartManagement";
 import QuestionManagement from "./components/Admin/Content/QuestionManagement/QuestionManagement";
+import CourseManagement from "./components/Admin/Content/CourseManagement/CourseManagement";
+import PurchaseForm from "./components/User/PurchaseForm/PurchaseForm";
+import Lesson from "./components/User/Lesson/Lesson";
 
+import CourseExistingManagement from "./components/Admin/Content/CourseExistingManagement/CourseExistingManagement";
+import UserProfile from "./components/User/UserProfile/UserProfile";
+/* import CourseDetailManagement from "./components/Admin/Content/CourseDetailManagement/CourseDetailManagement";
+ */
+import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
+import LessonDetailManagement from "./components/Admin/Content/LessonDetailManagement/LessonDetailManagement";
+// import CommentsContainer from "./components/User/Feedback/Comment"
+import MyCourses from "./components/User/MyCourse/MyCourse";
+import PaymentSuccess from "./components/User/PurchaseForm/PaymentSuccess";
 const renderUserRouter = () => {
   const userRouters = [
     { path: ROUTERS.USER.HOMEPAGE, element: <Homepage /> },
@@ -27,6 +39,7 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.TEST_PAGE, element: <TestDetail /> },
     { path: ROUTERS.USER.MAIN_TEST, element: <MainTest /> },
     { path: ROUTERS.USER.ONLINECOURSE, element: <OnlineCourse /> },
+    { path: ROUTERS.USER.COURSEPURCHASE, element: <PurchaseForm /> },
     { path: ROUTERS.USER.LOGIN, element: <Login /> },
     { path: ROUTERS.USER.REGISTER, element: <Register /> },
     { path: ROUTERS.USER.FINDACCOUNT, element: <FindAccount /> },
@@ -34,7 +47,12 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.RESETPASSWORD, element: <ResetPassword /> },
     { path: ROUTERS.USER.USERCOURSE, element: <UserCourse /> },
     { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
-    { path: ROUTERS.USER.TESTRESULT, element: <TestResult />},
+    { path: ROUTERS.USER.TESTRESULT, element: <TestResult /> },
+    // { path: ROUTERS.USER.COMMENT, element: <CommentsContainer /> },
+    { path: ROUTERS.USER.LESSON, element: <Lesson /> },
+    { path: ROUTERS.USER.MYCOURSE, element: <MyCourses /> },
+    { path: ROUTERS.USER.USERPROFILE, element: <UserProfile /> },
+    { path: ROUTERS.USER.PAYMENTSUCCESS, element: <PaymentSuccess /> },
   ];
 
   return userRouters.map((route, key) => (
@@ -49,6 +67,21 @@ const renderAdminRouter = () => {
     { path: ROUTERS.ADMIN.USER, element: <UserManagement /> },
     { path: ROUTERS.ADMIN.PART, element: <PartManagement /> },
     { path: ROUTERS.ADMIN.QUESTION, element: <QuestionManagement /> },
+    { path: ROUTERS.ADMIN.COURSE, element: <CourseManagement /> },
+    {
+      path: ROUTERS.ADMIN.COURSE_EXISTING,
+      element: <CourseExistingManagement />,
+    },
+    /*     { path: ROUTERS.ADMIN.COURSE, element: <CourseDetailManagement /> },
+     */
+    {
+      path: ROUTERS.ADMIN.LESSON,
+      element: <LessonManagement />,
+    },
+    {
+      path: ROUTERS.ADMIN.LESSON_DETAIL,
+      element: <LessonDetailManagement />,
+    },
   ];
 
   return adminRouters.map((route, key) => (

@@ -77,6 +77,16 @@ const TextBox = ({ tests }) => {
 
           {/* Phân trang */}
           <div className="pagination mt-4">
+            {/* Nút Trái */}
+            <button
+              className="page-button"
+              disabled={currentPage === 1} // Vô hiệu hóa nếu đang ở trang đầu tiên
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              <i className="fas fa-chevron-left"></i> {/* Icon FontAwesome */}
+            </button>
+
+            {/* Nút số trang */}
             {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index + 1}
@@ -88,6 +98,15 @@ const TextBox = ({ tests }) => {
                 {index + 1}
               </button>
             ))}
+
+            {/* Nút Phải */}
+            <button
+              className="page-button"
+              disabled={currentPage === totalPages} // Vô hiệu hóa nếu đang ở trang cuối
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              <i className="fas fa-chevron-right"></i> {/* Icon FontAwesome */}
+            </button>
           </div>
         </>
       )}

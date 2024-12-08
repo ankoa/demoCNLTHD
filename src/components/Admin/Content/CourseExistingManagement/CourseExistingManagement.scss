@@ -1,0 +1,41 @@
+.AdminCourses {
+  .card-header {
+    background-color: #7fb4ed; // Màu nền của card header
+    color: white; // Màu chữ
+    font-size: 1.25rem; // Kích thước chữ
+  }
+
+  .form-control {
+    width: 100%;
+    max-width: 600px; // Giới hạn chiều rộng tối đa của input
+    border-radius: 5px; // Bo tròn góc input
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Thêm bóng mờ cho input
+  }
+
+  .btn-success {
+    border-radius: 5px; // Bo tròn góc của nút
+    font-size: 0.9rem; // Kích thước chữ của nút
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      margin-right: 5px; // Khoảng cách giữa icon và chữ
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 10px; // Khoảng cách giữa các nút
+    .btn-icon {
+      background: none;
+      border: none;
+      color: #333;
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      &:hover {
+        color: #007bff; // Màu khi hover
+      }
+    }
+  }
+}

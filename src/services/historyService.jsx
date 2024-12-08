@@ -1,13 +1,13 @@
 import createAxiosInstance from "../util/axiosCustomize";
 
 // Định nghĩa URL cơ sở
-const BASE_URL = "https://localhost:5001/api/History";
-const axios = createAxiosInstance(5001); // Tạo instance axios
+const API_BASE_URL = "http://examservice.somee.com/";
+const axios = createAxiosInstance(API_BASE_URL);
 
 // Lấy danh sách tất cả lịch sử
 const getAllHistories = async () => {
   try {
-    const response = await axios.get(BASE_URL);
+    const response = await axios.get("api/History");
     return response;
   } catch (error) {
     console.error("Error fetching histories:", error);
@@ -18,7 +18,7 @@ const getAllHistories = async () => {
 // Lấy lịch sử theo ID
 const getHistoryById = async (id) => {
   try {
-    const response = await axios.get(`${BASE_URL}/${id}`);
+    const response = await axios.get(`api/History/${id}`);
     return response;
   } catch (error) {
     console.error(`Error fetching history with id=${id}:`, error);
@@ -29,7 +29,7 @@ const getHistoryById = async (id) => {
 // Tạo mới một lịch sử
 const createHistory = async (data) => {
   try {
-    const response = await axios.post(BASE_URL, data);
+    const response = await axios.post("api/History", data);
     return response;
   } catch (error) {
     console.error("Error creating history:", error);
@@ -40,7 +40,7 @@ const createHistory = async (data) => {
 // Cập nhật lịch sử theo ID
 const updateHistory = async (id, history) => {
   try {
-    const response = await axios.put(`${BASE_URL}/${id}`, history);
+    const response = await axios.put(`api/History/${id}`, history);
     return response.data;
   } catch (error) {
     console.error(`Error updating history with id=${id}:`, error);
@@ -51,7 +51,7 @@ const updateHistory = async (id, history) => {
 // Xóa lịch sử theo ID
 const deleteHistory = async (id) => {
   try {
-    await axios.delete(`${BASE_URL}/${id}`);
+    await axios.delete(`api/History/${id}`);
   } catch (error) {
     console.error(`Error deleting history with id=${id}:`, error);
     throw error;
@@ -61,7 +61,7 @@ const deleteHistory = async (id) => {
 // Lấy tất cả các phần của lịch sử theo ID lịch sử
 const getAllPartsByHistoryId = async (id) => {
   try {
-    const response = await axios.get(`${BASE_URL}/part/${id}`);
+    const response = await axios.get(`api/History/part/${id}`);
     return response;
   } catch (error) {
     console.error(`Error fetching parts of history with id=${id}:`, error);
@@ -73,7 +73,7 @@ const getAllPartsByHistoryId = async (id) => {
 const getCombinedHistories = async (userId, hisId) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/PartOfHistory/${userId}/${hisId}`
+      `api/History/PartOfHistory/${userId}/${hisId}`
     );
     return response;
   } catch (error) {
@@ -89,7 +89,7 @@ const getCombinedHistories = async (userId, hisId) => {
 const getPartOfHis = async (userID, historyID) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/PartOfHistory/${userID}/${historyID}`
+      `api/History/PartOfHistory/${userID}/${historyID}`
     );
     return response;
   } catch (error) {
