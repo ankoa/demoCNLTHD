@@ -25,10 +25,12 @@ import Lesson from "./components/User/Lesson/Lesson";
 
 import CourseExistingManagement from "./components/Admin/Content/CourseExistingManagement/CourseExistingManagement";
 import UserProfile from "./components/User/UserProfile/UserProfile";
+import PracticeResults from "./components/User/UserProfile/PracticeResults";
 /* import CourseDetailManagement from "./components/Admin/Content/CourseDetailManagement/CourseDetailManagement";
  */
 import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
 import LessonDetailManagement from "./components/Admin/Content/LessonDetailManagement/LessonDetailManagement";
+// import CommentsContainer from "./components/User/Feedback/Comment"
 import MyCourses from "./components/User/MyCourse/MyCourse";
 import PaymentSuccess from "./components/User/PurchaseForm/PaymentSuccess";
 const renderUserRouter = () => {
@@ -47,10 +49,14 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.USERCOURSE, element: <UserCourse /> },
     { path: ROUTERS.USER.CHANGEPASSWORD, element: <ChangePassword /> },
     { path: ROUTERS.USER.TESTRESULT, element: <TestResult /> },
+    // { path: ROUTERS.USER.COMMENT, element: <CommentsContainer /> },
     { path: ROUTERS.USER.LESSON, element: <Lesson /> },
     { path: ROUTERS.USER.MYCOURSE, element: <MyCourses /> },
     { path: ROUTERS.USER.USERPROFILE, element: <UserProfile /> },
+    { path: ROUTERS.USER.PRACTICERESULTS, element: <PracticeResults /> },
+
     { path: ROUTERS.USER.PAYMENTSUCCESS, element: <PaymentSuccess /> },
+
   ];
 
   return userRouters.map((route, key) => (

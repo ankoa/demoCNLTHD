@@ -17,7 +17,10 @@ export const ROUTERS = {
     LESSON: "/lesson/:courseId",
     MYCOURSE: "/my-course",
     USERPROFILE: "/userprofile",
+    PRACTICERESULTS:"/practiceresults",
     PAYMENTSUCCESS: "/payment-success",
+    // COMMENT:"/comment",
+
   },
   ADMIN: {
     DASHBOARD: "dashboard", // Chỉ cần để "dashboard" mà không có /
