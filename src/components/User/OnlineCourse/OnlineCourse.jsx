@@ -15,7 +15,7 @@ const OnlineCourse = () => {
       setLoading(true);
       try {
         const data = await getCourses(); // Gọi API
-        setCourses(data);
+        setCourses(data.filter(course => course.active === 1));
         console.log("Course: ", data);
       } catch (err) {
         console.log("Lỗi khi lấy dữ liệu course: ", err);
@@ -32,7 +32,7 @@ const OnlineCourse = () => {
       <div className="site-content-wrapper">
         <div className="content-header">
           <div className="image-wrapper">
-              <img src='./src/assets/online_course/online_course_banner.png' alt='banner'></img>
+            <img src='./src/assets/online_course/online_course_banner.png' alt='banner'></img>
           </div>
           <br />
           <h1>Chương trình học online</h1>
@@ -40,7 +40,7 @@ const OnlineCourse = () => {
           </p>
         </div>
       </div>
-      <CourseList courseData={courses}/>
+      <CourseList courseData={courses} />
     </div>
   )
 }
