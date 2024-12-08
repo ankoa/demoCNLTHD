@@ -17,8 +17,8 @@ root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
-        {/* <RouterCustom /> */}
-        <ExcelReader></ExcelReader>
+        <RouterCustom />
+        {/* <ExcelReader></ExcelReader> */}
         <ToastContainer
           position="top-center"
           autoClose={2000}
