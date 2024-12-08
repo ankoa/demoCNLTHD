@@ -37,7 +37,7 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    dispatch(doLogOut());
+    dispatch(doLogOut()); // Đảm bảo người dùng trước đó được đăng xuất
     if (!username) {
       toast.error("Email không được để trống!");
       return;
@@ -47,23 +47,35 @@ const Login = () => {
       return;
     }
     try {
-      let response = await postLogin(username, password);
+      let response = await postLogin(username, password); // Gửi request login
       if (response && response.EC === 0) {
+        // Lưu thông tin người dùng vào Redux
         dispatch(doLogIn(response));
-        // let res = await getUsers();
-        // console.log(res)
-        navigate("/");
+
+        const role = response.DT.role; // Lấy role từ response (DT.role là giả định)
+
+        // Điều hướng dựa trên vai trò
+        if (role === "Admin" || role === "Staff") {
+          navigate("/admin"); // Admin/Staff chuyển đến trang Admin
+        } else {
+          navigate("/"); // User chuyển đến trang Home
+        }
+
+        toast.success("Đăng nhập thành công!");
       } else if (response && response.EC !== 0) {
+        // Xử lý khi đăng nhập thất bại
         toast.error(response.EM);
         console.log(response);
       }
     } catch (error) {
+      // Xử lý lỗi trong quá trình đăng nhập
       console.error("Error during login:", error);
       toast.error(
         "Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại sau."
       );
     }
   };
+
 
   // Handle keydown event for Enter key to submit form
   const handleKeyDown = (event) => {

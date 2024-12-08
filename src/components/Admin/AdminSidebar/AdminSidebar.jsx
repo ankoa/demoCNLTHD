@@ -65,21 +65,6 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             icon={<FiActivity />}
             onClick={() => navigate("/admin/user")}
           >
-            <MenuItem
-              suffix={
-                <span className="badge bg-primary-soft text-primary ms-auto">
-                  Updated
-                </span>
-              }
-            >
-              Default <Link to="/admin/manage-user" />
-            </MenuItem>
-            <MenuItem>
-              Multiopurpose <Link to="/admin/manage-quiz" />
-            </MenuItem>
-            <MenuItem>
-              Affiliate <Link to="/admin/manage-question" />
-            </MenuItem>
           </SubMenu>
         </Menu>
         <Menu iconShape="circle">
@@ -89,27 +74,9 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             icon={<AiOutlineAppstore />}
             onClick={() => navigate("/admin/test")}
           ></SubMenu>
-          <SubMenu title="Parts" icon={<FiGlobe />}>
-            <MenuItem>
-              Default <Link to="/admin/manage-user" />
-            </MenuItem>
-            <MenuItem>
-              Multiopurpose <Link to="/admin/manage-quiz" />
-            </MenuItem>
-            <MenuItem>
-              Affiliate <Link to="/admin/manage-question" />
-            </MenuItem>
+          <SubMenu title="Parts" icon={<FiGlobe />} onClick={() => navigate("/admin/part")}>
           </SubMenu>
-          <SubMenu title="QAs" icon={<IoRepeat />}>
-            <MenuItem>
-              Knowledge Base <Link to="/admin/manage-user" />
-            </MenuItem>
-            <MenuItem>
-              User Management <Link to="/admin/manage-quiz" />
-            </MenuItem>
-            <MenuItem>
-              Posts Management <Link to="/admin/manage-question" />
-            </MenuItem>
+          <SubMenu title="QAs" icon={<IoRepeat />} onClick={() => navigate("/admin/question")}>
           </SubMenu>
         </Menu>
         <Menu iconShape="course">
