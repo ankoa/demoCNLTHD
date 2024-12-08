@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   // Nếu vai trò không nằm trong danh sách được phép, chuyển hướng đến trang login
   if (!allowedRoles.includes(role)) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Nếu vai trò hợp lệ, render component

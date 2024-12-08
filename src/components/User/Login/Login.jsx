@@ -3,11 +3,12 @@ import { getUsers, postLogin } from "../../../services/authService";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Login.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { doLogIn, doLogOut } from "../../../redux/action/userAction";
 import { toast } from "react-toastify";
 
 const Login = () => {
+  const role = useSelector((state) => state.userReducer.account.role);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +24,12 @@ const Login = () => {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
+
+  useEffect(() => {
+    if (role) {
+      navigate(role === "User" ? "/" : "/admin"); // Chuyển hướng về trang chủ nếu đã có role
+    }
+  }, [role, navigate]); // role thay đổi thì effect này sẽ chạy
 
   useEffect(() => {
     if (dataFromRegister) {
