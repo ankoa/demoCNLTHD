@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
+import axios from "axios";
 import { addCourse } from "../../../../services/courseService";
 
-// Styled-components
+// Styled-components for modal styling
 const StyledModal = styled(Modal)`
   .modal-content {
     border-radius: 10px;
@@ -39,6 +40,8 @@ const AddCourseModal = (props) => {
     image: null, // To hold the image file
   });
 
+  const [isUploading, setIsUploading] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCourse({ ...course, [name]: value });
@@ -51,50 +54,78 @@ const AddCourseModal = (props) => {
     }
   };
 
+  // Retrieve environment variables
+  const cloudName = "drybe720w";
+  const apiKey = "328935211357267";
+  const apiSecret = "eaDdEvcb1IkctNIznI34poBW8_k";
+
+  const uploadImageToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "n7pniczk");
+    formData.append("cloud_name", cloudName);
+
+    try {
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      console.log("Upload response:", response.data);
+      return response.data.secure_url;
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+      toast.error("Failed to upload image. Please try again.");
+      throw new Error("Image upload failed.");
+    }
+  };
+
   const handleSubmit = async () => {
     try {
-      // Gọi hàm kiểm tra dữ liệu
       const validationError = validateInput(course);
       if (validationError) {
-        toast.error(validationError); // Hiển thị lỗi
-        return; // Dừng hàm nếu có lỗi
+        toast.error(validationError);
+        return;
       }
 
-      // Xử lý dữ liệu nếu hợp lệ
+      let imageUrl = "";
+      if (course.image) {
+        setIsUploading(true);
+        imageUrl = await uploadImageToCloudinary(course.image);
+        setIsUploading(false);
+      }
+
       const payload = {
         courseId: 0,
         name: course.name,
         description: course.description,
         title: course.title,
         price: parseFloat(course.price) || 0,
-        image: course.image ? await convertImageToBase64(course.image) : "",
+        image: imageUrl,
         active: course.active ? 1 : 0,
         created: new Date().toISOString(),
       };
 
-      console.log("Payload:", payload); // Debug dữ liệu gửi đi
+      console.log("Payload:", payload);
 
-      const response = await addCourse(payload); // Gọi API
+      const response = await addCourse(payload);
       if (response && response.ec === 1) {
         toast.success("Course added successfully!");
         props.onClose();
       } else {
-        toast.error(response?.em || "Error occurred!");
+        toast.error(response?.em || "Error occurred while adding the course.");
       }
     } catch (error) {
+      setIsUploading(false);
       console.error("Error adding course:", error);
-      toast.error("Error adding course.");
+      toast.error(
+        "An error occurred while adding the course. Please try again."
+      );
     }
   };
 
-  const convertImageToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
-    });
-  };
   const validateInput = (course) => {
     if (!course.name || course.name.trim() === "") {
       return "Course name is required.";
@@ -115,7 +146,7 @@ const AddCourseModal = (props) => {
     if (!course.image) {
       return "Course image is required.";
     }
-    return null; // Không có lỗi
+    return null; // No validation error
   };
 
   return (
@@ -198,8 +229,8 @@ const AddCourseModal = (props) => {
         <Button variant="secondary" onClick={props.onClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          Save Changes
+        <Button variant="primary" onClick={handleSubmit} disabled={isUploading}>
+          {isUploading ? "Uploading..." : "Save Changes"}
         </Button>
       </Modal.Footer>
     </StyledModal>

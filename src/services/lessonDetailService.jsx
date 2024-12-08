@@ -12,7 +12,7 @@ const getLessonDetails = async () => {
       console.log("Lesson details data:", response);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -20,7 +20,23 @@ const getLessonDetails = async () => {
     throw error;
   }
 };
-
+const getLessonDetailByID = async (id) => {
+  console.log("getLessonDetailByID: ", id);
+  try {
+    const response = await axios.get(`/api/LessonDetail/ID?ID=${id}`);
+    console.log("Lesson detail by ID:", response);
+    if (response.ec === 1) {
+      console.log("Lesson detail by ID:", response);
+      return response.dt; // Trả về dữ liệu trong phần 'dt'
+    } else {
+      console.error("Error:", response.em);
+      throw new Error(response.em);
+    }
+  } catch (error) {
+    console.error("Error fetching lesson detail by ID:", error);
+    throw error;
+  }
+};
 // Hàm thêm chi tiết bài học mới
 const addLessonDetail = async (lessonDetailData) => {
   try {
@@ -28,10 +44,10 @@ const addLessonDetail = async (lessonDetailData) => {
       headers: { "Content-Type": "application/json" },
     });
     if (response.ec === 1) {
-      console.log("Lesson detail added:", response.data.dt);
+      console.log("Lesson detail added:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -45,10 +61,10 @@ const deleteLessonDetail = async (lessonDetailID) => {
   try {
     const response = await axios.delete(`api/LessonDetail/${lessonDetailID}`);
     if (response.ec === 1) {
-      console.log("Lesson detail deleted:", response.data.dt);
+      console.log("Lesson detail deleted:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -68,10 +84,10 @@ const updateLessonDetail = async (lessonDetailID, lessonDetailData) => {
       }
     );
     if (response.ec === 1) {
-      console.log("Lesson detail updated:", response.data.dt);
+      console.log("Lesson detail updated:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
-      console.error("Error:", response.data.em);
+      console.error("Error:", response.em);
       throw new Error(response.em);
     }
   } catch (error) {
@@ -86,4 +102,5 @@ export {
   addLessonDetail,
   deleteLessonDetail,
   updateLessonDetail,
+  getLessonDetailByID,
 };

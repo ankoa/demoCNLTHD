@@ -136,7 +136,15 @@ const LessonDetailManagement = () => {
               <IoIosAddCircleOutline /> Add Lesson Detail
             </button>
           </div>
-          <DataTable columns={columns} data={filteredData} pagination />
+          <div className="table-container">
+            {" "}
+            <DataTable
+              columns={columns}
+              data={filteredData}
+              pagination
+              className="data-table"
+            />
+          </div>
         </Card.Body>
       </Card>
       <AddLessonDetailModal

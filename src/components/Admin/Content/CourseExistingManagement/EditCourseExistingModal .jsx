@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import {
-  addCourseExisting,
+  updateCourseExisting,
   getCourseExistings,
-} from "../../../../services/courseExistingService"; // Updated import
-import { getCoursesByID } from "../../../../services/courseService"; // Updated import
-import { getUserById } from "../../../../services/userService"; // Thêm import này
+} from "../../../../services/courseExistingService";
+import { getCoursesByID } from "../../../../services/courseService";
+import { getUserById } from "../../../../services/userService";
 
 // Styled-components
 const StyledModal = styled(Modal)`
@@ -34,16 +34,60 @@ const StyledModal = styled(Modal)`
   }
 `;
 
-const AddCourseExistingModal = (props) => {
+const EditCourseExistingModal = (props) => {
+  console.log(props);
   const [courseExisting, setCourseExisting] = useState({
     userID: "",
     courseName: "",
     idCourse: "",
     dateTimeStart: "",
     dateTimeEnd: "",
-    active: 1, // Set to 1 (active) by default
-    username: "", // Thêm trường để lưu trữ username
+    active: 1,
+    username: "",
   });
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      if (props.course) {
+        setCourseExisting(props.course);
+
+        // Fetch user data if userID is available
+        if (props.course.userID) {
+          try {
+            const response = await getUserById(props.course.userID);
+            if (response) {
+              setCourseExisting((prev) => ({
+                ...prev,
+                username: response.Username,
+              }));
+            }
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            toast.error("Error fetching user data.");
+          }
+        }
+
+        // Fetch course data if idCourse is available
+        if (props.course.idCourse) {
+          try {
+            const response = await getCoursesByID(props.course.idCourse);
+            if (response && response.dt) {
+              setCourseExisting((prev) => ({
+                ...prev,
+                courseName: response.dt.name,
+              }));
+            }
+          } catch (error) {
+            console.error("Error fetching course data:", error);
+            toast.error("Error fetching course data.");
+          }
+        }
+      }
+    };
+
+    fetchInitialData();
+  }, [props.course]);
+
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setCourseExisting((prev) => ({ ...prev, [name]: value }));
@@ -113,7 +157,7 @@ const AddCourseExistingModal = (props) => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSave = async () => {
     if (!courseExisting.userID) {
       toast.error("Please enter the User ID!");
       return;
@@ -146,8 +190,10 @@ const AddCourseExistingModal = (props) => {
       const existingCourse = responseExistingCourse.find(
         (item) =>
           item.userID == courseExisting.userID &&
-          item.idCourse == courseExisting.idCourse
+          item.idCourse == courseExisting.idCourse &&
+          item.courseExistingId !== courseExisting.courseExistingId // Ensure it is not the current one being updated
       );
+
       if (existingCourse && existingCourse.courseExistingId) {
         toast.error("This course already exists.");
         return;
@@ -159,43 +205,26 @@ const AddCourseExistingModal = (props) => {
     }
 
     try {
-      const response = await addCourseExisting(courseExisting);
-      if (response && response.ec === 1) {
-        toast.success("Course existing added successfully!");
-        clearModal(); // Clear the form after successful submission
-        props.onClose();
+      const response = await updateCourseExisting(
+        courseExisting.courseExistingId,
+        courseExisting
+      );
+      if (response && response.EC === 1) {
+        toast.success("Updated successfully!");
+        props.onClose(); // Close modal after success
       } else {
-        toast.error(response?.em || "Error occurred!");
+        toast.error(response?.EM || "Error occurred!");
       }
     } catch (error) {
-      console.error("Error adding course existing:", error);
-      toast.error("Error adding course existing.");
+      console.error("Error updating course existing:", error);
+      toast.error("Error updating course existing.");
     }
   };
 
-  const clearModal = () => {
-    setCourseExisting({
-      userID: "",
-      courseName: "",
-      idCourse: "",
-      dateTimeStart: "",
-      dateTimeEnd: "",
-      active: 1, // Reset active to default value
-      username: "", // Reset username field
-    });
-  };
-
   return (
-    <StyledModal
-      show={props.show}
-      onHide={() => {
-        clearModal();
-        props.onClose();
-      }}
-      size="lg"
-    >
+    <StyledModal show={props.show} onHide={props.onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Add Course Existing</Modal.Title>
+        <Modal.Title>Edit Course Existing</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -240,8 +269,8 @@ const AddCourseExistingModal = (props) => {
               />
             </Form.Group>
           )}
-          <Form.Group controlId="formDateTimeStart">
-            <Form.Label>Date Time Start</Form.Label>
+          <Form.Group controlId="dateTimeStart">
+            <Form.Label>Start Date</Form.Label>
             <Form.Control
               type="datetime-local"
               name="dateTimeStart"
@@ -249,8 +278,8 @@ const AddCourseExistingModal = (props) => {
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group controlId="formDateTimeEnd">
-            <Form.Label>Date Time End</Form.Label>
+          <Form.Group controlId="dateTimeEnd">
+            <Form.Label>End Date</Form.Label>
             <Form.Control
               type="datetime-local"
               name="dateTimeEnd"
@@ -258,32 +287,27 @@ const AddCourseExistingModal = (props) => {
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group controlId="formActive">
+          <Form.Group controlId="active">
+            <Form.Label>Active</Form.Label>
             <Form.Check
               type="checkbox"
-              label="Active"
+              name="active"
               checked={courseExisting.active === 1}
-              onChange={() =>
-                setCourseExisting({
-                  ...courseExisting,
-                  active: courseExisting.active === 1 ? 0 : 1,
-                })
+              onChange={(e) =>
+                setCourseExisting((prev) => ({
+                  ...prev,
+                  active: e.target.checked ? 1 : 0,
+                }))
               }
             />
           </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            clearModal();
-            props.onClose();
-          }}
-        >
+        <Button variant="secondary" onClick={props.onClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
+        <Button variant="primary" onClick={handleSave}>
           Save Changes
         </Button>
       </Modal.Footer>
@@ -291,4 +315,4 @@ const AddCourseExistingModal = (props) => {
   );
 };
 
-export default AddCourseExistingModal;
+export default EditCourseExistingModal;

@@ -7,17 +7,19 @@ import { toast } from "react-toastify";
 import {
   deleteCourseExisting,
   getCourseExistings,
-  addCourseExisting,
-  updateCourseExisting,
+  findByID, // Import the new API function
 } from "../../../../services/courseExistingService";
 import AddCourseExistingModal from "./AddCourseExistingModal"; // Import the AddCourseExistingModal
+import EditCourseExistingModal from "./EditCourseExistingModal "; // Import the EditCourseExistingModal
 import "./CourseExistingManagement.scss";
 
 const CourseExistingManagement = () => {
   const refModalCourse = useRef();
-  const [showModal, setShowModal] = useState(false); // State for controlling modal visibility
+  const [showModal, setShowModal] = useState(false); // State for adding modal
+  const [showEditModal, setShowEditModal] = useState(false); // State for editing modal
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   const columns = [
     {
@@ -109,9 +111,29 @@ const CourseExistingManagement = () => {
     </div>
   );
 
-  const handleEdit = (id) => {
-    const course = data.find((item) => item.courseExistingId === id);
-    if (course) refModalCourse.current.open(course, "Update");
+  // New function to fetch data by ID
+  const fetchCourseByID = async (id) => {
+    try {
+      const response = await findByID(id);
+      if (response) {
+        return response;
+      } else {
+        toast.error("Error occurred while fetching course details.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching course by ID:", error);
+      toast.error("Error fetching course by ID.");
+      return null;
+    }
+  };
+
+  const handleEdit = async (id) => {
+    const course = await fetchCourseByID(id);
+    if (course) {
+      setSelectedCourse(course);
+      setShowEditModal(true); // Open the edit modal
+    }
   };
 
   return (
@@ -131,17 +153,29 @@ const CourseExistingManagement = () => {
             />
             <button
               className="btn btn-success ms-2"
-              onClick={() => setShowModal(true)} // Open the modal
+              onClick={() => setShowModal(true)} // Open the add modal
             >
               <IoIosAddCircleOutline /> Add Course Existing
             </button>
           </div>
-          <DataTable columns={columns} data={filteredData} pagination />
+          <div className="table-container">
+            <DataTable
+              columns={columns}
+              data={filteredData}
+              pagination
+              className="data-table"
+            />
+          </div>
         </Card.Body>
       </Card>
       <AddCourseExistingModal
         show={showModal}
         onClose={() => setShowModal(false)}
+      />
+      <EditCourseExistingModal
+        show={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        course={selectedCourse} // Pass the selected course data to the modal
       />
     </div>
   );

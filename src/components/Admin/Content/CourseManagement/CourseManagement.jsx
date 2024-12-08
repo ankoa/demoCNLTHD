@@ -120,7 +120,8 @@ const CourseManagement = () => {
     try {
       const course = await getCoursesByID(id);
       if (course) {
-        setEditModalData(course); // Pass course to modal
+        console.log("Editing course:", course);
+        setEditModalData(course.dt); // Pass course to modal
         setShowEditModal(true); // Open modal
       } else {
         toast.error("Error fetching course.");
@@ -164,7 +165,15 @@ const CourseManagement = () => {
                 <IoIosAddCircleOutline /> Add Course
               </button>
             </div>
-            <DataTable columns={columns} data={filteredData} pagination />
+            <div className="table-container">
+              {" "}
+              <DataTable
+                columns={columns}
+                data={filteredData}
+                pagination
+                className="data-table"
+              />
+            </div>
           </Card.Body>
         </Card>
         <AddCourseModal show={showModal} onClose={() => setShowModal(false)} />

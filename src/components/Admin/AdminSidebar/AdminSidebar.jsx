@@ -141,11 +141,11 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             icon={<FiActivity />}
             onClick={() => navigate("/admin/manage-lesson")}
           />
-          <SubMenu
+          {/* <SubMenu
             title="Lesson Details"
             icon={<FiActivity />}
             onClick={() => navigate("/admin/manage-lessonDetail")}
-          />
+          /> */}
         </Menu>
         <Menu iconShape="circle">
           <MenuItem>UI TOOLKIT</MenuItem>

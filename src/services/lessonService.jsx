@@ -20,7 +20,22 @@ const getLessons = async () => {
     throw error;
   }
 };
-
+const getLessonByID = async (id) => {
+  try {
+    const response = await axios.get(`/api/Lesson/ID?ID=${id}`);
+    console.log("Lesson by ID:", response);
+    if (response.ec === 1) {
+      console.log("Lesson by ID:", response);
+      return response.dt; // Trả về dữ liệu trong phần 'dt'
+    } else {
+      console.error("Error:", response.em);
+      throw new Error(response.em);
+    }
+  } catch (error) {
+    console.error("Error fetching lesson by ID:", error);
+    throw error;
+  }
+};
 // Hàm thêm bài học mới
 const addLesson = async (lessonData) => {
   try {
@@ -59,10 +74,15 @@ const deleteLesson = async (lessonID) => {
 
 // Hàm cập nhật thông tin bài học theo ID
 const updateLesson = async (lessonID, lessonData) => {
+  console.log("Lesson data:", lessonData);
   try {
-    const response = await axios.put(`api/Lesson/${lessonID}`, lessonData, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await axios.put(
+      `api/Lesson/LessonID?LessonID=${lessonID}`,
+      lessonData,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
     if (response.ec === 1) {
       console.log("Lesson updated:", response.dt);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
@@ -77,4 +97,4 @@ const updateLesson = async (lessonID, lessonData) => {
 };
 
 // Export các hàm để sử dụng trong các thành phần khác
-export { getLessons, addLesson, deleteLesson, updateLesson };
+export { getLessons, addLesson, deleteLesson, updateLesson, getLessonByID };

@@ -1,0 +1,126 @@
+.modal-content {
+  border-radius: 10px; // Rounded corners for the modal
+  padding: 20px; // Add more padding to make it spacious
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); // Add a soft shadow for depth
+  min-width: 600px; // Ensure the modal has a decent minimum width
+}
+
+.modal-header {
+  border-bottom: none; // Remove the default border
+  background-color: #f8f9fa; // Light background for the header
+}
+
+.modal-title {
+  font-size: 1.5rem; // Increase the title size
+  font-weight: bold;
+}
+
+.modal-body {
+  padding: 20px 10px; // Add padding to make the content more comfortable
+  overflow-y: auto;
+  max-height: 400px; // Ensures content is scrollable if too large
+}
+
+.table {
+  width: 100%; // Full width for the table
+  margin-bottom: 20px; // Add space below the table
+  border-collapse: collapse; // Ensure borders are combined seamlessly
+}
+
+.table th,
+.table td {
+  padding: 12px 15px; // Larger cell padding
+  text-align: center; // Center-align the content
+  border: 1px solid #ddd; // Add subtle borders to the cells
+}
+
+.table th {
+  background-color: #007bff; // Header background color
+  color: white; // Header text color
+  font-size: 1rem; // Adjust font size
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2; // Alternating row color
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  margin: 0 5px;
+  transition: color 0.3s;
+}
+
+.btn-icon:hover {
+  color: #0056b3; // Change color on hover
+}
+.custom-modal-body {
+  overflow-y: unset;
+}
+.mt-3 {
+  margin-top: 1rem; // Add margin to the top of the button
+}
+.table-body {
+  overflow-y: scroll;
+  height: 300px;
+}
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; // Add some space between the icon and text
+  padding: 0.5rem 1rem;
+  border-radius: 5px; // Rounded corners for buttons
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0; // Adjust padding for the footer
+}
+
+.modal-footer .btn {
+  margin-left: 10px; // Add space between buttons
+}
+.modal-lg {
+  width: 90%; /* Adjust modal width */
+  max-width: none; /* Prevent default max width */
+}
+
+.modal-body {
+  padding: 0; /* Remove any extra padding */
+}
+
+.tablelessondetail {
+  /* Add horizontal scroll if needed */
+  max-height: 300px; /* Limit vertical height */
+  margin-bottom: 20px; /* Add spacing below the table */
+  overflow-y: auto;
+}
+/* Tạo kiểu dáng đẹp mắt cho các nút chứa icon */
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff; /* Màu sắc của icon */
+  font-size: 1.5rem; /* Kích thước của icon */
+  padding: 8px; /* Khoảng cách xung quanh icon */
+  border-radius: 50%; /* Làm tròn nút */
+  transition: background-color 0.3s, color 0.3s; /* Hiệu ứng khi hover */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Định dạng cho các icon trong nút */
+.btn-icon svg {
+  width: 100%; /* Đảm bảo icon chiếm hết kích thước của nút */
+  height: auto;
+}
+.thead {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  z-index: 1;
+}
