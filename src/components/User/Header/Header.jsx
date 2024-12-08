@@ -22,7 +22,6 @@ const Header = () => {
     (state) => state.userReducer.isAuthenticated
   );
   const accountFromState = useSelector((state) => state.userReducer.account);
-
   useEffect(() => {
     if (isAuthenticated) {
       setAccount(accountFromState);
@@ -32,7 +31,6 @@ const Header = () => {
       setAccount(null);
     }
   }, [isAuthenticated, accountFromState]);
-
   const handleLogout = async () => {
     if (account) {
       try {
@@ -52,6 +50,9 @@ const Header = () => {
         );
       }
     }
+  };
+  const handleAdmin = () => {
+    navigate("/admin");
   };
   const handleUserinformation = () => {
     navigate("/userprofile");
@@ -105,6 +106,11 @@ const Header = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
+                  {account.role == "Admin" && (
+                    <Dropdown.Item onClick={handleAdmin}>
+                      Trang Admin
+                    </Dropdown.Item>
+                  )}
                   <Dropdown.Item onClick={handleUserinformation}>
                     Thông tin tài khoản
                   </Dropdown.Item>

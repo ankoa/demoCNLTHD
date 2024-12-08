@@ -1,5 +1,14 @@
 import React from "react";
-import { FiActivity, FiGlobe, FiLayout, FiPackage } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import {
+  FiActivity,
+  FiGlobe,
+  FiLayout,
+  FiPackage,
+  FiSettings,
+  FiMonitor,
+  FiLogOut,
+} from "react-icons/fi";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { IoRepeat } from "react-icons/io5";
 import { LuBarChart, LuWrench } from "react-icons/lu";
@@ -25,9 +34,51 @@ import {
 import "react-pro-sidebar/dist/css/styles.css";
 import "./AdminSidebar.scss";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-
+import { useSelector, useDispatch } from "react-redux";
+import { postLogOut } from "../../../services/authService";
+import { doLogOut } from "../../../redux/action/userAction";
+import { toast } from "react-toastify"; // Adjust path as necessary
 const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [account, setAccount] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
+
+  const isAuthenticated = useSelector(
+    (state) => state.userReducer.isAuthenticated
+  );
+  const accountFromState = useSelector((state) => state.userReducer.account);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setAccount(accountFromState);
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+      setAccount(null);
+    }
+  }, [isAuthenticated, accountFromState]);
+  const handleLogout = async () => {
+    console.log("account", account);
+    if (account) {
+      try {
+        let response = await postLogOut(accountFromState.refresh_token);
+        if (response && response.EC === 0) {
+          dispatch(doLogOut());
+          toast.success(response.EM);
+          navigate("/");
+        } else if (response && response.EC !== 0) {
+          toast.error(response.EM);
+          console.log(response);
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+        toast.error(
+          "Có lỗi xảy ra trong quá trình đăng xuất. Vui lòng thử lại sau."
+        );
+      }
+    }
+  };
   return (
     <ProSidebar
       collapsed={collapsed}
@@ -64,8 +115,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             title="Users"
             icon={<FiActivity />}
             onClick={() => navigate("/admin/user")}
-          >
-          </SubMenu>
+          ></SubMenu>
         </Menu>
         <Menu iconShape="circle">
           <MenuItem>EXAM</MenuItem>
@@ -74,10 +124,16 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             icon={<AiOutlineAppstore />}
             onClick={() => navigate("/admin/test")}
           ></SubMenu>
-          <SubMenu title="Parts" icon={<FiGlobe />} onClick={() => navigate("/admin/part")}>
-          </SubMenu>
-          <SubMenu title="QAs" icon={<IoRepeat />} onClick={() => navigate("/admin/question")}>
-          </SubMenu>
+          <SubMenu
+            title="Parts"
+            icon={<FiGlobe />}
+            onClick={() => navigate("/admin/part")}
+          ></SubMenu>
+          <SubMenu
+            title="QAs"
+            icon={<IoRepeat />}
+            onClick={() => navigate("/admin/question")}
+          ></SubMenu>
         </Menu>
         <Menu iconShape="course">
           <MenuItem suffix={<span className="badge red">New</span>}>
@@ -88,7 +144,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             icon={<FiActivity />}
             onClick={() => navigate("/admin/manage-course")}
           />
-            {/* <SubMenu
+          {/* <SubMenu
               title="Courses Details"
               icon={<FiActivity />}
               onClick={() => navigate("/admin/manage-courseDetails")}
@@ -238,6 +294,37 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             </MenuItem>
           </SubMenu>
           <SubMenu title="Tables" icon={<CiFilter />}></SubMenu>
+        </Menu>
+        <Menu iconShape="circle">
+          <MenuItem suffix={<span className="badge red">New</span>}>
+            PLUGINS
+          </MenuItem>
+          <SubMenu title="Charts" icon={<LuBarChart />}>
+            <MenuItem>
+              Score Chart <Link to="/admin/scorechart" />
+            </MenuItem>
+            <MenuItem>
+              Revenue Chart <Link to="/admin/revenuechart" />
+            </MenuItem>
+          </SubMenu>
+          <SubMenu title="Tables" icon={<CiFilter />}></SubMenu>
+        </Menu>
+        <Menu iconShape="circle">
+          <MenuItem suffix={<span className="badge red">New</span>}>
+            <FiSettings /> SETTING
+          </MenuItem>
+
+          <SubMenu
+            title="USER INTERFACE"
+            icon={<FiMonitor />}
+            onClick={() => navigate("/")}
+          >
+            {/* You can add nested MenuItems here if needed */}
+          </SubMenu>
+
+          <SubMenu title="LOG OUT" icon={<FiLogOut />} onClick={handleLogout}>
+            {/* You can add nested MenuItems here if needed */}
+          </SubMenu>
         </Menu>
         {/* <Menu iconShape="circle">
                     <SubMenu
