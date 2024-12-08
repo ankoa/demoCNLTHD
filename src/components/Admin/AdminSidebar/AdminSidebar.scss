@@ -82,3 +82,9 @@
         /* Màu khi hover vào thanh cuộn */
     }
 }
+
+.pro-menu-item.pro-sub-menu.open {
+    .pro-inner-item {
+        background-color: rgba(0, 0, 255, 0.196);
+    }
+}

@@ -100,6 +100,24 @@ const postRegister = (email, username, password, firstname, lastname) => {
   });
 };
 
+// Hàm postRegister để đăng ký tài khoản
+const postRegisterWithRole = (email, username, password, firstname, lastname, roleId) => {
+  const data = {
+    Username: username,
+    Email: email,
+    PasswordHash: password,
+    FirstName: firstname,
+    LastName: lastname,
+    RoleID: roleId
+  };
+
+  return axios.post(`${BASE_URL}/SignUpWithRole`, data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 // Hàm postRenewToken để làm mới token
 const postRenewToken = (AccessToken, RefreshToken) => {
   const data = {
@@ -127,4 +145,5 @@ export {
   postResetPassword,
   getUsers,
   postRenewToken,
+  postRegisterWithRole
 };

@@ -104,6 +104,7 @@ $highlight-color: #dee2ec;
             width: calc(100vw - 240px);
             padding: 30px;
             transition: width 0.3s ease;
+            overflow: auto;
 
             &.collapsed {
                 width: 100vw;
