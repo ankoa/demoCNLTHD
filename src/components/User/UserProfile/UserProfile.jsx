@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import "./UserProfile.scss";
+import PracticeResults from "./PracticeResults"; // Import component PracticeResults
+import { putUpdateUser } from '../../../services/userService';
 
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("courses"); // Tab mặc định
   const [isEditing, setIsEditing] = useState(false); // Trạng thái chỉnh sửa
   const [userInfo, setUserInfo] = useState({
-    //thêm thông tin 
     name: "Nguyễn Văn A",
     email: "nguyenvana@example.com",
     phone: "0123456789",
@@ -24,11 +25,22 @@ const UserProfile = () => {
     setUserInfo({ ...userInfo, [name]: value });
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    // Thực hiện lưu vào backend nếu cần
-    console.log("Thông tin mới:", userInfo);
+  const handleSave = async () => {
+    try {
+      const updatedUser = await putUpdateUser(userInfo);
+      if (updatedUser) {
+        setUserInfo(updatedUser); // Cập nhật lại giao diện với dữ liệu mới từ API
+        setIsEditing(false);
+        console.log("Cập nhật thành công:", updatedUser);
+      } else {
+        alert("Cập nhật không thành công. Vui lòng thử lại!");
+      }
+    } catch (error) {
+      console.error("Error saving user:", error);
+      alert("Đã xảy ra lỗi khi cập nhật thông tin!");
+    }
   };
+  
 
   return (
     <div className="user-profile">
@@ -45,7 +57,7 @@ const UserProfile = () => {
         </div>
       </div>
       <div className="profile-info">
-        <h1>name</h1>
+        <h1>{userInfo.name}</h1>
         <p>Trang công khai</p>
       </div>
       <div className="tabs">
@@ -73,8 +85,7 @@ const UserProfile = () => {
       </div>
       <div className="tab-content">
         {activeTab === "courses" && <div>Danh sách khoá học sẽ được hiển thị ở đây.</div>}
-        {activeTab === "results" && <div>Kết quả luyện thi sẽ được hiển thị ở đây.</div>}
-
+        {activeTab === "results" && <PracticeResults />}
         {activeTab === "personalInfo" && (
           <div className="personal-info">
             <h2>Thông tin cá nhân</h2>

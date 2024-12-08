@@ -229,7 +229,14 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
           <MenuItem suffix={<span className="badge red">New</span>}>
             PLUGINS
           </MenuItem>
-          <SubMenu title="Charts" icon={<LuBarChart />}></SubMenu>
+          <SubMenu title="Charts" icon={<LuBarChart />}>
+            <MenuItem>
+              Score Chart <Link to="/admin/scorechart" />
+            </MenuItem>
+            <MenuItem>
+              Revenue Chart <Link to="/admin/revenuechart" />
+            </MenuItem>
+          </SubMenu>
           <SubMenu title="Tables" icon={<CiFilter />}></SubMenu>
         </Menu>
         {/* <Menu iconShape="circle">
