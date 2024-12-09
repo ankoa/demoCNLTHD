@@ -32,14 +32,14 @@ export default function (props) {
           <img src={image || ""} alt={name || "Course Image"} />
         </div>
         <div className="courses-grid-item-title">
-          <span>[{name}]</span> {title}
+          <span>{name}: </span> {title}
         </div>
         <div className="courses-grid-item-description">{description}</div>
-        <div className="courses-grid-item-content">
+        {/* <div className="courses-grid-item-content"> */}
           <div className="course-tags">
             <span className="tag">#Khóa học online</span>
           </div>
-        </div>
+        {/* </div> */}
         <div className="courses-grid-item-pricing">
           <div className="course-prices">{formatPrice(price)}</div>
         </div>

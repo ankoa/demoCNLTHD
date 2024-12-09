@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import chartData from "./ChartData.json"; 
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,20 +9,57 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { getStatAverage, getStatOverview } from "../../../../services/testService";
+import { toast } from "react-toastify";
 
 // Đăng ký các thành phần cần thiết cho biểu đồ
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const ScoreChart = () => {
-  const { ranges, maxScore, minScore, avgScore } = chartData;
+  const [chartData, setChartData] = useState([]);
+  const [textData, setTextData] = useState({});
+
+  // Fetch dữ liệu biểu đồ
+  const fetchDataChart = async () => {
+    try {
+      const response = await getStatOverview();
+      if (response) {
+        setChartData(response);
+      } else {
+        toast.error("Lỗi không xác định khi tải dữ liệu biểu đồ");
+      }
+    } catch (error) {
+      console.error("Error fetching chart data:", error);
+    }
+  };
+
+  // Fetch dữ liệu text (điểm max, min, avg)
+  const fetchDataText = async () => {
+    try {
+      const response = await getStatAverage();
+      if (response) {
+        setTextData(response);
+      } else {
+        toast.error("Lỗi không xác định khi tải dữ liệu thống kê");
+      }
+    } catch (error) {
+      console.error("Error fetching text data:", error);
+    }
+  };
+
+  // Gọi fetch dữ liệu khi component được mount
+  useEffect(() => {
+    fetchDataChart();
+    fetchDataText();
+  }, []);
 
   // Dữ liệu cho biểu đồ
   const barData = {
-    labels: ranges.map((range) => range.Range),
+    labels: chartData.map((range) => range.Range),
     datasets: [
       {
         label: "Số lượng học viên",
-        data: ranges.map((range) => range.Count), // Dữ liệu số lượng
+        data: chartData.map((range) => range.Count), // Dữ liệu số lượng
         backgroundColor: "rgba(75, 192, 192, 0.5)", // Màu cột
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
@@ -34,7 +70,7 @@ const ScoreChart = () => {
   // Tùy chọn biểu đồ
   const barOptions = {
     responsive: true,
-    indexAxis: 'y',
+    indexAxis: "y", // Biểu đồ ngang
     plugins: {
       legend: {
         position: "top",
@@ -45,13 +81,13 @@ const ScoreChart = () => {
       },
     },
     scales: {
-      x: { // Trục X là số lượng (số người)
+      x: {
         ticks: {
           stepSize: 1,
           beginAtZero: true,
         },
       },
-      y: { // Trục Y là các mức điểm
+      y: {
         beginAtZero: true,
       },
     },
@@ -59,18 +95,18 @@ const ScoreChart = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      
-
+      <h3>Phân bổ điểm số TOEIC</h3>
       <Bar data={barData} options={barOptions} />
       <div style={{ marginTop: "20px", textAlign: "left" }}>
         <p>
-          <strong>Điểm cao nhất:</strong> {maxScore}
+          <strong>Điểm cao nhất:</strong> {textData.MaxScore || 0}
         </p>
         <p>
-          <strong>Điểm thấp nhất:</strong> {minScore}
+          <strong>Điểm thấp nhất:</strong> {textData.MinScore || 0}
         </p>
         <p>
-          <strong>Điểm trung bình:</strong> {avgScore.toFixed(2)}
+          <strong>Điểm trung bình:</strong>{" "}
+          {textData.AvgScore ? textData.AvgScore.toFixed(2) : 0}
         </p>
       </div>
     </div>

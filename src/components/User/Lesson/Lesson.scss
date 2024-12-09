@@ -14,17 +14,34 @@
   margin-bottom: 25px;
   font-size: 16px;
   color: #666;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.lesson-container .breadcrumb .home-link {
+
+.lesson-container .breadcrumb  .breadcrumb-link {
   color: #007bff;
   cursor: pointer;
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s ease;
 }
 
-.lesson-container .breadcrumb .home-link:hover {
+.lesson-container .breadcrumb .breadcrumb-link:hover {
   text-decoration: underline;
+  color: #0056b3;
+}
+
+.breadcrumb-divider {
+  color: #aaa; /* Màu xám nhạt */
+  font-weight: bold;
+}
+
+.breadcrumb-current {
+  color: #333; /* Màu xám đậm hơn cho phần hiện tại */
+  font-weight: 600;
 }
 
 /* Layout chính */

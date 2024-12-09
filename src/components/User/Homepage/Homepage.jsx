@@ -31,8 +31,8 @@ const Homepage = () => {
       setLoading(true);
       try {
         const data = await getCourses(); // Gọi API
-        const first10Courses = data.slice(0, 10); // Lấy 10 khóa học đầu tiên
-        setCourses(first10Courses);
+        setCourses(data.filter(course => course.active === 1).slice(0, 10)); // Lọc và lấy 10 khóa học đầu tiên
+
         console.log("Course: ", first10Courses);
       } catch (err) {
         console.log("Lỗi khi lấy dữ liệu course: ", err);
