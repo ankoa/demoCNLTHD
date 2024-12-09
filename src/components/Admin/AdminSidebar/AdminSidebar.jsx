@@ -16,6 +16,9 @@ import { CiFilter } from "react-icons/ci";
 import { FaUser } from "react-icons/fa";
 import { PiExam } from "react-icons/pi";
 import { TbPencilQuestion } from "react-icons/tb";
+import { ImBooks } from "react-icons/im";
+import { HiBookOpen } from "react-icons/hi";
+import { MdOutlinePlayLesson } from "react-icons/md";
 
 import {
   Menu,
@@ -144,7 +147,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
           </MenuItem>
           <SubMenu
             title="Courses"
-            icon={<FiActivity />}
+            icon={<ImBooks />}
             onClick={() => navigate("/admin/manage-course")}
           />
           {/* <SubMenu
@@ -154,7 +157,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             /> */}
           <SubMenu
             title="Courses Existing"
-            icon={<FiActivity />}
+            icon={<HiBookOpen />}
             onClick={() => navigate("/admin/manage-courseExisting")}
           />
         </Menu>
@@ -164,7 +167,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
           </MenuItem>
           <SubMenu
             title="Lesson"
-            icon={<FiActivity />}
+            icon={<MdOutlinePlayLesson />}
             onClick={() => navigate("/admin/manage-lesson")}
           />
           {/* <SubMenu
