@@ -55,10 +55,10 @@ const PurchaseForm = () => {
       setSnackBarOpen(true);
       return;
     }
-    if (selectedPayment === 'transfer') {
+    if (selectedPayment === 'transfer' || 'momo') {
       setShowModal(true); // Mở modal khi chọn thanh toán chuyển khoản
     }
-    alert(`Bạn có muốn mua khóa học ${name} với giá $${price}!`);
+    // alert(`Bạn có muốn mua khóa học ${name} với giá $${price}!`);
   };
 
   const handleBack = () => {
