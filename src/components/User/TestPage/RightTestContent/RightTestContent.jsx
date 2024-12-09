@@ -79,15 +79,21 @@ const RightTestContent = (props) => {
         {partData.length > 0 ? (
           (() => {
             let currentIndex = 1; // Bắt đầu đếm từ 1
-            return partData.map((part) => (
-              <div key={part.Id}>
-                <div className="part-title">
-                  Part {part.Number}: {part.Text}
-                </div>
-                <div className="questions-container ps-4">
-                  {quizData
-                    .filter((qdata) => qdata.question.PartID === part.Id)
-                    .map((qdata) => (
+            return partData.map((part) => {
+              const filteredQuestions = quizData.filter(
+                (qdata) => qdata.question.PartID === part.Id
+              );
+
+              // Chỉ render nếu có câu hỏi
+              if (filteredQuestions.length === 0) return null;
+
+              return (
+                <div key={part.Id}>
+                  <div className="part-title">
+                    Part {part.Number}: {part.Text}
+                  </div>
+                  <div className="questions-container ps-4">
+                    {filteredQuestions.map((qdata) => (
                       <div
                         key={qdata.question.Id}
                         className={`question-number ${getClassQuestion(
@@ -98,14 +104,16 @@ const RightTestContent = (props) => {
                         {currentIndex++}
                       </div>
                     ))}
+                  </div>
                 </div>
-              </div>
-            ));
+              );
+            });
           })()
         ) : (
           <div>Loading parts...</div>
         )}
       </div>
+
       {error && <div className="error-message">{error}</div>}
     </>
   );

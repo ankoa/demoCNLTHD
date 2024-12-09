@@ -10,9 +10,10 @@ const INITIAL_STATE = {
     refresh_token: "",
     userid: "",
     username: "",
-    image: "",
     role: "",
     email: "",
+    firstName: "",
+    lastName: "",
   },
   isAuthenticated: false,
 };
@@ -28,11 +29,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
           refresh_token: action?.payload?.DT?.token?.RefreshToken || "",
           username: action?.payload?.DT?.user?.Username || "",
           userid: action?.payload?.DT?.user?.UserID || "",
-
+          email: action?.payload?.DT?.user?.Email || "",
+          firstName: action?.payload?.DT?.user?.FirstName || "",
+          lastName: action?.payload?.DT?.user?.LastName || "",
           // Nếu có thông tin bổ sung từ server, bạn có thể đưa vào đây
-          image: action?.payload?.DT?.image || "",
           role: action?.payload?.DT?.role || "",
-          email: action?.payload?.DT?.email || "",
+
         },
         isAuthenticated: true,
       };

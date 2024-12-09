@@ -75,7 +75,7 @@ const deleteCourse = async (courseID) => {
 // Hàm cập nhật thông tin khóa học theo ID
 const updateCourse = async (course) => {
   console.log("Updating course with ID:-->>>", course.courseId);
-  console.log("Course data:->>>", course);
+  console.log("Course data:->>>", course.image);
   try {
     const response = await axios.put(
       `/api/Course/courseID?courseID=${course.courseId}`,

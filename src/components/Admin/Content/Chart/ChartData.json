@@ -1,0 +1,27 @@
+{
+    "ranges": [
+      { "Range": "0-0", "Description": "Người dự thi không tham gia dự thi", "Count": 0 },
+      { "Range": "25-55", "Description": "Thang điểm thấp nhất, không thể sử dụng tiếng Anh", "Count": 0 },
+      { "Range": "75-125", "Description": "Thí sinh không biết cách ứng dụng tiếng Anh vào cuộc sống", "Count": 0 },
+      { "Range": "135-170", "Description": "Thí sinh chỉ biết một vài từ tiếng Anh đơn lẻ", "Count": 0 },
+      { "Range": "185-225", "Description": "Thí sinh chỉ sử dụng được vài từ đơn lẻ và câu ngắn", "Count": 0 },
+      { "Range": "235-260", "Description": "Thí sinh chỉ sử dụng được vài từ đơn lẻ và câu ngắn", "Count": 0 },
+      { "Range": "265-280", "Description": "Thí sinh có thể sử dụng tiếng Anh trong tình huống quen thuộc", "Count": 0 },
+      { "Range": "290-305", "Description": "Thí sinh có thể sử dụng tiếng Anh trong tình huống quen thuộc", "Count": 0 },
+      { "Range": "310-335", "Description": "Thí sinh có thể sử dụng thành thạo tiếng Anh trong tình huống cụ thể", "Count": 0 },
+      { "Range": "340-360", "Description": "Thí sinh sử dụng tiếng Anh linh hoạt nhưng khó khăn với giao tiếp phức tạp", "Count": 0 },
+      { "Range": "365-440", "Description": "Thí sinh có thể giao tiếp bình thường và chỉ mắc một số lỗi", "Count": 0 },
+      { "Range": "450-560", "Description": "Thí sinh ứng dụng tốt từ vựng chuyên môn", "Count": 0 },
+      { "Range": "570-680", "Description": "Thí sinh sử dụng ngôn ngữ tương đối thành thạo", "Count": 0 },
+      { "Range": "685-780", "Description": "Thí sinh giao tiếp tốt trong tình huống phức tạp", "Count": 12 },
+      { "Range": "785-830", "Description": "Thí sinh nắm vững tiếng Anh và ứng dụng linh hoạt", "Count": 4 },
+      { "Range": "835-900", "Description": "Thí sinh hiểu rõ các lý luận và ẩn ý", "Count": 20 },
+      { "Range": "905-945", "Description": "Thí sinh làm chủ tiếng Anh và mắc ít lỗi", "Count": 0 },
+      { "Range": "955-970", "Description": "Thí sinh có thể tranh luận chủ đề phức tạp", "Count": 0 },
+      { "Range": "975-990", "Description": "Thí sinh làm chủ hoàn toàn tiếng Anh", "Count": 0 }
+    ],
+    "maxScore": 880,
+    "minScore": 5,
+    "avgScore": 31.344086021505376
+  }
+  

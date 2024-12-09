@@ -2,9 +2,14 @@ $highlight-color: #dee2ec;
 
 .admin-container {
     //display: flex;
+    overflow: hidden;
+    height: 100vh;
 
     .admin-header {
         width: 100%;
+        position: sticky;
+        top: 0;
+        right: 0;
 
         .toggle-menu-btn {
             cursor: pointer;
@@ -99,6 +104,7 @@ $highlight-color: #dee2ec;
             width: calc(100vw - 240px);
             padding: 30px;
             transition: width 0.3s ease;
+            overflow: auto;
 
             &.collapsed {
                 width: 100vw;

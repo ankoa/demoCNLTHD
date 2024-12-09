@@ -18,10 +18,10 @@ root.render(
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <RouterCustom />
-        <ExcelReader></ExcelReader>
+        {/* <ExcelReader></ExcelReader> */}
         <ToastContainer
           position="top-center"
-          autoClose={2000}
+          autoClose={1000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

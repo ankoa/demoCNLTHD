@@ -1,24 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FaEllipsisV, FaTrashAlt } from "react-icons/fa";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import {
+  IoIosAddCircleOutline,
+  IoIosInformationCircleOutline,
+} from "react-icons/io";
 import { Card } from "react-bootstrap";
 import { toast } from "react-toastify";
-import {
-  deleteLesson,
-  getLessons,
-  addLesson,
-  updateLesson,
-} from "../../../../services/lessonService"; // Assuming lessonService exists
-import AddLessonModal from "./AddLessonModal.jsx"; // Import the AddLessonModal
-import "./LessonManagement.scss"; // Adjust CSS file as needed
+import { deleteLesson, getLessons } from "../../../../services/lessonService";
+import AddLessonModal from "./AddLessonModal.jsx";
+import EditLessonModal from "./EditLessonModal.jsx";
+import LessonDetailModal from "./LessonDetailModal.jsx";
+import DeletelessonModal from "./DeleteLessonModal.jsx";
+import "./LessonManagement.scss";
 
 const LessonManagement = () => {
   const refModalLesson = useRef();
-  const [showModal, setShowModal] = useState(false); // State for controlling modal visibility
+  const refModalLessonDetail = useRef();
+  const [showModal, setShowModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
-
+  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showdeleteModal, setshowdeleteModal] = useState(false);
+  const [deleteLessonId, setDeleteLessonId] = useState(null);
   const columns = [
     {
       name: "Lesson ID",
@@ -42,7 +48,7 @@ const LessonManagement = () => {
     },
     {
       name: "Actions",
-      cell: (row) => <ActionButtons id={row.lessonId} />,
+      cell: (row) => <ActionButtons lesson={row} />,
     },
   ];
 
@@ -60,7 +66,7 @@ const LessonManagement = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  /*   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this lesson?")) {
       try {
         const response = await deleteLesson(id);
@@ -74,10 +80,26 @@ const LessonManagement = () => {
         toast.error("Error deleting lesson.");
       }
     }
+  }; */
+  const handleEdit = (id) => {
+    setSelectedLesson(id);
+    setShowEditModal(true);
   };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleLessonDetail = (lessonID) => {
+    setSelectedLesson(lessonID);
+    setShowDetailModal(true);
+  };
+  const resetTable = () => {
+    fetchLessons(); // Re-fetch data to refresh the table
+  };
+  const handleDelete = (id) => {
+    setDeleteLessonId(id);
+    setshowdeleteModal(true);
   };
 
   const filteredData = data.filter(
@@ -86,21 +108,25 @@ const LessonManagement = () => {
       lesson.courseId.toString().includes(searchTerm.toLowerCase())
   );
 
-  const ActionButtons = ({ id }) => (
+  const ActionButtons = ({ lesson }) => (
     <div className="action-buttons">
-      <button className="btn-icon" onClick={() => handleEdit(id)}>
+      <button className="btn-icon" onClick={() => handleEdit(lesson.lessonId)}>
         <FaEllipsisV />
       </button>
-      <button className="btn-icon" onClick={() => handleDelete(id)}>
+      <button
+        className="btn-icon"
+        onClick={() => handleDelete(lesson.lessonId)}
+      >
         <FaTrashAlt />
+      </button>
+      <button
+        className="btn-icon"
+        onClick={() => handleLessonDetail(lesson.lessonId)}
+      >
+        <IoIosInformationCircleOutline />
       </button>
     </div>
   );
-
-  const handleEdit = (id) => {
-    const lesson = data.find((item) => item.lessonId === id);
-    if (lesson) refModalLesson.current.open(lesson, "Update");
-  };
 
   return (
     <div className="AdminLessons">
@@ -119,15 +145,58 @@ const LessonManagement = () => {
             />
             <button
               className="btn btn-success ms-2"
-              onClick={() => setShowModal(true)} // Open the modal
+              onClick={() => setShowModal(true)}
             >
               <IoIosAddCircleOutline /> Add Lesson
             </button>
           </div>
-          <DataTable columns={columns} data={filteredData} pagination />
+          <div className="table-container">
+            <DataTable
+              columns={columns}
+              data={filteredData}
+              pagination
+              className="data-table"
+            />
+          </div>
         </Card.Body>
       </Card>
-      <AddLessonModal show={showModal} onClose={() => setShowModal(false)} />
+      <AddLessonModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        resetTable={resetTable}
+      />
+      <EditLessonModal
+        show={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        resetTable={resetTable}
+        lessonID={selectedLesson}
+      />
+
+      <LessonDetailModal
+        show={showDetailModal}
+        lessonId={selectedLesson}
+        onClose={() => setShowDetailModal(false)}
+      />
+      {showdeleteModal && (
+        <DeletelessonModal
+          show={showdeleteModal}
+          lessonID={deleteLessonId}
+          onClose={() => setshowdeleteModal(false)}
+          resetTable={resetTable}
+          /* onDelete={async (id) => {
+              try {
+                await deleteCourse(id);
+                toast.success("Course deleted successfully.");
+                fetchCourses();
+                setShowDeleteModal(false);
+                fetchCourses();
+              } catch (error) {
+                console.error("Error deleting course:", error);
+                toast.error("Error deleting course.");
+              }
+            } }*/
+        />
+      )}
     </div>
   );
 };
