@@ -73,7 +73,7 @@ const CourseExistingManagement = () => {
   const fetchCourseExistings = async () => {
     try {
       const response = await getCourseExistings();
-      setData(response || []);
+      setData(response.dt || []);
     } catch (error) {
       console.error(error);
       toast.error("Error fetching course existings.");

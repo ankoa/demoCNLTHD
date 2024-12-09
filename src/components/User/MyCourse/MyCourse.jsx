@@ -15,7 +15,11 @@ const MyCourses = () => {
     // API call lấy danh sách khóa học người dùng đã đăng ký
     const fetchUserCourses = async () => {
       const response = await getCourseExistings();
-      const filteredCourses = response.filter(course => course.userID === userID);  // Lọc các khóa học theo userID
+      console.log(response);
+      const filteredCourses = response.filter(course => course.userID === userID && 
+        new Date(course.dateTimeEnd) > new Date() &&
+        course.active ===1
+      );
       setUserCourses(filteredCourses);  // Cập nhật state với danh sách khóa học đã lọc
     };
 
