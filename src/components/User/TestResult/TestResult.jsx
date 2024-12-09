@@ -28,6 +28,10 @@ const TestResult = () => {
   const [fullData, setFullData] = useState([]);
   const [userAnswers, setUserAnswers] = useState([]);
   const [skip, setSkip] = useState(null);
+  const [listeningCorrect, setListeningCorrect] = useState(0);
+  const [readingCorrect, setReadingCorrect] = useState(0);
+  const [totalListeningQuestions, setTotalListeningQuestions] = useState(0);
+  const [activePart, setActivePart] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,7 +46,6 @@ const TestResult = () => {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [incorrectAnswers, setIncorrectAnswers] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
-  const [formattedTime, setFormattedTime] = useState("");
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   useEffect(() => {
@@ -58,6 +61,7 @@ const TestResult = () => {
         }
         setHistoryData(historyResponse.DT);
 
+        //lấy thông tin part của 1 user trong history
         const partResponse = await getPartOfHis(userID, historyID);
         if (partResponse.EC !== 0) {
           setError(partResponse.EM);
@@ -146,14 +150,26 @@ const TestResult = () => {
     let skipCount = 0;
     let questions = 0;
     let correct = 0;
+    let listeningCorrect = 0;
+    let readingCorrect = 0;
     if (partData) {
-      partData.map((part) => {
-        questions += +part.Total_Question;
+      partData.forEach((part, index) => {
+        console.log("partData", partData)
+        // questions += +part.Total_Question;
         correct += part.Total_Correct;
+        if (index < 5) {
+          listeningCorrect += part.Total_Correct; // Tính điểm Listening
+        } else {
+          readingCorrect += part.Total_Correct; // Tính điểm Reading
+        }
       });
     }
+    setReadingCorrect(readingCorrect);
+    setListeningCorrect(listeningCorrect);
+    setCorrectAnswers(correct);
 
     fullData.forEach((part) => {
+      questions += part.questions.length;
       part.questions.forEach((item) => {
         if (item.userAnswer == null) {
           skipCount += 1;
@@ -162,24 +178,19 @@ const TestResult = () => {
     });
 
     setTotalQuestions(questions);
-    setCorrectAnswers(correct);
-    setIncorrectAnswers(questions - correct - skipCount);
     setSkip(skipCount);
+    setIncorrectAnswers(questions - correct - skipCount);
 
-    let accuracyValue = ((correct / totalQuestions) * 100).toFixed(1);
+    // Tổng số câu hỏi phần Listening
+    setTotalListeningQuestions(
+      fullData?.slice(0, 5).reduce((total, part) => {
+        return total + (part?.questions?.length || 0); // Kiểm tra part.questions
+      }, 0)
+    );
+
+    let accuracyValue = ((correct / questions) * 100).toFixed(1);
     setAccuracy(accuracyValue);
 
-    let timeDiff = new Date(
-      new Date(historyData.EndTime || new Date()) -
-        new Date(historyData.StartTime || new Date())
-    );
-    let formatted = `${String(timeDiff.getUTCHours()).padStart(
-      2,
-      "0"
-    )}:${String(timeDiff.getUTCMinutes()).padStart(2, "0")}:${String(
-      timeDiff.getUTCSeconds()
-    ).padStart(2, "0")}`;
-    setFormattedTime(formatted);
   }, [partData, historyData, fullData]);
 
   const convertSelectedToLetter = (selectedId) => {
@@ -205,6 +216,7 @@ const TestResult = () => {
   // Hàm xử lý cuộn đến phần cụ thể
   const handleScrollToPart = (partName) => {
     // Kiểm tra nếu ref của phần tử đó tồn tại
+    setActivePart(partName)
     if (partRefs.current[partName]) {
       partRefs.current[partName].scrollIntoView({
         behavior: "smooth", // Cuộn mượt mà
@@ -216,8 +228,7 @@ const TestResult = () => {
     // Điều hướng về trang đề thi (giả sử đường dẫn là '/exam')
     navigate("/library-test");
   };
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className="result-display">
       <div className="result-display__header">
@@ -227,7 +238,8 @@ const TestResult = () => {
             partData.map((part) => (
               <button
                 key={part.PartName}
-                className="partButton"
+                // className="partButton"
+                className={`partButton ${activePart === part.PartName ? 'active' : ''}`}
                 onClick={() => handleScrollToPart(part.PartName)}
               >
                 {part.PartName}
@@ -238,7 +250,7 @@ const TestResult = () => {
       <button className="result-display__back" onClick={handleBackClick}>
         Quay về trang đề thi
       </button>
-      {/* Điều hướng */}
+
       <div className="result-display__content">
         <div className="result-display__summary">
           <div className="result-display__summary__element">
@@ -255,41 +267,60 @@ const TestResult = () => {
             </span>
             <strong>{accuracy}%</strong>
           </div>
-          <div className="result-display__summary__element">
-            <span>
-              <MdOutlineTimer color="red" /> Thời gian hoàn thành
-            </span>
-            <strong>{formattedTime}</strong>
-          </div>
         </div>
 
-        <div className="result-display__stats">
-          <div className="result-display__stat correct">
-            <FaCheckCircle className="icon" />
-            <span>Trả lời đúng</span>
-            <strong>{correctAnswers}</strong>
-            <span>câu hỏi</span>
+        <div className="result-display__container-stats">
+          <div className="result-display__stats">
+            <div className="result-display__stat correct">
+              <FaCheckCircle className="icon" />
+              <span>Trả lời đúng</span>
+              <strong>{correctAnswers}</strong>
+              <span>câu hỏi</span>
+            </div>
+            <div className="result-display__stat incorrect">
+              <FaTimesCircle className="icon" />
+              <span>Trả lời sai</span>
+              <strong>{incorrectAnswers}</strong>
+              <span>câu hỏi</span>
+            </div>
+            <div className="result-display__stat skipped">
+              <FaMinusCircle className="icon" />
+              <span>Bỏ qua</span>
+              <strong>{skip}</strong>
+              <span>câu hỏi</span>
+            </div>
           </div>
-          <div className="result-display__stat incorrect">
-            <FaTimesCircle className="icon" />
-            <span>Trả lời sai</span>
-            <strong>{incorrectAnswers}</strong>
-            <span>câu hỏi</span>
-          </div>
-          <div className="result-display__stat skipped">
-            <FaMinusCircle className="icon" />
-            <span>Bỏ qua</span>
-            <strong>{skip}</strong>
-            <span>câu hỏi</span>
-          </div>
+
+          {partData.length === 7 ? (
+            <div className="result-display__score-section">
+              <div className="result-display__score listening">
+                <strong>Listening</strong>
+                <strong>{listeningCorrect * 5}/{totalListeningQuestions * 5}</strong>
+                <span>Trả lời đúng: {listeningCorrect}/{totalListeningQuestions}</span>
+              </div>
+              <div className="result-display__score reading">
+                <span>Reading</span>
+                <strong>{readingCorrect * 5}/{(totalQuestions - totalListeningQuestions) * 5}</strong>
+                <span>Trả lời đúng:  {readingCorrect}/{totalQuestions - totalListeningQuestions}</span>
+              </div>
+              <div className="result-display__score total">
+                <span>Tổng điểm</span>
+                <strong>{listeningCorrect * 5 + readingCorrect * 5 + 5}/{totalQuestions * 5 + 5}</strong>
+                <span>Trả lời đúng: {correctAnswers}/{totalQuestions}</span>
+              </div>
+            </div>
+          ) : null}
         </div>
+
       </div>
+
       <div className="answer-list">
         <h3>Đáp án</h3>
         {fullData.map((part, index) => {
           return (
             <div
               key={index}
+              id={part.PartName} // Thêm id cho từng phần tử
               className="part-section"
               ref={(el) => (partRefs.current[part.PartName] = el)} // Gán ref cho từng phần part
             >
@@ -311,11 +342,10 @@ const TestResult = () => {
                               )}
                             </span>
                             <div
-                              className={`selected-answer ${
-                                item.userAnswer.IsCorrect === true
-                                  ? "correct"
-                                  : "incorrect"
-                              }`}
+                              className={`selected-answer ${item.userAnswer.IsCorrect === true
+                                ? "correct"
+                                : "incorrect"
+                                }`}
                             ></div>
                             {item.userAnswer.IsCorrect === true ? (
                               <span className="correct-icon">
@@ -352,17 +382,16 @@ const TestResult = () => {
                                 return (
                                   <li
                                     key={answer.Id}
-                                    className={`answer-list-item ${
-                                      answer.IsCorrect == true
-                                        ? "correct-answer-bg"
-                                        : selectedQuestion.userAnswer != null &&
-                                          selectedQuestion.userAnswer
-                                            .SelectedAnswerID === answer.Id &&
-                                          selectedQuestion.userAnswer
-                                            .IsCorrect == false
+                                    className={`answer-list-item ${answer.IsCorrect == true
+                                      ? "correct-answer-bg"
+                                      : selectedQuestion.userAnswer != null &&
+                                        selectedQuestion.userAnswer
+                                          .SelectedAnswerID === answer.Id &&
+                                        selectedQuestion.userAnswer
+                                          .IsCorrect == false
                                         ? "incorrect-answer-bg"
                                         : ""
-                                    }`}
+                                      }`}
                                   >
                                     <span style={{ fontWeight: "bold" }}>
                                       {convertSelectedToLetter(answer.Id)}
