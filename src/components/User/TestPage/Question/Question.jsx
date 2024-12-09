@@ -20,7 +20,7 @@ const Question = (props) => {
         </div>
       )}
 
-      <div className="question">
+      <div className="question mt-5">
         Question {index + 1}: {data.question.Text}
       </div>
       <div className="answer">
