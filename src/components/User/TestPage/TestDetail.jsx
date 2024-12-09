@@ -3,7 +3,10 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"; // Import useParams
 import { getTestById } from "../../../services/testsService"; // Import hàm lấy test
 import { useNavigate } from "react-router-dom"; // Negative import cho useNavigate
-
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import CommentsContainer from "../Feedback/Comment";
+/* import CommentsContainer from "../Feedback/Comment"; */
 const TestDetail = () => {
   const { testId } = useParams(); // Lấy testId từ URL params
   const [selectedTab, setSelectedTab] = useState("practice"); // State to track the selected tab
@@ -17,6 +20,9 @@ const TestDetail = () => {
   });
   const [testInfo, setTestInfo] = useState(null); // State để lưu thông tin bài kiểm tra
   const [loading, setLoading] = useState(true); // State để quản lý trạng thái tải
+  const userId = useSelector(
+    (state) => state?.userReducer?.account?.userid || null
+  );
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab); // Update the selected tab
@@ -32,17 +38,22 @@ const TestDetail = () => {
   const navigate = useNavigate();
 
   const handleStartPractice = (type) => {
-    if (type === "full") {
-      console.log("Starting full test practice");
-      // Chuyển hướng đến trang kiểm tra toàn bộ
-      navigate(`/test/${testId}/full`); // Đường dẫn cho bài kiểm tra toàn bộ
-    } else if (type === "part") {
-      console.log("Parts selected for practice:", selectedParts);
-      // Chuyển hướng đến trang kiểm tra từng phần
-      navigate(`/test/${testId}/part`, { state: { parts: selectedParts } }); // Đường dẫn cho bài kiểm tra từng phần
-    }
+    if (userId != null) {
+      if (type === "full") {
+        console.log("Starting full test practice");
+        // Chuyển hướng đến trang kiểm tra toàn bộ
+        navigate(`/test/${testId}/full`); // Đường dẫn cho bài kiểm tra toàn bộ
+      } else if (type === "part") {
+        console.log("Parts selected for practice:", selectedParts);
+        // Chuyển hướng đến trang kiểm tra từng phần
+        navigate(`/test/${testId}/part`, { state: { parts: selectedParts } }); // Đường dẫn cho bài kiểm tra từng phần
+      }
 
-    console.log("Test ID:", testId);
+      console.log("Test ID:", testId);
+    } else {
+      toast.error("Vui lòng đăng nhập để làm bài kiểm tra");
+      navigate("/login");
+    }
   };
 
   useEffect(() => {
@@ -494,6 +505,9 @@ const TestDetail = () => {
             </button>
           </div>
         )}
+        <div className="mt-5">
+          <CommentsContainer userId={userId} testId={testId} />
+        </div>
       </div>
     </div>
   );

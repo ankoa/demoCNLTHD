@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { loadComment, createComment, updateComment, deleteComment } from "../services/feedbackService";
+import {
+  loadComment,
+  createComment,
+  updateComment,
+  deleteComment,
+} from "../../../services/feedbackService";
+import { useParams } from "react-router-dom"; // Import useParams
+import "./Comment.scss";
 
 const Comment = ({ comment, onDelete, onEdit }) => (
   <li>
@@ -9,7 +16,11 @@ const Comment = ({ comment, onDelete, onEdit }) => (
       </div>
       <div className="comment-box">
         <div className="comment-head">
-          <h6 className={`comment-name ${comment.author === "Agustin Ortiz" ? "by-author" : ""}`}>
+          <h6
+            className={`comment-name ${
+              comment.author === "Agustin Ortiz" ? "by-author" : ""
+            }`}
+          >
             {comment.author}
           </h6>
           <span>{comment.time}</span>
@@ -22,22 +33,28 @@ const Comment = ({ comment, onDelete, onEdit }) => (
     {comment.replies && comment.replies.length > 0 && (
       <ul className="comments-list reply-list">
         {comment.replies.map((reply) => (
-          <Comment key={reply.id} comment={reply} onDelete={onDelete} onEdit={onEdit} />
+          <Comment
+            key={reply.id}
+            comment={reply}
+            onDelete={onDelete}
+            onEdit={onEdit}
+          />
         ))}
       </ul>
     )}
   </li>
 );
 
-const CommentsContainer = () => {
+const CommentsContainer = (props) => {
   const [comments, setComments] = useState([]);
   const [editingComment, setEditingComment] = useState(null);
   const [newComment, setNewComment] = useState("");
+  const { testId } = useParams(); // Lấy testId từ URL params
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const data = await loadComment(1); // Load comments by testID
+        const data = await loadComment(props.testId); // Load comments by testID
         setComments(data);
       } catch (error) {
         console.error("Error loading comments:", error);
@@ -48,8 +65,11 @@ const CommentsContainer = () => {
 
   const handleAddComment = async () => {
     try {
-      const commentData = { content: newComment, avatar: "https://example.com/avatar.jpg" };
-      const addedComment = await createComment(commentData);
+      const commentData = {
+        content: newComment,
+        avatar: "https://example.com/avatar.jpg",
+      };
+      const addedComment = await createComment(commentData, props.userId);
       setComments((prev) => [...prev, addedComment]);
       setNewComment("");
     } catch (error) {

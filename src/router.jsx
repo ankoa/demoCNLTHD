@@ -23,8 +23,10 @@ import CourseManagement from "./components/Admin/Content/CourseManagement/Course
 import PurchaseForm from "./components/User/PurchaseForm/PurchaseForm";
 import Lesson from "./components/User/Lesson/Lesson";
 
+
 import CourseExistingManagement from "./components/Admin/Content/CourseExistingManagement/CourseExistingManagement";
 import UserProfile from "./components/User/UserProfile/UserProfile";
+import PracticeResults from "./components/User/UserProfile/PracticeResults";
 /* import CourseDetailManagement from "./components/Admin/Content/CourseDetailManagement/CourseDetailManagement";
  */
 import LessonManagement from "./components/Admin/Content/LessonManagement/LessonManagement";
@@ -32,6 +34,10 @@ import LessonDetailManagement from "./components/Admin/Content/LessonDetailManag
 // import CommentsContainer from "./components/User/Feedback/Comment"
 import MyCourses from "./components/User/MyCourse/MyCourse";
 import PaymentSuccess from "./components/User/PurchaseForm/PaymentSuccess";
+import ProtectedRoute from "./ProtectedRoute";
+import ScoreChart from "./components/Admin/Content/Chart/ScoreChart";
+import RevenueChart from "./components/Admin/Content/Chart/RevenueChart";
+
 const renderUserRouter = () => {
   const userRouters = [
     { path: ROUTERS.USER.HOMEPAGE, element: <Homepage /> },
@@ -52,7 +58,10 @@ const renderUserRouter = () => {
     { path: ROUTERS.USER.LESSON, element: <Lesson /> },
     { path: ROUTERS.USER.MYCOURSE, element: <MyCourses /> },
     { path: ROUTERS.USER.USERPROFILE, element: <UserProfile /> },
+    { path: ROUTERS.USER.PRACTICERESULTS, element: <PracticeResults /> },
+
     { path: ROUTERS.USER.PAYMENTSUCCESS, element: <PaymentSuccess /> },
+
   ];
 
   return userRouters.map((route, key) => (
@@ -82,6 +91,8 @@ const renderAdminRouter = () => {
       path: ROUTERS.ADMIN.LESSON_DETAIL,
       element: <LessonDetailManagement />,
     },
+    { path: ROUTERS.ADMIN.SCORECHART, element: <ScoreChart /> },
+    { path: ROUTERS.ADMIN.REVENUECHART, element: <RevenueChart /> },
   ];
 
   return adminRouters.map((route, key) => (
@@ -92,11 +103,27 @@ const renderAdminRouter = () => {
 const RouterCustom = () => {
   return (
     <Routes>
-      {/* User Routes */}
+      {/* Public Routes (Login, Register, etc.) */}
+      <Route element={<MasterLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/confirm-code" element={<ConfirmCode />} />
+        <Route path="/find-account" element={<FindAccount />} />
+      </Route>
+
+      {/* User Routes (No authentication required) */}
       <Route element={<MasterLayout />}>{renderUserRouter()}</Route>
 
-      {/* Admin Routes */}
-      <Route path="/admin/*" element={<AdminLayout />}>
+      {/* Admin Routes (Authentication required) */}
+      <Route
+        path="/admin/*"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
         {renderAdminRouter()}
       </Route>
     </Routes>

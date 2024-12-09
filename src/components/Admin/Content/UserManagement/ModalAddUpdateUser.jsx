@@ -1,12 +1,11 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { Modal, Button, Form, Stack, Badge } from 'react-bootstrap';
-import './ModalAddUpdateUser.scss'
+import React, { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 const ModalAddUpdateUser = forwardRef(
     ({ handleAdd, handleUpdate }, ref) => {
         const [sh, setSh] = useState(false);
         const [actionType, setActionType] = useState('');
-
+        const [selectedRole, setSelectedRole] = useState(''); // Lưu giá trị role đã chọn
         const [formData, setFormData] = useState({
             UserID: 0,
             Username: "",
@@ -17,11 +16,28 @@ const ModalAddUpdateUser = forwardRef(
             NewPass: ""
         });
 
-        const [role, setRole] = useState([]);
+        // Danh sách roles cố định
+        const roles = [
+            { RoleID: 2, RoleName: 'User' },
+            { RoleID: 3, RoleName: 'Staff' },
+            { RoleID: 1, RoleName: 'Admin' }
+        ];
 
-        // Truyền hàm open() qua ref để có thể gọi từ component cha
+        // Hàm cập nhật selectedRole khi load form
+        useEffect(() => {
+            if (actionType === 'Update') {
+                // Gán selectedRole dựa trên dữ liệu user đã có
+                setSelectedRole(formData.RoleID);
+            }
+        }, [formData, actionType]);
+
+        // Hàm thay đổi selectedRole
+        const handleRoleChange = (event) => {
+            setSelectedRole(event.target.value);
+        };
+
+        // Mở modal với dữ liệu
         useImperativeHandle(ref, () => ({ open }), []);
-
         const open = (data, action) => {
             setActionType(action);
             if (action === 'Update') {
@@ -32,10 +48,9 @@ const ModalAddUpdateUser = forwardRef(
                     FirstName: data.user.FirstName,
                     LastName: data.user.LastName,
                     CreatedAt: data.user.CreatedAt,
-                    NewPass: ""
+                    NewPass: "",
+                    RoleID: data.roles[0].RoleID // Gán RoleID từ dữ liệu
                 });
-                setRole(data.roles);
-                console.log(data);
             } else {
                 setFormData({
                     UserID: 0,
@@ -44,9 +59,9 @@ const ModalAddUpdateUser = forwardRef(
                     FirstName: "",
                     LastName: "",
                     CreatedAt: new Date().toISOString(),
-                    NewPass: ""
+                    NewPass: "",
+                    RoleID: 2 // Không có role khi thêm mới
                 });
-                setRole([]);
             }
             setSh(true);
         };
@@ -63,7 +78,7 @@ const ModalAddUpdateUser = forwardRef(
                 CreatedAt: "",
                 NewPass: ""
             });
-            setRole([]);
+            setSelectedRole('');
         };
 
         const handleChange = (e) => {
@@ -76,11 +91,11 @@ const ModalAddUpdateUser = forwardRef(
 
             if (actionType === 'Add') {
                 if (window.confirm('Are you sure you want to add this user?')) {
-                    handleAdd(formData);
+                    handleAdd({ ...formData, RoleID: selectedRole });
                 }
             } else if (actionType === 'Update') {
                 if (window.confirm('Are you sure you want to update this user?')) {
-                    handleUpdate(formData);
+                    handleUpdate({ ...formData, RoleID: selectedRole });
                 }
             }
             handleCloseModal();
@@ -125,6 +140,7 @@ const ModalAddUpdateUser = forwardRef(
                                 value={formData.Email}
                                 onChange={handleChange}
                                 required
+                                disabled={actionType === 'Update'}
                             />
                         </Form.Group>
 
@@ -163,38 +179,19 @@ const ModalAddUpdateUser = forwardRef(
                             </Form.Group>
                         )}
 
-                        {/* <Form.Group className="mb-3" controlId="CreatedAt">
-                            <Form.Label>Created At</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="CreatedAt"
-                                value={new Date(formData.CreatedAt).toLocaleString("vi-VN")}
-                                disabled
-                            />
-                        </Form.Group> */}
-
-
                         <Form.Group className="mb-3" controlId="Role">
                             <Form.Label>Role</Form.Label>
-                            <div className='d-flex flex-wrap'>
-                                {role.map((role, index) => (
-                                    <Badge
-                                        key={index}
-                                        bg="primary"
-                                        className="role-badge"
-                                    >
+                            <Form.Select
+                                value={selectedRole} // Gán selectedRole khi load form
+                                onChange={handleRoleChange} // Hàm xử lý thay đổi role
+                            >
+                                {roles.map((role, index) => (
+                                    <option key={index} value={role.RoleID}>
                                         {role.RoleName}
-                                        <span
-                                            onClick={() => handleDeleteRole(index)} // Hàm xóa role
-                                            className="badge-delete-icon"
-                                        >
-                                            × {/* Hoặc dùng icon X */}
-                                        </span>
-                                    </Badge>
+                                    </option>
                                 ))}
-                            </div>
+                            </Form.Select>
                         </Form.Group>
-
 
                         <Button variant="primary" type="submit" style={{ margin: 'auto' }}>
                             {actionType === 'Add' ? 'Add User' : 'Update User'}

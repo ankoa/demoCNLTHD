@@ -6,10 +6,17 @@ const axios = createAxiosInstance("http://courseservice.somee.com");
 // Hàm lấy danh sách các khóa học hiện có
 const getCourseExistings = async () => {
   try {
-    const response = await axios.get("/api/CourseExisting");
-    console.log("Course existing data:", response);
+    return await axios.get("/api/CourseExisting");
+  } catch (error) {
+    console.error("Error fetching course existings:", error);
+    throw error;
+  }
+};
+
+const getCourseExistingsNam = async (nam) => {
+  try {
+    const response = await axios.get("/api/CourseExisting/Nam?Nam=" + nam);
     if (response.ec === 1) {
-      console.log("Course existing data:", response);
       return response.dt; // Trả về dữ liệu trong phần 'dt'
     } else {
       console.error("Error:", response.em);
@@ -17,6 +24,24 @@ const getCourseExistings = async () => {
     }
   } catch (error) {
     console.error("Error fetching course existings:", error);
+    throw error;
+  }
+};
+
+// Hàm tìm khóa học hiện có theo ID
+const findByID = async (id) => {
+  console.log("Finding course existing by ID:", id);
+  try {
+    const response = await axios.get(`/api/CourseExisting/ID?ID=${id}`);
+    console.log("Course existing by ID:", response);
+    if (response.ec === 1) {
+      return response.dt; // Trả về dữ liệu trong phần 'dt'
+    } else {
+      console.error("Error:", response.em);
+      throw new Error(response.em);
+    }
+  } catch (error) {
+    console.error("Error fetching course existing by ID:", error);
     throw error;
   }
 };
@@ -48,7 +73,7 @@ const addCourseExisting = async (courseExistingData) => {
 const deleteCourseExisting = async (courseExistingID) => {
   try {
     const response = await axios.delete(
-      `api/CourseExisting/${courseExistingID}`
+      `api/CourseExisting/courseExistingID?courseExistingID=${courseExistingID}`
     );
     if (response.ec === 1) {
       console.log("Course existing deleted:", response.dt);
@@ -65,9 +90,10 @@ const deleteCourseExisting = async (courseExistingID) => {
 
 // Hàm cập nhật thông tin khóa học hiện có theo ID
 const updateCourseExisting = async (courseExistingID, courseExistingData) => {
+  console.log("Course existing data:", courseExistingData);
   try {
     const response = await axios.put(
-      `api/CourseExisting/${courseExistingID}`,
+      `api/CourseExisting/courseExistingID?courseExistingID=${courseExistingID}`,
       courseExistingData,
       {
         headers: { "Content-Type": "application/json" },
@@ -89,7 +115,9 @@ const updateCourseExisting = async (courseExistingID, courseExistingData) => {
 // Export các hàm để sử dụng trong các thành phần khác
 export {
   getCourseExistings,
+  findByID,
   addCourseExisting,
   deleteCourseExisting,
   updateCourseExisting,
+  getCourseExistingsNam,
 };

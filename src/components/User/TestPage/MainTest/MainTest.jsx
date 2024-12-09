@@ -12,7 +12,7 @@ import {
 import Question from "../Question/Question";
 import ModalResult from "./ModalResult";
 import QuizAudio from "./QuizAudio";
-
+import { useNavigate } from "react-router-dom";
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { createHistory } from "../../../../services/historyService";
@@ -321,7 +321,7 @@ const MainTest = () => {
             alt={testData ? testData.Name : "Loading..."}
           /> */}
         </div>
-        <div className="q-content">
+        <div className="q-content mt-3">
           {/* Kiểm tra điều kiện và truyền đúng prop cho QuizAudio */}
           {quizData && quizData.length > 0 && (
             <>
@@ -335,9 +335,10 @@ const MainTest = () => {
                 />
               ) : (
                 // Nếu không có AudioPath, hiển thị đếm ngược
-                <CountdownTimer
+                <div></div>
+                /*{ <CountdownTimer
                   handelNext={() => handelNext(quizData[index]?.question?.Id)}
-                />
+                /> }*/
               )}
             </>
           )}
@@ -352,21 +353,32 @@ const MainTest = () => {
         </div>
 
         <div className="footer">
-          <button
+          {/* <button
             className="btn btn-secondary"
             onClick={() => handelPrevious()}
           >
             Previous
-          </button>
-          <button className="btn btn-primary" onClick={() => handelNext()}>
-            Next
-          </button>
-          <button
+          </button> */}
+          {quizData && quizData.length > 0 && (
+            <>
+              {!quizData[index]?.question?.AudioPath && (
+                <button
+                  className="btn btn-primary me-5"
+                  style={{ width: "200px" }} // Inline style using camelCase
+                  onClick={() => handelNext()} // Function name corrected to handleNext
+                >
+                  Next
+                </button>
+              )}
+            </>
+          )}
+
+          {/* <button
             className="btn btn-warning"
             onClick={() => handelFinishQuiz()}
           >
             Finish
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="right-content">

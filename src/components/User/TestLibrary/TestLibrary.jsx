@@ -60,7 +60,7 @@ const TestLibrary = () => {
 
   return (
     <div className="site-content-wrapper">
-      <header className="content-header pb-0 gray-bg">
+      <header className="content-header pb-0">
         <div className="container pb-0 px-5">
           <div className="row custom-row">
             <div className="col-12 col-md-12 order-md-1 custom-col">

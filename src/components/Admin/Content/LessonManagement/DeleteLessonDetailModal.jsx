@@ -1,30 +1,23 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
-import {
-  updateCourse, // Ensure this function updates a course's active status
-  getCoursesByID, // Optionally, use this if you need to fetch course details
-} from "../../../../services/courseService";
+import { deleteLessonDetail } from "../../../../services/lessonDetailService";
 import { toast } from "react-toastify";
-const DeleteCourseModal = (props) => {
+const DeleteLessonDetailModal = (props) => {
   console.log("props", props);
 
   const handleDelete = async () => {
     try {
       // Fetch the course by ID to update its 'active' status to 0
-      const course = await getCoursesByID(props.courseId);
-      if (course) {
-        course.dt.active = 0; // Set active status to 0 (inactive)
-
-        // Call the service to update the course in the database
-        await updateCourse(course.dt);
-        props.resetTable();
+      const response = await deleteLessonDetail(props.lessonDetailID);
+      if (response) {
+        props.resettable();
+        toast.success("Lesson Detail has been deactivated successfully.");
         props.onClose();
-        toast.success("Course has been deactivated successfully.");
       } else {
-        console.error("Course not found.");
+        console.error("Error deactivating Lesson Detail.");
       }
     } catch (error) {
-      console.error("Error deactivating course:", error);
+      console.error("Error deactivating Lesson Detail:", error);
     }
   };
 
@@ -35,8 +28,8 @@ const DeleteCourseModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         <p>
-          Are you sure you want to deactivate this course? Course ID:{" "}
-          {props.courseId}
+          Are you sure you want to deactivate this lesson? Lesson ID:{" "}
+          {props.lessonDetailID}
         </p>
       </Modal.Body>
       <Modal.Footer>
@@ -51,4 +44,4 @@ const DeleteCourseModal = (props) => {
   );
 };
 
-export default DeleteCourseModal;
+export default DeleteLessonDetailModal;
