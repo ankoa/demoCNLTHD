@@ -13,6 +13,9 @@ import { AiOutlineAppstore } from "react-icons/ai";
 import { IoRepeat } from "react-icons/io5";
 import { LuBarChart, LuWrench } from "react-icons/lu";
 import { CiFilter } from "react-icons/ci";
+import { FaUser } from "react-icons/fa";
+import { PiExam } from "react-icons/pi";
+import { TbPencilQuestion } from "react-icons/tb";
 
 import {
   Menu,
@@ -113,7 +116,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
           <MenuItem>ACCOUNT</MenuItem>
           <SubMenu
             title="Users"
-            icon={<FiActivity />}
+            icon={<FaUser />}
             onClick={() => navigate("/admin/user")}
           ></SubMenu>
         </Menu>
@@ -121,17 +124,17 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
           <MenuItem>EXAM</MenuItem>
           <SubMenu
             title="Tests"
-            icon={<AiOutlineAppstore />}
+            icon={<PiExam />}
             onClick={() => navigate("/admin/test")}
           ></SubMenu>
           <SubMenu
             title="Parts"
-            icon={<FiGlobe />}
+            icon={<AiOutlineAppstore />}
             onClick={() => navigate("/admin/part")}
           ></SubMenu>
           <SubMenu
             title="QAs"
-            icon={<IoRepeat />}
+            icon={<TbPencilQuestion />}
             onClick={() => navigate("/admin/question")}
           ></SubMenu>
         </Menu>
