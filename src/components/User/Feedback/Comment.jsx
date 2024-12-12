@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { loadComment,createComment, updateComment,deleteComment,} from "../../../services/feedbackService";
+import {
+  loadComment,
+  createComment,
+  updateComment,
+  deleteComment,
+} from "../../../services/feedbackService";
 import "./Comment.scss";
 import { useSelector } from "react-redux";
 
@@ -13,35 +18,35 @@ const CommentsContainer = ({ userId }) => {
 
   // Fetch comments khi component được mount hoặc testId thay đổi
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const data = await loadComment(testId); // Lấy danh sách bình luận theo testId
-        setComments(data || []);
-      } catch (error) {
-        console.error("Error loading comments:", error);
-      }
-    };
     fetchComments();
   }, [testId]);
-
+  const fetchComments = async () => {
+    try {
+      const data = await loadComment(testId); // Lấy danh sách bình luận theo testId
+      setComments(data || []);
+    } catch (error) {
+      console.error("Error loading comments:", error);
+    }
+  };
   // Xử lý thêm bình luận
   const handleAddComment = async () => {
     if (!newComment.trim()) return; // Không cho phép bình luận rỗng
-  
+
     try {
       const commentData = {
         UserID: userId,
         TestID: testId,
         CommentText: newComment,
       };
-  
+
       // Gửi yêu cầu và thêm bình luận vào danh sách
       const addedComment = await createComment(commentData);
-  
+
       if (addedComment) {
         setComments((prev) => [...prev, addedComment]);
+        fetchComments();
       }
-  
+
       setNewComment("");
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -63,10 +68,13 @@ const CommentsContainer = ({ userId }) => {
         console.error("CommentID is missing");
         return;
       }
-  
+
       const updatedComment = { ...editingComment, CommentText: newComment };
-      const response = await updateComment(editingComment.CommentID, updatedComment);
-      
+      const response = await updateComment(
+        editingComment.CommentID,
+        updatedComment
+      );
+
       setComments((prev) =>
         prev.map((comment) =>
           comment.CommentID === editingComment.CommentID ? response : comment
@@ -130,16 +138,22 @@ const CommentItem = ({ comment, onEdit, onDelete, userId }) => (
       </div>
       <div className="comment-box">
         <div className="comment-head">
-          <h6 className={`comment-name ${comment.UserID === userId ? "by-author" : ""}`}>
+          <h6
+            className={`comment-name ${
+              comment.UserID === userId ? "by-author" : ""
+            }`}
+          >
             {comment.UserID} {/* Hiển thị UserID hoặc tên người dùng */}
           </h6>
           <span>{new Date(comment.CommentDate).toLocaleString()}</span>
-          
+
           {/* Chỉ hiển thị nút Edit và Delete nếu UserID của bình luận bằng userId */}
           {comment.UserID === userId && (
             <>
               <button onClick={() => onEdit(comment)}>Edit</button>
-              <button onClick={() => onDelete(comment.CommentID)}>Delete</button>
+              <button onClick={() => onDelete(comment.CommentID)}>
+                Delete
+              </button>
             </>
           )}
         </div>
