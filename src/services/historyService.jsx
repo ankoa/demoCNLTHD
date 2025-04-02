@@ -1,7 +1,7 @@
 import createAxiosInstance from "../util/axiosCustomize";
 
 // Định nghĩa URL cơ sở
-const API_BASE_URL = "http://examservice.somee.com/";
+const API_BASE_URL = "http://examservicetoeic.somee.com/";
 const axios = createAxiosInstance(API_BASE_URL);
 
 // Lấy danh sách tất cả lịch sử
@@ -14,8 +14,6 @@ const getAllHistories = async () => {
     throw error;
   }
 };
-
-
 
 // Lấy lịch sử theo ID
 const getHistoryById = async (id) => {
@@ -124,7 +122,7 @@ export {
   getAllPartsByHistoryId,
   getCombinedHistories,
   getPartOfHis,
-  getHistoryByUserId
+  getHistoryByUserId,
 };
 
 /* import createAxiosInstance from "../util/axiosCustomize";

@@ -1,5 +1,5 @@
 import createAxiosInstance from "../util/axiosCustomize";
-const API_BASE_URL = "http://examservice.somee.com/";
+const API_BASE_URL = "http://examservicetoeic.somee.com/";
 const axios = createAxiosInstance(API_BASE_URL); // Specify your base URL
 // Get all questions
 const getAllQuestions = async () => {

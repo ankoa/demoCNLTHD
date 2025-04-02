@@ -2,7 +2,7 @@
 import createAxiosInstance from "../util/axiosCustomize";
 
 // Đường dẫn đầy đủ của API
-const API_BASE_URL = "http://examservice.somee.com/";
+const API_BASE_URL = "http://examservicetoeic.somee.com/";
 const axios = createAxiosInstance(API_BASE_URL);
 const BASE_URL = "/api/Test";
 
@@ -12,7 +12,9 @@ const getTests = async () => {
 
 const getStatOverview = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}api/History/score-statistics`);
+    const response = await axios.get(
+      `${API_BASE_URL}api/History/score-statistics`
+    );
     return response;
   } catch (error) {
     console.error("Error fetching stats:", error);
@@ -22,7 +24,9 @@ const getStatOverview = async () => {
 
 const getStatAverage = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}api/History/score-statistics-average`);
+    const response = await axios.get(
+      `${API_BASE_URL}api/History/score-statistics-average`
+    );
     return response;
   } catch (error) {
     console.error("Error fetching stats:", error);
@@ -172,5 +176,5 @@ export {
   putUpdateTest,
   getParfOfTestById,
   getStatAverage,
-  getStatOverview
+  getStatOverview,
 };

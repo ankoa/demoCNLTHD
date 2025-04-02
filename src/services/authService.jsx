@@ -23,8 +23,8 @@ const getUsers = () => {
 
 // Hàm postLogOut để gọi API đăng xuất
 const postLogOut = (RefreshToken) => {
-  return axios.post("/api/Account/Logout", {
-    RefreshToken
+  return axios.post(`${BASE_URL}/Logout`, {
+    RefreshToken,
   });
 };
 
@@ -101,14 +101,21 @@ const postRegister = (email, username, password, firstname, lastname) => {
 };
 
 // Hàm postRegister để đăng ký tài khoản
-const postRegisterWithRole = (email, username, password, firstname, lastname, roleId) => {
+const postRegisterWithRole = (
+  email,
+  username,
+  password,
+  firstname,
+  lastname,
+  roleId
+) => {
   const data = {
     Username: username,
     Email: email,
     PasswordHash: password,
     FirstName: firstname,
     LastName: lastname,
-    RoleID: roleId
+    RoleID: roleId,
   };
 
   return axios.post(`${BASE_URL}/SignUpWithRole`, data, {
@@ -145,5 +152,5 @@ export {
   postResetPassword,
   getUsers,
   postRenewToken,
-  postRegisterWithRole
+  postRegisterWithRole,
 };
