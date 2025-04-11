@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const TextBox = ({ tests }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8; // Số bài kiểm tra hiển thị trên mỗi trang
+  const itemsPerPage = 8;
   const navigate = useNavigate();
 
   // Tính toán chỉ số của bài kiểm tra để hiển thị

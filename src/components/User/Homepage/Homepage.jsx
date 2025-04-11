@@ -31,7 +31,7 @@ const Homepage = () => {
       setLoading(true);
       try {
         const data = await getCourses(); // Gọi API
-        setCourses(data.filter(course => course.active === 1).slice(0, 10)); // Lọc và lấy 10 khóa học đầu tiên
+        setCourses(data.filter((course) => course.active === 1).slice(0, 10)); // Lọc và lấy 10 khóa học đầu tiên
 
         console.log("Course: ", first10Courses);
       } catch (err) {
@@ -65,7 +65,7 @@ const Homepage = () => {
     };
 
     fetchTest();
-  }, []); // Chỉ chạy 1 lần khi component mount
+  }, []);
 
   const handleCourseClick = (course) => {
     navigate(`/onlinecourse/purchase/${course.courseId}`, {
@@ -157,9 +157,9 @@ const Homepage = () => {
             fontSize: "1.5rem",
           }}
         >
-          Khoá học online nổi bật
+          {/* Khoá học online nổi bật */}
         </h2>
-        <div className="new-test-container pt-2">
+        {/* <div className="new-test-container pt-2">
           {courses.map((course, index) => (
             <Card key={index} style={{ width: "20rem", marginBottom: "20px" }}>
               <Card.Img
@@ -185,9 +185,10 @@ const Homepage = () => {
               </Card.Body>
             </Card>
           ))}
-        </div>
+        </div> */}
       </div>
-      <div className="mt-5 px-5">
+      {/* <div className="mt-5 px-5"> */}
+      <div className="px-5">
         <h2
           style={{
             textAlign: "center",
@@ -196,7 +197,7 @@ const Homepage = () => {
             fontSize: "1.5rem",
           }}
         >
-          Đề thi mới nhất
+          ĐỀ THI MỚI NHẤT
         </h2>
         <div className="pt-2">
           <div className="col-12 col-md-12">
@@ -205,50 +206,52 @@ const Homepage = () => {
             ) : (
               <>
                 <div className="testitem-grid row align-items-center">
-                  {tests.map((test) => (
-                    <div className="col-6 col-md-3 my-2" key={test.Id}>
-                      <div
-                        className="testitem-wrapper border rounded shadow-sm p-3"
-                        style={{ backgroundColor: "#f4f4f4" }}
-                      >
-                        <h2 className="testitem-title">{test.Name}</h2>
-                        <p className="testitem-description">
-                          {test.Description}
-                        </p>
-                        <div className="testitem-info-wrapper">
-                          <div>
-                            <span className="testitem-info">
-                              <span className="far fa-clock mr-1"></span>
-                              {test.Duration} phút |{" "}
-                              <span className="fa-regular fa-star mr-1"></span>
-                              {test.Difficulty}
-                            </span>
+                  {tests
+                    .filter((test) => test.Id !== -1)
+                    .map((test) => (
+                      <div className="col-6 col-md-3 my-2" key={test.Id}>
+                        <div
+                          className="testitem-wrapper border rounded shadow-sm p-3"
+                          style={{ backgroundColor: "#f4f4f4" }}
+                        >
+                          <h2 className="testitem-title">{test.Name}</h2>
+                          <p className="testitem-description">
+                            {test.Description}
+                          </p>
+                          <div className="testitem-info-wrapper">
+                            <div>
+                              <span className="testitem-info">
+                                <span className="far fa-clock mr-1"></span>
+                                {test.Duration} phút |{" "}
+                                <span className="fa-regular fa-star mr-1"></span>
+                                {test.Difficulty}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="testitem-info">
+                                Cập nhật lần cuối:{" "}
+                                {new Date(test.UpdatedAt).toLocaleDateString()}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="testitem-info">
+                                <span className="far fa-calendar-alt mr-1"></span>
+                                Ngày tạo:{" "}
+                                {new Date(test.CreatedAt).toLocaleDateString()}
+                              </span>
+                            </div>
                           </div>
-                          <div>
-                            <span className="testitem-info">
-                              Cập nhật lần cuối:{" "}
-                              {new Date(test.UpdatedAt).toLocaleDateString()}
-                            </span>
+                          <div className="testitem-start-test mt-2 d-flex justify-content-center">
+                            <button
+                              className="btn btn-block btn-outline-primary"
+                              onClick={() => handleDetailClick(test.Id)}
+                            >
+                              Chi tiết
+                            </button>
                           </div>
-                          <div>
-                            <span className="testitem-info">
-                              <span className="far fa-calendar-alt mr-1"></span>
-                              Ngày tạo:{" "}
-                              {new Date(test.CreatedAt).toLocaleDateString()}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="testitem-start-test mt-2 d-flex justify-content-center">
-                          <button
-                            className="btn btn-block btn-outline-primary"
-                            onClick={() => handleDetailClick(test.Id)}
-                          >
-                            Chi tiết
-                          </button>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </>
             )}

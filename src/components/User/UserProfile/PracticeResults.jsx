@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./PracticeResults.scss";
 import { useSelector } from "react-redux";
-import { getHistoryByUserId } from "../../../services/historyService";
+import { getAllHistories } from "../../../services/historyService";
 import { useNavigate } from "react-router-dom";
 
 const PracticeResults = () => {
@@ -11,15 +11,21 @@ const PracticeResults = () => {
 
   const fetchHistoryByUserID = async () => {
     try {
-      const response = await getHistoryByUserId(account.userid);
+      const response = await getAllHistories(); // Lấy tất cả lịch sử
       if (response && response.EC === 0) {
+        // Lọc theo userID hiện tại
+        const filtered = response.DT.filter(
+          (history) => history.UserID === account.userid
+        );
+
         // Map dữ liệu từ API để phù hợp với định dạng hiển thị
-        const mappedResults = response.DT.map((history) => ({
+        const mappedResults = filtered.map((history) => ({
           date: new Date(history.EndTime).toLocaleDateString("vi-VN"), // Chỉ lấy ngày
           badges: [`Test ${history.TestID}`, "Luyện tập"], // Test ID và badge "Luyện tập"
           score: `${history.TotalScore}`, // Tổng điểm
           detailsLink: `/testResults/${history.Id}`, // Đường dẫn chi tiết (tuỳ chỉnh)
         }));
+
         setResults(mappedResults);
       } else {
         console.error(response?.EM || "Không thể lấy dữ liệu lịch sử.");
@@ -37,7 +43,8 @@ const PracticeResults = () => {
     <div className="container">
       <div className="header">
         <a href="#">
-          <i className="fas fa-chart-bar"></i> Tới trang thống kê kết quả luyện thi
+          <i className="fas fa-chart-bar"></i> Tới trang thống kê kết quả luyện
+          thi
         </a>
       </div>
       <table className="tableHistory">
@@ -64,7 +71,10 @@ const PracticeResults = () => {
               </td>
               <td>{result.score}</td>
               <td>
-                <a onClick={() => navigate(result.detailsLink)} className="details-link">
+                <a
+                  onClick={() => navigate(result.detailsLink)}
+                  className="details-link"
+                >
                   Xem chi tiết
                 </a>
               </td>

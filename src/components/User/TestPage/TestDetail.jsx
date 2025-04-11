@@ -513,7 +513,7 @@ const TestDetail = () => {
           </div>
         )}
         <div className="mt-5">
-          <CommentsContainer userId={userId} testId={testId} />
+          {/* <CommentsContainer userId={userId} testId={testId} /> */}
         </div>
       </div>
     </div>

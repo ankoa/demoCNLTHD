@@ -62,21 +62,26 @@ const Header = () => {
       {showUpperHeader && (
         <div className={`upper-header ${addDropShadow ? "with-shadow" : ""}`}>
           {/* Logo */}
-          <div className="logo" onClick={() => navigate("/")}>
+          <div
+            className="d-flex align-items-center logo-slogan"
+            onClick={() => navigate("/")}
+          >
             <img
               src="src/assets/images/logo-toeic-transparent1.png"
               alt="Logo"
               className="logo-image"
             />
+            <div className="phone-number">
+              <FaPhoneAlt /> 0123456789
+            </div>
           </div>
-
           {/* Phone Number */}
-          <div className="phone-number">
-            <FaPhoneAlt /> 0123456789
-          </div>
 
+          <span className="slogan-text mx-5">
+            Luyện đề TOEIC hiệu quả, tăng điểm thần tốc!
+          </span>
           {/* Navigation */}
-          <nav className="navigation">
+          {/* <nav className="navigation">
             <button className="nav-item" onClick={() => navigate("/my-course")}>
               Khóa học của tôi
             </button>
@@ -91,6 +96,14 @@ const Header = () => {
               onClick={() => navigate("/library-test")}
             >
               Đề thi online
+            </button>
+          </nav> */}
+          <nav className="navigation">
+            <button
+              className="btn btn-round btn-block btn-primary "
+              onClick={() => navigate("/library-test")}
+            >
+              Tham gia thư viện đề thi online ngay
             </button>
           </nav>
 
