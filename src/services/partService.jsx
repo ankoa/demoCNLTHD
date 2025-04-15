@@ -27,7 +27,7 @@ const deletePartById = async (id) => {
 const postNewPart = async (newPart) => {
   try {
     const response = await axios.post("/api/Part", newPart);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error creating new part:", error);
     throw error;
@@ -40,7 +40,7 @@ const putUpdatePart = async (id, description) => {
     const response = await axios.put(`/api/Part/${id}`, description, {
       headers: { "Content-Type": "application/json" },
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error(`Error updating part with id=${id}:`, error);
     throw error;

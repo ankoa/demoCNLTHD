@@ -1,37 +1,67 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Button, Form, Row, Col } from "react-bootstrap";
+import { putUpdateUser, getUserById } from "../../../services/userService";
+import { useSelector } from "react-redux";
 import "./UserProfile.scss";
-import PracticeResults from "./PracticeResults"; // Import component PracticeResults
-import { putUpdateUser } from '../../../services/userService';
+import PracticeResults from "./PracticeResults";
 
 const UserProfile = () => {
-  const [activeTab, setActiveTab] = useState("courses"); // Tab mặc định
-  const [isEditing, setIsEditing] = useState(false); // Trạng thái chỉnh sửa
+  const [activeTab, setActiveTab] = useState("courses");
+  const [isEditing, setIsEditing] = useState(false);
+  const userId = useSelector((state) => state.userReducer.account.userid);
+
   const [userInfo, setUserInfo] = useState({
-    name: "Nguyễn Văn A",
-    email: "nguyenvana@example.com",
-    phone: "0123456789",
+    firstName: "",
+    lastName: "",
+    email: "",
+    username: "",
+    createdAt: "",
   });
 
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
+  const fetchUserInfo = async () => {
+    try {
+      const response = await getUserById(userId);
+      const data = response.DT;
+      setUserInfo({
+        firstName: data.FirstName || "",
+        lastName: data.LastName || "",
+        email: data.Email || "",
+        username: data.Username || "",
+        createdAt: data.CreatedAt || "",
+      });
+    } catch (error) {
+      console.error("Lỗi khi lấy thông tin người dùng:", error);
+    }
   };
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const handleTabChange = (tab) => setActiveTab(tab);
+
+  const handleEditClick = () => setIsEditing(true);
+
+  const handleBackClick = () => setIsEditing(false); // Nút quay lại
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserInfo({ ...userInfo, [name]: value });
+    setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
     try {
-      const updatedUser = await putUpdateUser(userInfo);
+      const updatedUser = await putUpdateUser({
+        UserID: userId,
+        Username: userInfo.username,
+        Email: userInfo.email,
+        FirstName: userInfo.firstName,
+        LastName: userInfo.lastName,
+      });
+
       if (updatedUser) {
-        setUserInfo(updatedUser); // Cập nhật lại giao diện với dữ liệu mới từ API
         setIsEditing(false);
-        console.log("Cập nhật thành công:", updatedUser);
+        fetchUserInfo(); // reload thông tin
       } else {
         alert("Cập nhật không thành công. Vui lòng thử lại!");
       }
@@ -40,7 +70,6 @@ const UserProfile = () => {
       alert("Đã xảy ra lỗi khi cập nhật thông tin!");
     }
   };
-  
 
   return (
     <div className="user-profile">
@@ -56,10 +85,14 @@ const UserProfile = () => {
           />
         </div>
       </div>
+
       <div className="profile-info">
-        <h1>{userInfo.name}</h1>
+        <h1>
+          {userInfo.firstName} {userInfo.lastName}
+        </h1>
         <p>Trang công khai</p>
       </div>
+
       <div className="tabs">
         <a
           href="#"
@@ -83,53 +116,88 @@ const UserProfile = () => {
           Thông tin cá nhân
         </a>
       </div>
+
       <div className="tab-content">
-        {activeTab === "courses" && <div>Danh sách khoá học sẽ được hiển thị ở đây.</div>}
+        {activeTab === "courses" && (
+          <div>Danh sách khoá học sẽ được hiển thị ở đây.</div>
+        )}
         {activeTab === "results" && <PracticeResults />}
         {activeTab === "personalInfo" && (
           <div className="personal-info">
             <h2>Thông tin cá nhân</h2>
             {isEditing ? (
               <div className="edit-form">
-                <div>
-                  <label>Họ và Tên:</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={userInfo.name}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label>Email:</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={userInfo.email}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label>Số điện thoại:</label>
-                  <input
-                    type="text"
-                    name="phone"
-                    value={userInfo.phone}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <button onClick={handleSave}>Lưu</button>
+                <Form>
+                  <Row>
+                    <Col md={4}>
+                      <Form.Label>Họ</Form.Label>
+                    </Col>
+                    <Col md={8}>
+                      <Form.Control
+                        type="text"
+                        name="firstName"
+                        value={userInfo.firstName}
+                        onChange={handleInputChange}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={4}>
+                      <Form.Label>Tên</Form.Label>
+                    </Col>
+                    <Col md={8}>
+                      <Form.Control
+                        type="text"
+                        name="lastName"
+                        value={userInfo.lastName}
+                        onChange={handleInputChange}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={4}>
+                      <Form.Label>Email</Form.Label>
+                    </Col>
+                    <Col md={8}>
+                      <Form.Control
+                        type="email"
+                        name="email"
+                        value={userInfo.email}
+                        onChange={handleInputChange}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={3}></Col>
+                    <Col md={3}>
+                      <Button variant="primary" onClick={handleSave}>
+                        Lưu
+                      </Button>
+                    </Col>
+                    <Col md={3}>
+                      <Button variant="secondary" onClick={handleBackClick}>
+                        Quay lại
+                      </Button>
+                    </Col>
+                    <Col md={3}></Col>
+                  </Row>
+                </Form>
               </div>
             ) : (
               <div>
                 <p>
-                  <strong>Họ và Tên:</strong> {userInfo.name}
+                  <strong>Họ và Tên:</strong> {userInfo.firstName}{" "}
+                  {userInfo.lastName}
                 </p>
                 <p>
                   <strong>Email:</strong> {userInfo.email}
                 </p>
                 <p>
-                  <strong>Số điện thoại:</strong> {userInfo.phone}
+                  <strong>Username:</strong> {userInfo.username}
+                </p>
+                <p>
+                  <strong>Ngày tạo:</strong>{" "}
+                  {new Date(userInfo.createdAt).toLocaleDateString()}
                 </p>
                 <button onClick={handleEditClick}>Chỉnh sửa</button>
               </div>

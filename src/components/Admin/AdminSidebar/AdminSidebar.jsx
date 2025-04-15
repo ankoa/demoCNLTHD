@@ -141,7 +141,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             onClick={() => navigate("/admin/question")}
           ></SubMenu>
         </Menu>
-        <Menu iconShape="course">
+        {/* <Menu iconShape="course">
           <MenuItem suffix={<span className="badge red">New</span>}>
             COURSE
           </MenuItem>
@@ -150,18 +150,18 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             icon={<ImBooks />}
             onClick={() => navigate("/admin/manage-course")}
           />
-          {/* <SubMenu
+           <SubMenu
               title="Courses Details"
               icon={<FiActivity />}
               onClick={() => navigate("/admin/manage-courseDetails")}
-            /> */}
+            /> 
           <SubMenu
             title="Courses Existing"
             icon={<HiBookOpen />}
             onClick={() => navigate("/admin/manage-courseExisting")}
           />
-        </Menu>
-        <Menu iconShape="course">
+        </Menu> */}
+        {/* <Menu iconShape="course">
           <MenuItem suffix={<span className="badge red">New</span>}>
             LESSON
           </MenuItem>
@@ -170,13 +170,13 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             icon={<MdOutlinePlayLesson />}
             onClick={() => navigate("/admin/manage-lesson")}
           />
-          {/* <SubMenu
+           <SubMenu
             title="Lesson Details"
             icon={<FiActivity />}
             onClick={() => navigate("/admin/manage-lessonDetail")}
-          /> */}
-        </Menu>
-        <Menu iconShape="circle">
+          />
+        </Menu> */}
+        {/* <Menu iconShape="circle">
           <MenuItem>UI TOOLKIT</MenuItem>
           <SubMenu title="Layout" icon={<FiLayout />}>
             <SubMenu title="Navigation">
@@ -285,9 +285,9 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
               Typography <Link to="/admin/manage-question" />
             </MenuItem>
           </SubMenu>
-        </Menu>
+        </Menu> */}
 
-        <Menu iconShape="circle">
+        {/* <Menu iconShape="circle">
           <MenuItem suffix={<span className="badge red">New</span>}>
             PLUGINS
           </MenuItem>
@@ -300,7 +300,7 @@ const AdminSidebar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
             </MenuItem>
           </SubMenu>
           <SubMenu title="Tables" icon={<CiFilter />}></SubMenu>
-        </Menu>
+        </Menu> */}
         <Menu iconShape="circle">
           <MenuItem suffix={<span className="badge red">New</span>}>
             PLUGINS

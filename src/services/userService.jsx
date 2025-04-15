@@ -42,7 +42,9 @@ const putUpdateUser = async (updateUser) => {
 
 const putUpdateUserRoles = async (userId, roleIds) => {
   try {
-    return await axios.put(`api/UserRole/UpdateRoles?userId=${userId}&roleId=${roleIds}`);
+    return await axios.put(
+      `api/UserRole/UpdateRoles?userId=${userId}&roleId=${roleIds}`
+    );
   } catch (error) {
     console.error("Error updating user roles:", error.message);
     return null;
@@ -51,7 +53,9 @@ const putUpdateUserRoles = async (userId, roleIds) => {
 
 const postAddUserRoles = async (userId, roleIds) => {
   try {
-    return await axios.post(`api/UserRole/UserRole?userId=${userId}&roleId=${roleIds}`);
+    return await axios.post(
+      `api/UserRole/UserRole?userId=${userId}&roleId=${roleIds}`
+    );
   } catch (error) {
     console.error("Error adding user roles:", error.message);
     return null;
@@ -76,7 +80,6 @@ const deleteUserById = async (id) => {
     return null;
   }
 };
-
 
 // Export các hàm để sử dụng trong các thành phần khác
 export {

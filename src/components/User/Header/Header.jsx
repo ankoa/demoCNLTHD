@@ -115,7 +115,7 @@ const Header = () => {
                   className="btn-user-icon"
                   id="dropdown-basic"
                 >
-                  <FaUser style={{ color: "black" }} />
+                  <FaUser style={{ color: "white" }} />
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
